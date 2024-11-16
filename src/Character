@@ -1,0 +1,76 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class CharacterScreen implements ActionListener {
+    JFrame frame;
+    JPanel subpanel;
+    DrawingPanel panel;
+    JButton b1, b2, b3, back;
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new CharacterScreen();
+            }
+        });
+    }
+    CharacterScreen() {
+        frame = new JFrame();
+        frame.setTitle("Ball Pickle");
+        frame.setSize(1024, 768);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        panel = new DrawingPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.setPreferredSize(new Dimension(1024, 768));
+
+        subpanel = new JPanel();
+        subpanel.setAlignmentY(100);
+        subpanel.setLayout(new FlowLayout());
+        subpanel.setPreferredSize(new Dimension(1024, 500));
+        
+        b1 = new JButton("Select");
+        b1.setActionCommand("b1");
+        b1.addActionListener(this);
+
+        b2 = new JButton("Select");
+        b2.setActionCommand("b2");
+        b2.addActionListener(this);
+
+        b3 = new JButton("Select");
+        b3.setActionCommand("b3");
+        b3.addActionListener(this);
+
+        back = new JButton("Back");
+        back.setActionCommand("back");
+        back.addActionListener(this);
+
+        back.setLocation(0, 1);
+        panel.add(back);
+      
+
+        subpanel.add(b1);
+        subpanel.add(b2);
+        subpanel.add(b3);
+
+        panel.add(subpanel);
+
+        frame.add(panel);
+        
+        frame.pack();
+
+        frame.setVisible(true);
+        
+    }
+
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+    private class DrawingPanel extends JPanel {
+
+    }
+}
