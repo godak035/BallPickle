@@ -69,13 +69,13 @@ public class BallPickleGUI implements KeyListener {
 				g2.drawImage(select, 384, 615, null);
 				g2.drawImage(select, 720, 615, null);
 				switch (currentHovered) {
-				case hovered.charSelect1:
+				case charSelect1:
 					g2.drawImage(select, 12, 605, select.getWidth() + 40, select.getHeight() + 20, null);
 					break;
-				case hovered.charSelect2:
+				case charSelect2:
 					g2.drawImage(select, 364, 605, select.getWidth() + 40, select.getHeight() + 20, null);
 					break;
-				case hovered.charSelect3:
+				case charSelect3:
 					g2.drawImage(select, 700, 605, select.getWidth() + 40, select.getHeight() + 20, null);
 					break;
 				default:
@@ -84,19 +84,19 @@ public class BallPickleGUI implements KeyListener {
 			} else if (currentScreen == screen.title) {
 				g2.drawImage(title, 0, 0, null);
 				switch (currentHovered) {
-				case hovered.titleStart:
+				case titleStart:
 					g2.drawImage(titleSelect, 385, 379, null);
 					g2.rotate(Math.PI);
 					g2.drawImage(titleSelect, -630, -438, null);
 					g2.rotate(Math.PI);
 					break;
-				case hovered.titleCharSelect:
+				case titleCharSelect:
 					g2.drawImage(titleSelect, 152, 428, null);
 					g2.rotate(Math.PI);
 					g2.drawImage(titleSelect, -867, -490, null);
 					g2.rotate(Math.PI);
 					break;
-				case hovered.titleHelp:
+				case titleHelp:
 					g2.drawImage(titleSelect, 407, 479, null);
 					g2.rotate(Math.PI);
 					g2.drawImage(titleSelect, -612, -538, null);
@@ -159,17 +159,17 @@ public class BallPickleGUI implements KeyListener {
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_J) {
 				switch (currentHovered) {
-				case hovered.titleStart:
+				case titleStart:
 					currentScreen = screen.inGame;
 					currentHovered = hovered.inGame;
 					panel.repaint();
 					break;
-				case hovered.titleCharSelect:
+				case titleCharSelect:
 					currentScreen = screen.characterSelect;
 					currentHovered = hovered.charSelect1;
 					panel.repaint();
 					break;
-				case hovered.titleHelp:
+				case titleHelp:
 					currentScreen = screen.help;
 					currentHovered = hovered.helpExit;
 					panel.repaint();
