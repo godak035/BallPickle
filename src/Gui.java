@@ -14,6 +14,7 @@ public class GUI extends JPanel {
 			titleSelect = ImageIO.read(this.getClass().getResource("sprites/titleSelect.png"));
 			help = ImageIO.read(this.getClass().getResource("sprites/help.png"));
 			inGame = ImageIO.read(this.getClass().getResource("sprites/inGame.png"));
+            
 		} catch (Exception e) {
 			System.out.println("Failed to load image.");
 		}

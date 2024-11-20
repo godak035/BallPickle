@@ -34,6 +34,8 @@ public class Main implements KeyListener, ActionListener {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.addKeyListener(this);
+		ImageIcon logo = new ImageIcon("logo.png");
+		frame.setIconImage(logo.getImage());
 		
 		panel = new GUI();
 		panel.setPreferredSize(new Dimension(1024, 768));
