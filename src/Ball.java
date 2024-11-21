@@ -1,4 +1,4 @@
-public class Ball {
+public class Ball extends Entity {
     int x, y; //pixel position of ball
     double xx, yy; //precise position of ball
     double vx, yx; //velocity of ball
