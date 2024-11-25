@@ -4,7 +4,7 @@ import javax.imageio.*;
 import javax.swing.*;
 public class GUI extends JPanel {
 
-    BufferedImage characterSelect, title, select, titleSelect, help, inGame;
+    BufferedImage characterSelect, title, select, titleSelect, help, inGame, court;
 
     GUI() {
         try {
@@ -14,7 +14,7 @@ public class GUI extends JPanel {
 			titleSelect = ImageIO.read(this.getClass().getResource("sprites/titleSelect.png"));
 			help = ImageIO.read(this.getClass().getResource("sprites/help.png"));
 			inGame = ImageIO.read(this.getClass().getResource("sprites/inGame.png"));
-            
+            court = ImageIO.read(this.getClass().getResource("sprites/court.png"));
 		} catch (Exception e) {
 			System.out.println("Failed to load image.");
 		}
@@ -70,7 +70,8 @@ public class GUI extends JPanel {
         } else if (Main.getCurrentScreen() == Main.screen.help) {
             g2.drawImage(help, 0, 0, null);
         } else if (Main.getCurrentScreen() == Main.screen.inGame) {
-            g2.drawImage(inGame, 0, 0, null);
+            //g2.drawImage(inGame, 0, 0, null);
+            g2.drawImage(court, 0, 0, null);
         }
     }//end paintComponent(Graphics g)
 }//end DrawingPanel class

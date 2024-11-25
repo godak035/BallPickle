@@ -11,7 +11,6 @@ public class Main implements KeyListener, ActionListener {
 	static private hovered currentHovered;
     static private Timer gameLoopTimer;
     
-	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -25,7 +24,11 @@ public class Main implements KeyListener, ActionListener {
 		currentHovered = hovered.titleStart;
 
         gameLoopTimer = new Timer(5, this);
-        
+		gameLoopTimer.setActionCommand("gameLoopTimer");
+        gameLoopTimer.setInitialDelay(0);
+		gameLoopTimer.setRepeats(true);
+
+
 
 		
 		frame = new JFrame();
@@ -118,13 +121,41 @@ public class Main implements KeyListener, ActionListener {
 				currentHovered = hovered.titleStart;
 				panel.repaint();
 			}
+		} else if (currentScreen == screen.inGame) {
+
 		}
 	}//end keyPressed
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+		String event = e.getActionCommand();
+		switch (event) {
+		case "gameLoopTimer":
+			moveCharacter();
+			moveBall();
+			moveBot();
+			frame.repaint();
+			break;
+		}
+		
     }
+
+
+
+	private void moveCharacter() {
+
+	}
+
+	private void moveBall() {
+
+	}
+
+	private void moveBot() {
+
+	}
+
+
+
 
     /*
      * getter methods

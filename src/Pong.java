@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -9,7 +10,7 @@ public class Pong extends KeyAdapter implements ActionListener{
 	DrawPanel pan;
 	Ball b;
 	Timer t;
-	int tSpeed = 10;
+	int tSpeed = 1;
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -44,11 +45,11 @@ public class Pong extends KeyAdapter implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		b.move();
-		if (b.x == 0) {
+		if (b.y == 0) {
 			t.stop();
 			JOptionPane.showMessageDialog(null, "Player 2 Wins!");
 			window.dispose();
-		} else if (b.x == pan.panW - b.width ) {
+		} else if (b.y == pan.panH - b.height ) {
 			t.stop();
 			JOptionPane.showMessageDialog(null, "Player 1 Wins!");
 			window.dispose();
@@ -59,20 +60,20 @@ public class Pong extends KeyAdapter implements ActionListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-		if (key == KeyEvent.VK_UP) {
-			pad2.y -= 30;
-			if (pad2.y < 0) pad2.y = 0;
-		} else if (key == KeyEvent.VK_DOWN) {
-			pad2.y += 30;
-			if (pad2.y > pan.panH - pad2.height) pad2.y = pan.panH - pad2.height;
+		if (key == KeyEvent.VK_LEFT) {
+			pad2.x -= 5;
+			if (pad2.x < 0) pad2.x = 0;
+		} else if (key == KeyEvent.VK_RIGHT) {
+			pad2.x += 30;
+			if (pad2.x > pan.panW - pad2.height) pad2.x = pan.panW - pad2.height;
 		} 
 		pan.repaint();
-		if (key == KeyEvent.VK_W) {
-			pad1.y -= 30;
-			if (pad1.y < 0) pad1.y = 0;
-		} else if (key == KeyEvent.VK_S) {
-			pad1.y += 30;
-			if (pad1.y > pan.panH - pad1.height) pad1.y = pan.panH - pad1.height;
+		if (key == KeyEvent.VK_A) {
+			pad1.x -= 30;
+			if (pad1.x < 0) pad1.x = 0;
+		} else if (key == KeyEvent.VK_D) {
+			pad1.x += 30;
+			if (pad1.x > pan.panW - pad1.height) pad1.x = pan.panW - pad1.height;
 		}
 		pan.repaint();
 	}
