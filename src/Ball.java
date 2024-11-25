@@ -1,13 +1,18 @@
 public class Ball extends Entity {
-    int x, y; //pixel position of ball
-    double xx, yy; //precise position of ball
-    double vx, yx; //velocity of ball
-    
-    public void move(){
+    private int size; //Size fo the object
+
+    Ball(double xx, double yy, double v, int size) {
+        super(xx, yy, v);
+        this.size = size;
+        this.x = (int)xx;
+        this.y = (int)yy;
+    }
+
+    public void move() {
         
     }
 
-    public void reset(){
+    public void reset() {
         
     }
 }

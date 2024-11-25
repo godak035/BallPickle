@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
 import javax.swing.*;
 public class Main implements KeyListener, ActionListener {
 	static private JFrame frame;
@@ -10,6 +9,7 @@ public class Main implements KeyListener, ActionListener {
 	static  enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleCharSelect, titleHelp, inGame, helpExit };
 	static private hovered currentHovered;
     static private Timer gameLoopTimer;
+	static Player player;
     
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -28,9 +28,8 @@ public class Main implements KeyListener, ActionListener {
         gameLoopTimer.setInitialDelay(0);
 		gameLoopTimer.setRepeats(true);
 
+		player = new Player(512, 500, 10, 20);
 
-
-		
 		frame = new JFrame();
 		frame.setSize(1024, 768);
 		frame.setLocationRelativeTo(null);
@@ -46,8 +45,6 @@ public class Main implements KeyListener, ActionListener {
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setVisible(true);
-
-        
 	}
 	
 	//required but useless methods
@@ -122,7 +119,19 @@ public class Main implements KeyListener, ActionListener {
 				panel.repaint();
 			}
 		} else if (currentScreen == screen.inGame) {
-
+			if (e.getKeyCode() == KeyEvent.VK_UP) {
+				player.yy -= player.velocity;
+				panel.repaint();
+			} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+				player.yy += player.velocity;
+				panel.repaint();
+			} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				player.xx -= player.velocity;
+				panel.repaint();
+			} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+				player.xx += player.velocity;
+				panel.repaint();
+			}
 		}
 	}//end keyPressed
 
@@ -131,20 +140,12 @@ public class Main implements KeyListener, ActionListener {
 		String event = e.getActionCommand();
 		switch (event) {
 		case "gameLoopTimer":
-			moveCharacter();
 			moveBall();
 			moveBot();
-			frame.repaint();
+			panel.repaint();
 			break;
 		}
-		
     }
-
-
-
-	private void moveCharacter() {
-
-	}
 
 	private void moveBall() {
 
@@ -153,9 +154,6 @@ public class Main implements KeyListener, ActionListener {
 	private void moveBot() {
 
 	}
-
-
-
 
     /*
      * getter methods
