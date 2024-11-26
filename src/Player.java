@@ -1,22 +1,38 @@
 public class Player extends Entity{
 
-    int size; //Size fo the object
+    int size;
+    KeyHandler keyH;
 
-    Player(double xx, double yy, double v, int size) {
+    /**
+    * A concise description of what the method does.
+    * double xx, double yy, double v, int s, KeyHandler, keyH
+    */
+    public Player(double xx, double yy, double v, int s, KeyHandler keyH){
         super(xx, yy, v);
-        this.size = size;
-        this.x = (int)xx;
-        this.y = (int)yy;
+        this.size = s;
+        this.keyH = keyH;
     }
 
-
-    public void setDefaultValues(){
-        x=2;
-        y=2;
-
-        // vx=5;
-        // vx=5;
+    //The player's movement
+    public void update(){
+        if (keyH.enterPressed==true){
+            //Swings
+        }
         
-    }
+        if(keyH.upPressed== true){
+            y -= velocity;
+        }
 
+        if(keyH.downPressed== true){
+            y += velocity;
+        }
+
+        if(keyH.rightPressed== true){
+            x += velocity;
+        }
+
+        if(keyH.leftPressed== true){
+            x-=velocity;
+        }
+    }
 }

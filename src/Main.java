@@ -1,163 +1,152 @@
+/**
+ * Main.java
+ * The main menu screen. :scream:
+ */
+
+//
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-public class Main implements KeyListener, ActionListener {
-	static private JFrame frame;
-	static private GUI panel;
-	static  enum screen { title, help, characterSelect, inGame };
-	static private screen currentScreen;
-	static  enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleCharSelect, titleHelp, inGame, helpExit };
+import javax.imageio.*;
+import java.awt.image.*;
+
+public class Main {
+    JFrame frame;
+    titlePanel title;
+    gamePanel inGame;
+    helpPanel help;
+    characterSelectPanel characterSelect;
+    BufferedImage characterSelectBg, select, titleBg, titleSelect, helpBg, court;
+    static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleCharSelect, titleHelp, inGame, helpExit };
 	static private hovered currentHovered;
-    static private Timer gameLoopTimer;
-	static Player player;
-    
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				new Main();
-			}
-		});
-	}
-	
-	Main() {
-		currentScreen = screen.title;
-		currentHovered = hovered.titleStart;
+    boolean upPressedThisTick, downPressedThisTick, leftPressedThisTick, rightPressedThisTick, fPressedThisTick;
+    KeyHandler KeyH;
 
-        gameLoopTimer = new Timer(5, this);
-		gameLoopTimer.setActionCommand("gameLoopTimer");
-        gameLoopTimer.setInitialDelay(0);
-		gameLoopTimer.setRepeats(true);
-
-		player = new Player(512, 500, 10, 20);
-
-		frame = new JFrame();
-		frame.setSize(1024, 768);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.addKeyListener(this);
-		ImageIcon logo = new ImageIcon("logo.png");
-		frame.setIconImage(logo.getImage());
-		
-		panel = new GUI();
-		panel.setPreferredSize(new Dimension(1024, 768));
-		
-		frame.setContentPane(panel);
-		frame.pack();
-		frame.setVisible(true);
-	}
-	
-	//required but useless methods
-	public void keyReleased(KeyEvent e) {} 
-	public void keyTyped(KeyEvent e) {}
-	
-	public void keyPressed(KeyEvent e) {
-		if (currentScreen == screen.characterSelect) {
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-				if (currentHovered == hovered.charSelect1) {
-					currentHovered = hovered.charSelect2;
-					panel.repaint();
-				} else if (currentHovered == hovered.charSelect2) {
-					currentHovered = hovered.charSelect3;
-					panel.repaint();
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-				if (currentHovered == hovered.charSelect2) {
-					currentHovered = hovered.charSelect1;
-					panel.repaint();
-				} else if (currentHovered == hovered.charSelect3) {
-					currentHovered = hovered.charSelect2;
-					panel.repaint();
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_J) {
-				currentScreen = screen.title;
-				currentHovered = hovered.titleStart;
-				panel.repaint();
-			}
-		} else if (currentScreen == screen.title) {
-			if (e.getKeyCode() == KeyEvent.VK_UP) {
-				if (currentHovered == hovered.titleCharSelect) {
-					currentHovered = hovered.titleStart;
-					panel.repaint();
-				} else if (currentHovered == hovered.titleHelp) {
-					currentHovered = hovered.titleCharSelect;
-					panel.repaint();
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-				if (currentHovered == hovered.titleStart) {
-					currentHovered = hovered.titleCharSelect;
-					panel.repaint();
-				} else if (currentHovered == hovered.titleCharSelect) {
-					currentHovered = hovered.titleHelp;
-					panel.repaint();
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_J) {
-				switch (currentHovered) {
-				case titleStart:
-					currentScreen = screen.inGame;
-					currentHovered = hovered.inGame;
-					panel.repaint();
-					break;
-				case titleCharSelect:
-					currentScreen = screen.characterSelect;
-					currentHovered = hovered.charSelect1;
-					panel.repaint();
-					break;
-				case titleHelp:
-					currentScreen = screen.help;
-					currentHovered = hovered.helpExit;
-					panel.repaint();
-					break;
-				default:
-					break;
-				}
-			}
-		} else if (currentScreen == screen.help) {
-			if (e.getKeyCode() == KeyEvent.VK_J) {
-				currentScreen = screen.title;
-				currentHovered = hovered.titleStart;
-				panel.repaint();
-			}
-		} else if (currentScreen == screen.inGame) {
-			if (e.getKeyCode() == KeyEvent.VK_UP) {
-				player.yy -= player.velocity;
-				panel.repaint();
-			} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-				player.yy += player.velocity;
-				panel.repaint();
-			} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-				player.xx -= player.velocity;
-				panel.repaint();
-			} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-				player.xx += player.velocity;
-				panel.repaint();
-			}
-		}
-	}//end keyPressed
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-		String event = e.getActionCommand();
-		switch (event) {
-		case "gameLoopTimer":
-			moveBall();
-			moveBot();
-			panel.repaint();
-			break;
-		}
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new Main();
+            }
+        });
     }
 
-	private void moveBall() {
+    Main() {
+        try {
+			characterSelectBg = ImageIO.read(this.getClass().getResource("sprites/characterSelect.png"));
+			select = ImageIO.read(this.getClass().getResource("sprites/select.png"));
+			titleBg = ImageIO.read(this.getClass().getResource("sprites/title.png"));
+			titleSelect = ImageIO.read(this.getClass().getResource("sprites/titleSelect.png"));
+			helpBg = ImageIO.read(this.getClass().getResource("sprites/help.png"));
+            court = ImageIO.read(this.getClass().getResource("sprites/court.png"));
+        } catch (Exception e) {
+			System.out.println("Failed to load image.");
+		}
 
-	}
+        currentHovered = hovered.titleStart;
 
-	private void moveBot() {
+        upPressedThisTick = false;
+        leftPressedThisTick = false;
+        downPressedThisTick = false;
+        rightPressedThisTick = false;
+        fPressedThisTick = false;
 
-	}
+        KeyH = new KeyHandler();
 
-    /*
-     * getter methods
-     */
-    public static screen getCurrentScreen() { return currentScreen; }
-    public static hovered getCurrentHovered() { return currentHovered; }
+        frame = new JFrame();
+		frame.setSize(1024, 768);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+        frame.addKeyListener(KeyH);
+		ImageIcon logo = new ImageIcon("logo.png");
+		frame.setIconImage(logo.getImage());
+
+        title = new titlePanel();
+        title.setPreferredSize(new Dimension(1024, 768));
+        
+        frame.add(title);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    public void updateHovered() {
+        switch (currentHovered) {
+        case titleStart:
+            if (KeyH.downPressed) currentHovered = hovered.titleCharSelect;
+            if (KeyH.enterPressed) {
+                frame.remove(title);
+                frame.add(inGame);
+                currentHovered = hovered.inGame;
+            }
+            break;
+        case titleCharSelect:
+            if (KeyH.downPressed) currentHovered = hovered.titleStart;
+            if (KeyH.upPressed) currentHovered = hovered.titleHelp;
+            if (KeyH.enterPressed) {
+                frame.remove(title);
+                frame.add(characterSelect);
+                currentHovered = hovered.charSelect1;
+            }
+            break;
+        case titleHelp:
+            if (KeyH.upPressed) currentHovered = hovered.titleCharSelect;
+            if (KeyH.enterPressed) {
+                frame.remove(title);
+                frame.add(help);
+                currentHovered = hovered.helpExit;
+            }
+            break;
+            
+        }
+    }
+
+    private class titlePanel extends JPanel {
+        public void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D)g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.drawImage(titleBg, 0, 0, null);
+            switch (currentHovered) {
+            case titleStart:
+                g2.drawImage(titleSelect, 385, 379, null);
+                g2.rotate(Math.PI);
+                g2.drawImage(titleSelect, -630, -438, null);
+                g2.rotate(Math.PI);
+                break;
+            case titleCharSelect:
+                g2.drawImage(titleSelect, 152, 428, null);
+                g2.rotate(Math.PI);
+                g2.drawImage(titleSelect, -867, -490, null);
+                g2.rotate(Math.PI);
+                break;
+            case titleHelp:
+                g2.drawImage(titleSelect, 407, 479, null);
+                g2.rotate(Math.PI);
+                g2.drawImage(titleSelect, -612, -538, null);
+                g2.rotate(Math.PI);
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    private class helpPanel extends JPanel {
+        public void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D)g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+    }
+
+    private class characterSelectPanel extends JPanel {
+        public void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D)g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+    }
+
+    private class gamePanel extends JPanel {
+        public void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D)g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+    }
 }
