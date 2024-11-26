@@ -10,6 +10,7 @@ import javax.imageio.*;
 import java.awt.image.*;
 
 public class Main {
+    
     JFrame frame;
     titlePanel title;
     gamePanel inGame;
@@ -95,7 +96,33 @@ public class Main {
                 currentHovered = hovered.helpExit;
             }
             break;
-            
+        case charSelect1:
+            if (KeyH.rightPressed) currentHovered = hovered.charSelect2;
+            if (KeyH.enterPressed) {
+                frame.remove(characterSelect);
+                frame.add(title);
+                currentHovered = hovered.titleStart;
+            }
+            break;
+        case charSelect2:
+            if (KeyH.rightPressed) currentHovered = hovered.charSelect3;
+            if (KeyH.leftPressed) currentHovered = hovered.charSelect1;
+            if (KeyH.enterPressed) {
+                frame.remove(characterSelect);
+                frame.add(title);
+                currentHovered = hovered.titleStart;
+            }
+            break;
+        case charSelect3:
+            if (KeyH.leftPressed) currentHovered = hovered.charSelect2;
+            if (KeyH.enterPressed) {
+                frame.remove(characterSelect);
+                frame.add(title);
+                currentHovered = hovered.titleStart;
+            }
+            break;
+        default:
+            break;
         }
     }
 
