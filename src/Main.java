@@ -8,19 +8,21 @@ import java.awt.*;
 import javax.swing.*;
 import javax.imageio.*;
 import java.awt.image.*;
+import java.awt.event.*;
 
-public class Main {
+public class Main implements ActionListener {
     
     JFrame frame;
-    titlePanel title;
-    gamePanel inGame;
-    helpPanel help;
-    characterSelectPanel characterSelect;
+    TitlePanel title;
+    GamePanel inGame;
+    HelpPanel help;
+    CharacterSelectPanel characterSelect;
     BufferedImage characterSelectBg, select, titleBg, titleSelect, helpBg, court;
     static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleCharSelect, titleHelp, inGame, helpExit };
 	static private hovered currentHovered;
-    boolean upPressedThisTick, downPressedThisTick, leftPressedThisTick, rightPressedThisTick, fPressedThisTick;
+    boolean upPressedThisTick, downPressedThisTick, leftPressedThisTick, rightPressedThisTick, enterPressedThisTick;
     KeyHandler KeyH;
+    Timer gameLoopTimer;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -42,13 +44,18 @@ public class Main {
 			System.out.println("Failed to load image.");
 		}
 
+        gameLoopTimer = new Timer(5, this);
+        gameLoopTimer.setInitialDelay(5);
+        gameLoopTimer.setActionCommand("gameLoopTimer");
+        gameLoopTimer.start();
+
         currentHovered = hovered.titleStart;
 
         upPressedThisTick = false;
         leftPressedThisTick = false;
         downPressedThisTick = false;
         rightPressedThisTick = false;
-        fPressedThisTick = false;
+        enterPressedThisTick = false;
 
         KeyH = new KeyHandler();
 
@@ -60,7 +67,16 @@ public class Main {
 		ImageIcon logo = new ImageIcon("logo.png");
 		frame.setIconImage(logo.getImage());
 
-        title = new titlePanel();
+        title = new TitlePanel();
+        title.setPreferredSize(new Dimension(1024, 768));
+
+        inGame = new GamePanel();
+        title.setPreferredSize(new Dimension(1024, 768));
+
+        help = new HelpPanel();
+        title.setPreferredSize(new Dimension(1024, 768));
+
+        characterSelect = new CharacterSelectPanel();
         title.setPreferredSize(new Dimension(1024, 768));
         
         frame.add(title);
@@ -69,54 +85,94 @@ public class Main {
         frame.setVisible(true);
     }
 
-    public void updateHovered() {
+    public void getInputs() {
         switch (currentHovered) {
         case titleStart:
-            if (KeyH.downPressed) currentHovered = hovered.titleCharSelect;
-            if (KeyH.enterPressed) {
+            if (KeyH.downPressed && !downPressedThisTick) {
+                downPressedThisTick = true;
+                currentHovered = hovered.titleCharSelect;
+            }
+            if (KeyH.enterPressed && !enterPressedThisTick) {
+                enterPressedThisTick = true;
                 frame.remove(title);
                 frame.add(inGame);
                 currentHovered = hovered.inGame;
             }
             break;
         case titleCharSelect:
-            if (KeyH.downPressed) currentHovered = hovered.titleStart;
-            if (KeyH.upPressed) currentHovered = hovered.titleHelp;
-            if (KeyH.enterPressed) {
+            if (KeyH.downPressed && !downPressedThisTick) {
+                downPressedThisTick = true;
+                currentHovered = hovered.titleHelp;
+            }
+            if (KeyH.upPressed && !upPressedThisTick) {
+                upPressedThisTick = true;
+                currentHovered = hovered.titleStart;
+            }
+            if (KeyH.enterPressed && !enterPressedThisTick) {
+                enterPressedThisTick = true;
                 frame.remove(title);
                 frame.add(characterSelect);
                 currentHovered = hovered.charSelect1;
             }
             break;
         case titleHelp:
-            if (KeyH.upPressed) currentHovered = hovered.titleCharSelect;
-            if (KeyH.enterPressed) {
+            if (KeyH.upPressed && !upPressedThisTick) {
+                upPressedThisTick = true;
+                currentHovered = hovered.titleCharSelect;
+            }
+            if (KeyH.enterPressed && !enterPressedThisTick) {
+                enterPressedThisTick = true;
                 frame.remove(title);
                 frame.add(help);
                 currentHovered = hovered.helpExit;
+                help.repaint();
+                System.out.println("this is being run");
             }
             break;
         case charSelect1:
-            if (KeyH.rightPressed) currentHovered = hovered.charSelect2;
-            if (KeyH.enterPressed) {
+            if (KeyH.rightPressed && !rightPressedThisTick) {
+                rightPressedThisTick = true;
+                currentHovered = hovered.charSelect2;
+            }
+            if (KeyH.enterPressed && !enterPressedThisTick) {
+                enterPressedThisTick = true;
                 frame.remove(characterSelect);
                 frame.add(title);
                 currentHovered = hovered.titleStart;
             }
             break;
         case charSelect2:
-            if (KeyH.rightPressed) currentHovered = hovered.charSelect3;
-            if (KeyH.leftPressed) currentHovered = hovered.charSelect1;
-            if (KeyH.enterPressed) {
+            if (KeyH.rightPressed && !rightPressedThisTick) {
+                rightPressedThisTick = true;
+                currentHovered = hovered.charSelect3;
+            }
+            if (KeyH.leftPressed && !leftPressedThisTick) {
+                leftPressedThisTick = true;
+                currentHovered = hovered.charSelect1;
+            }
+            if (KeyH.enterPressed && !enterPressedThisTick) {
+                enterPressedThisTick = true;
                 frame.remove(characterSelect);
                 frame.add(title);
                 currentHovered = hovered.titleStart;
             }
             break;
         case charSelect3:
-            if (KeyH.leftPressed) currentHovered = hovered.charSelect2;
-            if (KeyH.enterPressed) {
+            if (KeyH.leftPressed && !leftPressedThisTick) {
+                leftPressedThisTick = true;
+                currentHovered = hovered.charSelect2;
+            }
+            if (KeyH.enterPressed && !enterPressedThisTick) {
+                enterPressedThisTick = true;
                 frame.remove(characterSelect);
+                frame.add(title);
+                currentHovered = hovered.titleStart;
+            }
+            break;
+        case helpExit:
+            if (KeyH.enterPressed && !enterPressedThisTick) {
+                enterPressedThisTick = true;
+                frame.remove(help);
                 frame.add(title);
                 currentHovered = hovered.titleStart;
             }
@@ -124,9 +180,32 @@ public class Main {
         default:
             break;
         }
+        if (!KeyH.upPressed) upPressedThisTick = false;
+        if (!KeyH.downPressed) downPressedThisTick = false;
+        if (!KeyH.leftPressed) leftPressedThisTick = false;
+        if (!KeyH.rightPressed) rightPressedThisTick = false;
+        if (!KeyH.enterPressed) enterPressedThisTick = false;
     }
 
-    private class titlePanel extends JPanel {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String event = e.getActionCommand();
+        switch (event) {
+        case "gameLoopTimer":
+            getInputs();
+            title.repaint();
+            help.repaint();
+            characterSelect.repaint();
+            inGame.repaint();
+            gameLoopTimer.restart();
+            break;
+        default:
+            break;
+        }
+    }
+
+    private class TitlePanel extends JPanel {
+        @Override
         public void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D)g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -156,21 +235,25 @@ public class Main {
         }
     }
 
-    private class helpPanel extends JPanel {
+    private class HelpPanel extends JPanel {
+        @Override
+        public void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D)g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.drawImage(helpBg, 0, 0, null);
+        }
+    }
+
+    private class CharacterSelectPanel extends JPanel {
+        @Override
         public void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D)g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
     }
 
-    private class characterSelectPanel extends JPanel {
-        public void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D)g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        }
-    }
-
-    private class gamePanel extends JPanel {
+    private class GamePanel extends JPanel {
+        @Override
         public void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D)g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

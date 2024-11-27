@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "BallPickle_78b09b07"
+        },
+        {
+            "type": "java",
             "name": "Pong",
             "request": "launch",
             "mainClass": "Pong",

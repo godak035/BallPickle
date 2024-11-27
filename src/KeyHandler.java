@@ -4,12 +4,12 @@ import java.awt.event.*;
 
 public class KeyHandler implements KeyListener{
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
+    boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
     
     @Override
     public void keyTyped(KeyEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
+        //throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
     }
 
     @Override
