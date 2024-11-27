@@ -23,6 +23,14 @@ public class Main implements ActionListener {
     boolean upPressedThisTick, downPressedThisTick, leftPressedThisTick, rightPressedThisTick, enterPressedThisTick;
     KeyHandler KeyH;
     Timer gameLoopTimer;
+    Player player;
+    final int 
+        playerPositionXRelativeTo = 230,
+        playerPositionYRelativeTo = 383,
+        playerXMax = 542,
+        playerYMax = 289;
+
+    int frameCount = 0; //for debugging
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -50,6 +58,8 @@ public class Main implements ActionListener {
         gameLoopTimer.start();
 
         currentHovered = hovered.titleStart;
+
+        player = new Player(0, 0, 10, 20);
 
         upPressedThisTick = false;
         leftPressedThisTick = false;
@@ -97,6 +107,7 @@ public class Main implements ActionListener {
                 frame.remove(title);
                 frame.add(inGame);
                 currentHovered = hovered.inGame;
+                frame.revalidate();
             }
             break;
         case titleCharSelect:
@@ -113,6 +124,7 @@ public class Main implements ActionListener {
                 frame.remove(title);
                 frame.add(characterSelect);
                 currentHovered = hovered.charSelect1;
+                frame.revalidate();
             }
             break;
         case titleHelp:
@@ -122,11 +134,10 @@ public class Main implements ActionListener {
             }
             if (KeyH.enterPressed && !enterPressedThisTick) {
                 enterPressedThisTick = true;
-                frame.remove(title);
                 frame.add(help);
+                frame.remove(title);
                 currentHovered = hovered.helpExit;
-                help.repaint();
-                System.out.println("this is being run");
+                frame.revalidate();
             }
             break;
         case charSelect1:
@@ -139,6 +150,7 @@ public class Main implements ActionListener {
                 frame.remove(characterSelect);
                 frame.add(title);
                 currentHovered = hovered.titleStart;
+                frame.revalidate();
             }
             break;
         case charSelect2:
@@ -155,6 +167,7 @@ public class Main implements ActionListener {
                 frame.remove(characterSelect);
                 frame.add(title);
                 currentHovered = hovered.titleStart;
+                frame.revalidate();
             }
             break;
         case charSelect3:
@@ -167,14 +180,35 @@ public class Main implements ActionListener {
                 frame.remove(characterSelect);
                 frame.add(title);
                 currentHovered = hovered.titleStart;
+                frame.revalidate();
             }
             break;
         case helpExit:
             if (KeyH.enterPressed && !enterPressedThisTick) {
+                System.out.println("help exit AKLSJDHASKLDHASKLJDHAS");
                 enterPressedThisTick = true;
                 frame.remove(help);
                 frame.add(title);
                 currentHovered = hovered.titleStart;
+                frame.revalidate();
+            }
+            break;
+        case inGame:
+            if (KeyH.rightPressed) {
+                player.xx += player.velocity;
+                if (player.xx > playerXMax) player.xx = playerXMax;
+            }
+            if (KeyH.leftPressed) {
+                player.xx -= player.velocity;
+                if (player.xx < 0) player.xx = 0;
+            }
+            if (KeyH.upPressed) {
+                player.yy -= player.velocity;
+                if (player.yy < 0) player.yy = 0;
+            }
+            if (KeyH.downPressed) {
+                player.yy += player.velocity;
+                if (player.yy > playerYMax) player.yy = playerYMax;
             }
             break;
         default:
@@ -197,10 +231,10 @@ public class Main implements ActionListener {
             help.repaint();
             characterSelect.repaint();
             inGame.repaint();
-            gameLoopTimer.restart();
-            break;
-        default:
-            break;
+            player.updatePosition();
+            //for debugging
+            System.out.println("frame: " + frameCount + ", hovered: " + currentHovered + ", enter pressed: " + enterPressedThisTick);
+            frameCount++;
         }
     }
 
@@ -249,6 +283,23 @@ public class Main implements ActionListener {
         public void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D)g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.drawImage(characterSelectBg, 0, 0, null);
+            g2.drawImage(select, 32, 615, null);
+            g2.drawImage(select, 384, 615, null);
+            g2.drawImage(select, 720, 615, null);
+            switch (currentHovered) {
+            case charSelect1:
+                g2.drawImage(select, 12, 605, select.getWidth() + 40, select.getHeight() + 20, null);
+                break;
+            case charSelect2:
+                g2.drawImage(select, 364, 605, select.getWidth() + 40, select.getHeight() + 20, null);
+                break;
+            case charSelect3:
+                g2.drawImage(select, 700, 605, select.getWidth() + 40, select.getHeight() + 20, null);
+                break;
+            default:
+                break;
+            }
         }
     }
 
@@ -257,6 +308,8 @@ public class Main implements ActionListener {
         public void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D)g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.drawImage(court, 0, 0, null);
+            g2.fillRect(player.x + playerPositionXRelativeTo, player.y + playerPositionYRelativeTo, player.size, player.size);
         }
     }
 }

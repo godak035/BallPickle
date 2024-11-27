@@ -40,7 +40,7 @@ public class KeyHandler implements KeyListener{
         int code = e.getKeyCode();
 
         if (code==KeyEvent.VK_F){
-            enterPressed = true;
+            enterPressed = false;
         }
         
         if (code== KeyEvent.VK_LEFT){
