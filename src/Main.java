@@ -24,11 +24,12 @@ public class Main implements ActionListener {
     KeyHandler KeyH;
     Timer gameLoopTimer;
     Player player;
+    Ball ball;
     final int 
         playerPositionXRelativeTo = 230,
         playerPositionYRelativeTo = 383,
-        playerXMax = 542,
-        playerYMax = 289;
+        playerXMax = 562,
+        playerYMax = 309;
 
     int frameCount = 0; //for debugging
 
@@ -59,7 +60,9 @@ public class Main implements ActionListener {
 
         currentHovered = hovered.titleStart;
 
-        player = new Player(0, 0, 10, 20);
+        player = new Player(0, 0, 10, 40);
+
+        ball = new Ball(512.0, 500.0, 10.0, 0.0, 10);
 
         upPressedThisTick = false;
         leftPressedThisTick = false;
@@ -69,13 +72,11 @@ public class Main implements ActionListener {
 
         KeyH = new KeyHandler();
 
-        frame = new JFrame();
+        frame = new JFrame("BallPickle");
 		frame.setSize(1024, 768);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
         frame.addKeyListener(KeyH);
-		ImageIcon logo = new ImageIcon("logo.png");
-		frame.setIconImage(logo.getImage());
 
         title = new TitlePanel();
         title.setPreferredSize(new Dimension(1024, 768));
@@ -196,7 +197,7 @@ public class Main implements ActionListener {
         case inGame:
             if (KeyH.rightPressed) {
                 player.xx += player.velocity;
-                if (player.xx > playerXMax) player.xx = playerXMax;
+                if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
             }
             if (KeyH.leftPressed) {
                 player.xx -= player.velocity;
@@ -208,7 +209,7 @@ public class Main implements ActionListener {
             }
             if (KeyH.downPressed) {
                 player.yy += player.velocity;
-                if (player.yy > playerYMax) player.yy = playerYMax;
+                if (player.yy + player.size > playerYMax) player.yy = playerYMax - player.size;
             }
             break;
         default:
@@ -220,6 +221,8 @@ public class Main implements ActionListener {
         if (!KeyH.rightPressed) rightPressedThisTick = false;
         if (!KeyH.enterPressed) enterPressedThisTick = false;
     }
+
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -233,7 +236,13 @@ public class Main implements ActionListener {
             inGame.repaint();
             player.updatePosition();
             //for debugging
-            System.out.println("frame: " + frameCount + ", hovered: " + currentHovered + ", enter pressed: " + enterPressedThisTick);
+            System.out.print("frame: " + frameCount + ", hovered: " + currentHovered + ", key pressed: ");
+            if (KeyH.upPressed) System.out.print("UP ");
+            if (KeyH.downPressed) System.out.print("DOWN ");
+            if (KeyH.leftPressed) System.out.print("LEFT ");
+            if (KeyH.rightPressed) System.out.print("RIGHT ");
+            if (KeyH.enterPressed) System.out.print("F ");
+            System.out.println();
             frameCount++;
         }
     }

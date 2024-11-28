@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Entity extends Rectangle {
+public abstract class Entity extends Rectangle {
     int x, y;
     double xx, yy, velocity;
 
@@ -16,4 +16,6 @@ public class Entity extends Rectangle {
         this.x = (int)xx;
         this.y = (int)yy;
     }
+
+    abstract void updatePosition();
 }
