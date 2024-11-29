@@ -2,17 +2,20 @@
 public class Ball extends Entity {
 
     int size;
-    double theta; //the direction of the velocity vector
+    double theta;
 
-    /**
-    * A concise description of what the method does.
-    * double xx, double yy, double v, int s
+   /**
+    * constructor
+    * @param xx specific x position of the ball
+    * @param yy specific y position of the ball
+    * @param s  size of the ball
+    * @param v  velocity of the ball
+    * @param t  direction of velocity vector
     */
-
-    public Ball(double xx, double yy, double v, double t, int s) {
+    Ball(double xx, double yy, int s, double v, double t) {
         super(xx, yy, v);
-        this.theta = t;
         this.size = s;
+        this.theta = t;
     }
 
     @Override

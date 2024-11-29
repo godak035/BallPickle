@@ -36,7 +36,7 @@ public class Main implements ActionListener {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new Main();
+                Main m = new Main();
             }
         });
     }
@@ -62,7 +62,7 @@ public class Main implements ActionListener {
 
         player = new Player(0, 0, 10, 40);
 
-        ball = new Ball(512.0, 500.0, 10.0, 0.0, 10);
+        ball = new Ball(512.0, 500.0, 10, 10.0, 0.0);
 
         upPressedThisTick = false;
         leftPressedThisTick = false;
