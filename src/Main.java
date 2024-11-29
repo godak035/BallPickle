@@ -62,7 +62,8 @@ public class Main implements ActionListener {
 
         player = new Player(0, 0, 10, 40);
 
-        ball = new Ball(512.0, 500.0, 10, 10.0, 0.0);
+        ball = new Ball(512, 500, 10, 10);
+        ball.setTheta(0.0);
 
         upPressedThisTick = false;
         leftPressedThisTick = false;
@@ -319,6 +320,7 @@ public class Main implements ActionListener {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.drawImage(court, 0, 0, null);
             g2.fillRect(player.x + playerPositionXRelativeTo, player.y + playerPositionYRelativeTo, player.size, player.size);
+            g2.fillRect(ball.x, ball.y, ball.size, ball.size);
         }
     }
 }

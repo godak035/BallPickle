@@ -1,7 +1,7 @@
 
 public class Ball extends Entity {
 
-    int size;
+    public int size;
     double theta;
 
    /**
@@ -12,10 +12,9 @@ public class Ball extends Entity {
     * @param v  velocity of the ball
     * @param t  direction of velocity vector
     */
-    Ball(double xx, double yy, int s, double v, double t) {
+    Ball(double xx, double yy, int s, double v) {
         super(xx, yy, v);
         this.size = s;
-        this.theta = t;
     }
 
     @Override
@@ -27,6 +26,10 @@ public class Ball extends Entity {
         yy += vy;
         this.x = (int)xx;
         this.y = (int)yy;
+    }
+
+    public void setTheta(double t) {
+        this.theta = t;
     }
     
 }
