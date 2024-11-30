@@ -12,13 +12,13 @@ public class Ball extends Entity {
     * @param v  velocity of the ball
     * @param t  direction of velocity vector
     */
-    Ball(double xx, double yy, int s, double v) {
+    public Ball(double xx, double yy, int s, double v) {
         super(xx, yy, v);
         this.size = s;
     }
 
     @Override
-    void updatePosition() {
+    public void updatePosition() {
         double vx, vy; //x and y components of velocity
         vx = Math.cos(Math.toRadians(theta)) * velocity;
         vy = Math.sin(Math.toRadians(theta)) * velocity;

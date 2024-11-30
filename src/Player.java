@@ -12,7 +12,7 @@ public class Player extends Entity{
     }
 
     @Override
-    void updatePosition() {
+    public void updatePosition() {
         this.x = (int)xx;
         this.y = (int)yy;
     }

@@ -17,5 +17,5 @@ public abstract class Entity extends Rectangle {
         this.y = (int)yy;
     }
 
-    abstract void updatePosition();
+    public abstract void updatePosition();
 }
