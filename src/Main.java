@@ -8,6 +8,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.imageio.*;
 import java.awt.image.*;
+import java.util.Random;
 import java.awt.event.*;
 
 public class Main implements ActionListener {
@@ -25,6 +26,7 @@ public class Main implements ActionListener {
     Timer gameLoopTimer;
     Player player;
     Ball ball;
+    Enemy enemy;
     final int 
         playerPositionXRelativeTo = 230,
         playerPositionYRelativeTo = 383,
@@ -64,6 +66,8 @@ public class Main implements ActionListener {
 
         ball = new Ball(512, 500, 10, 10);
         ball.setTheta(0.0);
+
+        enemy = new Enemy(495, 100, 5.0, 30, 1); // prototype opponent. Level determines probability of enemy hitting the ball back.
 
         upPressedThisTick = false;
         leftPressedThisTick = false;
@@ -245,6 +249,11 @@ public class Main implements ActionListener {
             if (KeyH.enterPressed) System.out.print("F ");
             System.out.println();
             frameCount++;
+            enemyMove(enemy, ball);
+            if (ballCollidesWithEnemy(ball, enemy)) { //checks the bool to see if ball has hit enemy, if true, tries to do enemy strike (success based on enemy level and probability)
+                enemyStrike(enemy, ball);
+            }
+            break;
         }
     }
 
@@ -321,6 +330,52 @@ public class Main implements ActionListener {
             g2.drawImage(court, 0, 0, null);
             g2.fillRect(player.x + playerPositionXRelativeTo, player.y + playerPositionYRelativeTo, player.size, player.size);
             g2.fillRect(ball.x, ball.y, ball.size, ball.size);
+            g2.fillRect(enemy.x, enemy.y, enemy.size, enemy.size); //draws the enemy
         }
     }
+
+    
+      public void enemyMove(Enemy enemy, Ball ball) {
+    // Enemy will be idle at these center coordinated if the ball is far away.
+    int centerX = 495; 
+    int centerY = 100; 
+    
+    if (ball.yy >= 425) { 
+        // If the ball is far from the enemy the enemy will try to move back to their center coordinates
+        if (enemy.yy < centerY) enemy.yy += enemy.velocity; //checks if the enemy is not on the center coordinates, if so, moves the enemy back to the center coordinates (this is only if the ball is at y >= 425)  
+        if (enemy.yy > centerY) enemy.yy -= enemy.velocity;
+        if (enemy.xx < centerX) enemy.xx += enemy.velocity; //same thing but for x coordinates.
+        if (enemy.xx > centerX) enemy.xx -= enemy.velocity;
+        return; 
+    }
+
+    // track ball's X position if ball is too close to the enemy
+    if (ball.yy <= 385)
+        if (enemy.xx < ball.xx) enemy.xx += enemy.velocity; 
+        else if (enemy.xx > ball.xx) enemy.xx -= enemy.velocity;
+
+        // same thing but for ball's Y posiition.
+        if (ball.yy < enemy.yy) enemy.yy -= enemy.velocity; 
+        else if (ball.yy > enemy.yy) enemy.yy += enemy.velocity;
+}
+
+public void enemyStrike(Enemy enemy, Ball ball) {
+    Random rand = new Random();
+    int returnProbability = enemy.level * 20; // Higher level means better success rate. We should change this, this is just a placeholder for now.
+    if (rand.nextInt(100) < returnProbability) {
+        // The enemy successfully returns the ball
+        ball.yy += -ball.velocity; // Reverse ball's Y direction
+        
+    } else {
+        // If the enemy misses the ball
+        System.out.println("Enemy missed the ball!");
+        //add the score, Avishan has to do this idk.
+    }
+   }
+
+   private boolean ballCollidesWithEnemy(Ball ball, Enemy enemy) {
+    // check if ball is colliding with enemy
+    return ball.xx < enemy.xx + enemy.size && ball.xx + ball.size > enemy.xx &&
+           ball.yy < enemy.yy + enemy.size && ball.yy + ball.size > enemy.yy;
+   }
 }

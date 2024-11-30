@@ -4,7 +4,7 @@ public class Enemy extends Entity {
 
 
     /**
-    * enemies on our six!!!!!!!!!!!!!!!!!!
+    * 
     * @param xx
     * @param yy
     * @param v
