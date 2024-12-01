@@ -64,7 +64,7 @@ public class Main implements ActionListener {
 
         player = new Player(0, 0, 10, 40);
 
-        ball = new Ball(512, 500, 10, 10);
+        ball = new Ball(300, 500, 10, 0);
         ball.setTheta(0.0);
 
         enemy = new Enemy(495, 100, 5.0, 30, 1); // prototype opponent. Level determines probability of enemy hitting the ball back.
@@ -216,6 +216,26 @@ public class Main implements ActionListener {
                 player.yy += player.velocity;
                 if (player.yy + player.size > playerYMax) player.yy = playerYMax - player.size;
             }
+            if (KeyH.enterPressed) {
+                if (!enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    /*spots ball flies to:
+                     * left: (312, 100)
+                     * centre: (512, 100)
+                     * right: (712, 100)
+                    */
+                    if (player.x + playerPositionXRelativeTo < ball.x && player.x + playerPositionXRelativeTo + player.size > ball.x && player.y + playerPositionYRelativeTo < ball.y && player.y + playerPositionYRelativeTo + player.size > ball.y) {
+                        ball.velocity = 1;
+                        if (KeyH.leftPressed) {
+                            ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 312)) * -1));
+                        } else if (KeyH.rightPressed) {
+                            ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 712)) * -1));
+                        } else {
+                            ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 512)) * -1));
+                        }
+                    }
+                }
+            }
             break;
         default:
             break;
@@ -225,7 +245,7 @@ public class Main implements ActionListener {
         if (!KeyH.leftPressed) leftPressedThisTick = false;
         if (!KeyH.rightPressed) rightPressedThisTick = false;
         if (!KeyH.enterPressed) enterPressedThisTick = false;
-    }
+    }//end getInputs
 
     
 
@@ -240,6 +260,12 @@ public class Main implements ActionListener {
             characterSelect.repaint();
             inGame.repaint();
             player.updatePosition();
+            moveBall(ball);
+            ball.updatePosition();
+            enemyMove(enemy, ball);
+            if (ballCollidesWithEnemy(ball, enemy)) { //checks the bool to see if ball has hit enemy, if true, tries to do enemy strike (success based on enemy level and probability)
+                enemyStrike(enemy, ball);
+            }
             //for debugging
             System.out.print("frame: " + frameCount + ", hovered: " + currentHovered + ", key pressed: ");
             if (KeyH.upPressed) System.out.print("UP ");
@@ -249,13 +275,9 @@ public class Main implements ActionListener {
             if (KeyH.enterPressed) System.out.print("F ");
             System.out.println();
             frameCount++;
-            enemyMove(enemy, ball);
-            if (ballCollidesWithEnemy(ball, enemy)) { //checks the bool to see if ball has hit enemy, if true, tries to do enemy strike (success based on enemy level and probability)
-                enemyStrike(enemy, ball);
-            }
             break;
         }
-    }
+    }//end actionPerformed
 
     private class TitlePanel extends JPanel {
         @Override
@@ -359,23 +381,41 @@ public class Main implements ActionListener {
         else if (ball.yy > enemy.yy) enemy.yy += enemy.velocity;
 }
 
-public void enemyStrike(Enemy enemy, Ball ball) {
-    Random rand = new Random();
-    int returnProbability = enemy.level * 20; // Higher level means better success rate. We should change this, this is just a placeholder for now.
-    if (rand.nextInt(100) < returnProbability) {
-        // The enemy successfully returns the ball
-        ball.yy += -ball.velocity; // Reverse ball's Y direction
-        
-    } else {
-        // If the enemy misses the ball
-        System.out.println("Enemy missed the ball!");
-        //add the score, Avishan has to do this idk.
+    public void enemyStrike(Enemy enemy, Ball ball) {
+        Random rand = new Random();
+        int returnProbability = enemy.level * 20; // Higher level means better success rate. We should change this, this is just a placeholder for now.
+        if (rand.nextInt(100) < returnProbability) {
+            // The enemy successfully returns the ball
+            ball.yy += -ball.velocity; // Reverse ball's Y direction
+        } else {
+            // If the enemy misses the ball
+            System.out.println("Enemy missed the ball!");
+            //add the score, Avishan has to do this idk.
+        }
     }
-   }
 
-   private boolean ballCollidesWithEnemy(Ball ball, Enemy enemy) {
-    // check if ball is colliding with enemy
-    return ball.xx < enemy.xx + enemy.size && ball.xx + ball.size > enemy.xx &&
+    private boolean ballCollidesWithEnemy(Ball ball, Enemy enemy) {
+        // check if ball is colliding with enemy
+        return ball.xx < enemy.xx + enemy.size && ball.xx + ball.size > enemy.xx &&
            ball.yy < enemy.yy + enemy.size && ball.yy + ball.size > enemy.yy;
-   }
+    }
+
+    private void moveBall(Ball b) {
+        double vx, vy;
+        if (b.theta < 90) {
+            vx = Math.cos(Math.toRadians(b.theta)) * b.velocity;
+            vy = Math.sin(Math.toRadians(b.theta)) * b.velocity;
+        } else if (b.theta < 180) {
+            vx = Math.cos(Math.toRadians(180 - b.theta)) * b.velocity;
+            vy = Math.sin(Math.toRadians(180 - b.theta)) * b.velocity;
+        } else if (b.theta < 270) {
+            vx = Math.cos(Math.toRadians(180 + b.theta)) * b.velocity;
+            vy = Math.sin(Math.toRadians(180 + b.theta)) * b.velocity;
+        } else {
+            vx = Math.cos(Math.toRadians(360 - b.theta)) * b.velocity;
+            vy = Math.sin(Math.toRadians(360 - b.theta)) * b.velocity;
+        }
+        b.xx += vx;
+        b.yy += vy;
+    }
 }
