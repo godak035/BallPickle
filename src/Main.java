@@ -62,12 +62,12 @@ public class Main implements ActionListener {
 
         currentHovered = hovered.titleStart;
 
-        player = new Player(0, 0, 10, 40);
+        player = new Player(0, 0, 5, 40);
 
         ball = new Ball(300, 500, 10, 0);
         ball.setTheta(0.0);
 
-        enemy = new Enemy(495, 100, 5.0, 30, 1); // prototype opponent. Level determines probability of enemy hitting the ball back.
+        enemy = new Enemy(495, 100, 2, 30, 5); // prototype opponent. Level determines probability of enemy hitting the ball back.
 
         upPressedThisTick = false;
         leftPressedThisTick = false;
@@ -263,8 +263,10 @@ public class Main implements ActionListener {
             moveBall(ball);
             ball.updatePosition();
             enemyMove(enemy, ball);
+            enemy.updatePosition();
             if (ballCollidesWithEnemy(ball, enemy)) { //checks the bool to see if ball has hit enemy, if true, tries to do enemy strike (success based on enemy level and probability)
-                enemyStrike(enemy, ball);
+               enemyStrike(enemy, ball);
+                
             }
             //for debugging
             System.out.print("frame: " + frameCount + ", hovered: " + currentHovered + ", key pressed: ");
@@ -356,49 +358,70 @@ public class Main implements ActionListener {
         }
     }
 
+    /**
+     * Responsible for moving the enemy to the ball as well as back to the center position.
+     * @param enemy needed to move the enemy character, check its position relative to the ball
+     * @param ball needed to check the position of the ball, in order for the enemy to "intercept" it.
+     */
+    public void enemyMove(Enemy enemy, Ball ball) {
+        // Enemy will be idle at these center coordinated if the ball is far away, and the enemy will also return to these coordinates if the ball is far enough away.
+        int centerX = 495; 
+        int centerY = 100;
+        // The enemy shouldn't exceed these y coordinates, so as to not overlap with the net and such.
+        int maxY = 255;
+        // Ensures the enemy stays under y = 255.
+        if (enemy.yy >= maxY) enemy.yy = maxY;
+
+        if (ball.yy >= 425) { 
+            // If the ball is far from the enemy the enemy will try to move back to their center coordinates
+            if (enemy.yy < centerY) enemy.yy += enemy.velocity; //checks if the enemy is not on the center coordinates, if so, moves the enemy back to the center coordinates (this is only if the ball is at y >= 425)  
+            if (enemy.yy > centerY) enemy.yy -= enemy.velocity;
+            if (enemy.xx < centerX) enemy.xx += enemy.velocity; //same thing but for x coordinates.
+            if (enemy.xx > centerX) enemy.xx -= enemy.velocity;
+            return; 
+        }
     
-      public void enemyMove(Enemy enemy, Ball ball) {
-    // Enemy will be idle at these center coordinated if the ball is far away.
-    int centerX = 495; 
-    int centerY = 100; 
+        // track (follow) ball's X position if ball is close to the enemy
+        if (ball.yy <= 385)
+            if (enemy.xx < ball.xx) enemy.xx += enemy.velocity; 
+            else if (enemy.xx > ball.xx) enemy.xx -= enemy.velocity;
     
-    if (ball.yy >= 425) { 
-        // If the ball is far from the enemy the enemy will try to move back to their center coordinates
-        if (enemy.yy < centerY) enemy.yy += enemy.velocity; //checks if the enemy is not on the center coordinates, if so, moves the enemy back to the center coordinates (this is only if the ball is at y >= 425)  
-        if (enemy.yy > centerY) enemy.yy -= enemy.velocity;
-        if (enemy.xx < centerX) enemy.xx += enemy.velocity; //same thing but for x coordinates.
-        if (enemy.xx > centerX) enemy.xx -= enemy.velocity;
-        return; 
+            // same thing but for ball's Y posiition.
+            if (ball.yy < enemy.yy) enemy.yy -= enemy.velocity; 
+            else if (ball.yy > enemy.yy) enemy.yy += enemy.velocity;
     }
-
-    // track ball's X position if ball is too close to the enemy
-    if (ball.yy <= 385)
-        if (enemy.xx < ball.xx) enemy.xx += enemy.velocity; 
-        else if (enemy.xx > ball.xx) enemy.xx -= enemy.velocity;
-
-        // same thing but for ball's Y posiition.
-        if (ball.yy < enemy.yy) enemy.yy -= enemy.velocity; 
-        else if (ball.yy > enemy.yy) enemy.yy += enemy.velocity;
-}
-
-    public void enemyStrike(Enemy enemy, Ball ball) {
-        Random rand = new Random();
-        int returnProbability = enemy.level * 20; // Higher level means better success rate. We should change this, this is just a placeholder for now.
-        if (rand.nextInt(100) < returnProbability) {
-            // The enemy successfully returns the ball
-            ball.yy += -ball.velocity; // Reverse ball's Y direction
+    
+    /**
+     * Responsible for having the enemy strike the ball.
+     * @param enemy needed for enemy level to be checked, in order to measure probability of a successful return.
+     * @param ball needed to change velocity of the ball (return the ball)
+     */
+    private void enemyStrike(Enemy enemy, Ball ball) {
+        Random random = new Random();
+        if (random.nextInt(100) < enemy.level * 20) { // Success probability based on enemy's level. Right now I made it so that level 5 = 100%.
+            // The y-coordinate of the ball gets pushed up by 10px to avoid hitbox overlap. This stops the jittering, and makes the hits look a little more realistic.
+            ball.yy += 10;
+            // Updated the velocity for the ball to be returned.
+            ball.velocity *= -1;
         } else {
-            // If the enemy misses the ball
+            // Debug message.
             System.out.println("Enemy missed the ball!");
-            //add the score, Avishan has to do this idk.
         }
     }
+    
 
-    private boolean ballCollidesWithEnemy(Ball ball, Enemy enemy) {
-        // check if ball is colliding with enemy
-        return ball.xx < enemy.xx + enemy.size && ball.xx + ball.size > enemy.xx &&
-           ball.yy < enemy.yy + enemy.size && ball.yy + ball.size > enemy.yy;
-    }
+    
+/**
+ * Method checks if the ball has collided with the enemy. I reference the method in the actionPerformed() method, where if this bool is true, the enemyStrike() method will run.
+ * @param ball needed for collisions.
+ * @param enemy also needed for collisions. 
+ * @return whether or not the ball rectangle intersets with the enemy rectangle (collision detection).
+ */
+   private boolean ballCollidesWithEnemy(Ball ball, Enemy enemy) {
+      Rectangle ballRect = new Rectangle(ball.x, ball.y, ball.size, ball.size);
+      Rectangle enemyRect = new Rectangle(enemy.x, enemy.y, enemy.size, enemy.size);
+      return ballRect.intersects(enemyRect);
+}
 
     private void moveBall(Ball b) {
         double vx, vy;

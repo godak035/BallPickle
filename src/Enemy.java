@@ -13,16 +13,13 @@ public class Enemy extends Entity {
     public Enemy(double xx, double yy, double v, int s, int level) {
         super(xx, yy, v);
         this.size = s;
+        this.level = level;
     }
 
 
     @Override
     public void updatePosition() {
-        this.x = (int)xx;
-        this.y = (int)yy;
+        this.x = (int) xx;
+        this.y = (int) yy;
     }
-
-
-
-
 }

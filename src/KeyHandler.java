@@ -19,18 +19,18 @@ public class KeyHandler implements KeyListener{
             enterPressed = true;
         }
         
-        if (code== KeyEvent.VK_LEFT){
+        if (code== KeyEvent.VK_A){
             leftPressed = true;
         }
 
-        if (code== KeyEvent.VK_RIGHT){
+        if (code== KeyEvent.VK_D){
             rightPressed = true;
         }
-        if (code== KeyEvent.VK_UP){
+        if (code== KeyEvent.VK_W){
             upPressed = true;
         }
 
-        if (code== KeyEvent.VK_DOWN){
+        if (code== KeyEvent.VK_S){
             downPressed = true;
         }
     }
@@ -43,18 +43,18 @@ public class KeyHandler implements KeyListener{
             enterPressed = false;
         }
         
-        if (code== KeyEvent.VK_LEFT){
+        if (code== KeyEvent.VK_A){
             leftPressed = false;
         }
 
-        if (code== KeyEvent.VK_RIGHT){
+        if (code== KeyEvent.VK_D){
             rightPressed = false;
         }
-        if (code== KeyEvent.VK_UP){
+        if (code== KeyEvent.VK_W){
             upPressed = false;
         }
 
-        if (code== KeyEvent.VK_DOWN){
+        if (code== KeyEvent.VK_S){
             downPressed = false;
         }
     }
