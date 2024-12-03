@@ -1,9 +1,10 @@
-/**
+/***
  * Main.java
- * The main menu screen. :scream:
+ * The main gameloop of the BallPickle game.
+ * by: David Sue, Vadim Mironov, Avishan Ketheswaran and Owen McCarthy
+ * December 2, 2024
  */
 
-//
 import java.awt.*;
 import javax.swing.*;
 import javax.imageio.*;
@@ -14,27 +15,38 @@ import java.awt.event.*;
 public class Main implements ActionListener {
     
     JFrame frame;
+    //Different panels that are drawn on for the title screen, game screen, help screen and character select screen
     TitlePanel title;
     GamePanel inGame;
     HelpPanel help;
     CharacterSelectPanel characterSelect;
+
     BufferedImage characterSelectBg, select, titleBg, titleSelect, helpBg, court;
+
+    //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
     static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleCharSelect, titleHelp, inGame, helpExit };
 	static private hovered currentHovered;
+
+    //Whether or not the user has released the keys since they have pressed them (used in the menus, to ensure that you don't move down 2 options if you press the down key for 2 frames)
     boolean upPressedThisTick, downPressedThisTick, leftPressedThisTick, rightPressedThisTick, enterPressedThisTick;
+    
     KeyHandler KeyH;
     Timer gameLoopTimer;
     Player player;
     Ball ball;
     Enemy enemy;
+
     final int 
         playerPositionXRelativeTo = 230,
         playerPositionYRelativeTo = 383,
         playerXMax = 562,
         playerYMax = 309;
 
-    int frameCount = 0; //for debugging
+    // int frameCount = 0; //for debugging
 
+    /**
+     * Main method
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -43,6 +55,9 @@ public class Main implements ActionListener {
         });
     }
 
+    /**
+     * Constructor: where the variables are initialized. 
+     */
     Main() {
         try {
 			characterSelectBg = ImageIO.read(this.getClass().getResource("sprites/characterSelect.png"));
@@ -101,6 +116,9 @@ public class Main implements ActionListener {
         frame.setVisible(true);
     }
 
+    /**
+     * Gets the inputs each time it is called, and reacts accordingly
+     */
     public void getInputs() {
         switch (currentHovered) {
         case titleStart:
@@ -247,40 +265,49 @@ public class Main implements ActionListener {
         if (!KeyH.enterPressed) enterPressedThisTick = false;
     }//end getInputs
 
-    
-
+    /**
+     * Responds to game loop timer, updates all values.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String event = e.getActionCommand();
         switch (event) {
         case "gameLoopTimer":
             getInputs();
+
+            //Repaints each panel
             title.repaint();
             help.repaint();
             characterSelect.repaint();
             inGame.repaint();
+            
+            //updates the position of the player, ball, and enemy
             player.updatePosition();
             moveBall(ball);
             ball.updatePosition();
             enemyMove(enemy, ball);
             enemy.updatePosition();
-            if (ballCollidesWithEnemy(ball, enemy)) { //checks the bool to see if ball has hit enemy, if true, tries to do enemy strike (success based on enemy level and probability)
+            if (ballCollidesWithEnemy(ball, enemy)) { //Checks the bool to see if ball has hit enemy, if true, tries to do enemy strike (success based on enemy level and probability)
                enemyStrike(enemy, ball);
-                
             }
             //for debugging
-            System.out.print("frame: " + frameCount + ", hovered: " + currentHovered + ", key pressed: ");
-            if (KeyH.upPressed) System.out.print("UP ");
-            if (KeyH.downPressed) System.out.print("DOWN ");
-            if (KeyH.leftPressed) System.out.print("LEFT ");
-            if (KeyH.rightPressed) System.out.print("RIGHT ");
-            if (KeyH.enterPressed) System.out.print("F ");
-            System.out.println();
-            frameCount++;
+            // System.out.print("frame: " + frameCount + ", hovered: " + currentHovered + ", key pressed: ");
+            // if (KeyH.upPressed) System.out.print("UP ");
+            // if (KeyH.downPressed) System.out.print("DOWN ");
+            // if (KeyH.leftPressed) System.out.print("LEFT ");
+            // if (KeyH.rightPressed) System.out.print("RIGHT ");
+            // if (KeyH.enterPressed) System.out.print("F ");
+            // System.out.println();
+            // frameCount++;
+            break;
+        default:
             break;
         }
     }//end actionPerformed
 
+    /***
+     * TitlePanel is the panel where the title screen is drawn
+     */
     private class TitlePanel extends JPanel {
         @Override
         public void paintComponent(Graphics g) {
@@ -312,6 +339,9 @@ public class Main implements ActionListener {
         }
     }
 
+    /***
+     * HelpPanel is the panel where the help screen is drawn
+     */
     private class HelpPanel extends JPanel {
         @Override
         public void paintComponent(Graphics g) {
@@ -321,6 +351,9 @@ public class Main implements ActionListener {
         }
     }
 
+    /***
+     * CharacterSelectPanel is the panel where the character select screen is drawn
+     */
     private class CharacterSelectPanel extends JPanel {
         @Override
         public void paintComponent(Graphics g) {
@@ -330,6 +363,8 @@ public class Main implements ActionListener {
             g2.drawImage(select, 32, 615, null);
             g2.drawImage(select, 384, 615, null);
             g2.drawImage(select, 720, 615, null);
+
+            //Inflates the size of the button that the user is hovering
             switch (currentHovered) {
             case charSelect1:
                 g2.drawImage(select, 12, 605, select.getWidth() + 40, select.getHeight() + 20, null);
@@ -346,6 +381,9 @@ public class Main implements ActionListener {
         }
     }
 
+    /***
+     * GamePanel is the panel where the game screen is drawn
+     */
     private class GamePanel extends JPanel {
         @Override
         public void paintComponent(Graphics g) {
@@ -411,18 +449,22 @@ public class Main implements ActionListener {
     
 
     
-/**
- * Method checks if the ball has collided with the enemy. I reference the method in the actionPerformed() method, where if this bool is true, the enemyStrike() method will run.
- * @param ball needed for collisions.
- * @param enemy also needed for collisions. 
- * @return whether or not the ball rectangle intersets with the enemy rectangle (collision detection).
- */
-   private boolean ballCollidesWithEnemy(Ball ball, Enemy enemy) {
-      Rectangle ballRect = new Rectangle(ball.x, ball.y, ball.size, ball.size);
-      Rectangle enemyRect = new Rectangle(enemy.x, enemy.y, enemy.size, enemy.size);
-      return ballRect.intersects(enemyRect);
-}
+    /**
+     * Method checks if the ball has collided with the enemy. I reference the method in the actionPerformed() method, where if this bool is true, the enemyStrike() method will run.
+     * @param ball: The ball that is checked if it has a collision with the enemy.
+     * @param enemy The enemy that is checked if it has a collision with the ball.
+     * @return whether or not the ball rectangle intersets with the enemy rectangle (collision detection).
+     */
+    private boolean ballCollidesWithEnemy(Ball ball, Enemy enemy) {
+        Rectangle ballRect = new Rectangle(ball.x, ball.y, ball.size, ball.size);
+        Rectangle enemyRect = new Rectangle(enemy.x, enemy.y, enemy.size, enemy.size);
+        return ballRect.intersects(enemyRect);
+    }
 
+    /**
+     * Moves the ball
+     * @param b: The ball to me moved
+     */
     private void moveBall(Ball b) {
         double vx, vy;
         if (b.theta < 90) {

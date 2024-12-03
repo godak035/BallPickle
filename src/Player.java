@@ -1,11 +1,21 @@
+/***
+ * Player.java
+ * The player of the BallPickle game must move around according to the user's inputs and interact with the court and the ball.
+ * by: David Sue, Vadim Mironov, Avishan Ketheswaran and Owen McCarthy
+ * December 2, 2024
+ */
+
 public class Player extends Entity{
 
     int size;
 
     /**
-    * A concise description of what the method does.
-    * double xx, double yy, double v, int s, KeyHandler, keyH
-    */
+     * Constructor
+     * @param xx: The precise x position of the player
+     * @param yy: The precise y position of the player
+     * @param v: The velocity of the player
+     * @param s: the size of the player
+     */
     public Player(double xx, double yy, double v, int s) {
         super(xx, yy, v);
         this.size = s;
