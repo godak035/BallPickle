@@ -34,6 +34,13 @@ public class Ball extends Entity {
         yy += vy;
         this.x = (int)xx;
         this.y = (int)yy;
+
+        
+        
+    }
+    public int checkPosition(){
+
+        return this.y;
     }
 
     /**

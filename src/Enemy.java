@@ -7,6 +7,7 @@
 public class Enemy extends Entity {
     
     int size, level;
+    int score = 0;
 
    /**
     * Constructor

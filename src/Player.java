@@ -8,6 +8,7 @@
 public class Player extends Entity{
 
     int size;
+    int score = 0;
 
     /**
      * Constructor

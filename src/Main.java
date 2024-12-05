@@ -36,11 +36,13 @@ public class Main implements ActionListener {
     Ball ball;
     Enemy enemy;
 
+    boolean playerHitLast;
+
     final int 
         playerPositionXRelativeTo = 230,
-        playerPositionYRelativeTo = 383,
+        playerPositionYRelativeTo = 475,
         playerXMax = 562,
-        playerYMax = 309;
+        playerYMax = 218;
 
     // int frameCount = 0; //for debugging
 
@@ -77,7 +79,7 @@ public class Main implements ActionListener {
 
         currentHovered = hovered.titleStart;
 
-        player = new Player(0, 0, 5, 40);
+        player = new Player(282, 125, 5, 40);
 
         ball = new Ball(300, 500, 10, 0);
         ball.setTheta(0.0);
@@ -251,7 +253,10 @@ public class Main implements ActionListener {
                         } else {
                             ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 512)) * -1));
                         }
+                        playerHitLast = true;
                     }
+                    
+                    
                 }
             }
             break;
@@ -290,6 +295,23 @@ public class Main implements ActionListener {
             if (ballCollidesWithEnemy(ball, enemy)) { //Checks the bool to see if ball has hit enemy, if true, tries to do enemy strike (success based on enemy level and probability)
                enemyStrike(enemy, ball);
             }
+
+            if (ball.y <=0){
+                if (playerHitLast) {
+                    player.score++;
+                    resetGame();
+                }
+            }
+                 
+            if (ball.y >= 724) {
+                if (!playerHitLast){
+                    enemy.score++;
+                    resetGame();
+                }
+            } 
+            System.out.println("Enemy score: " + enemy.score + ", Player score: " + player.score);
+                
+            System.out.println("Player hitlast: " + playerHitLast);
             //for debugging
             // System.out.print("frame: " + frameCount + ", hovered: " + currentHovered + ", key pressed: ");
             // if (KeyH.upPressed) System.out.print("UP ");
@@ -391,8 +413,10 @@ public class Main implements ActionListener {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.drawImage(court, 0, 0, null);
             g2.fillRect(player.x + playerPositionXRelativeTo, player.y + playerPositionYRelativeTo, player.size, player.size);
-            g2.fillRect(ball.x, ball.y, ball.size, ball.size);
+            g2.fillRect(ball.x, ball.y, ball.size, ball.size); //draws the ball
             g2.fillRect(enemy.x, enemy.y, enemy.size, enemy.size); //draws the enemy
+            g2.drawString("Enemy: " + enemy.score, 150, 60);
+            g2.drawString("Player: " + player.score, 800, 720);
         }
     }
 
@@ -410,6 +434,7 @@ public class Main implements ActionListener {
         // Ensures the enemy stays under y = 255.
         if (enemy.yy >= maxY) enemy.yy = maxY;
 
+        
         if (ball.yy >= 425) { 
             // If the ball is far from the enemy the enemy will try to move back to their center coordinates
             if (enemy.yy < centerY) enemy.yy += enemy.velocity; //checks if the enemy is not on the center coordinates, if so, moves the enemy back to the center coordinates (this is only if the ball is at y >= 425)  
@@ -420,13 +445,23 @@ public class Main implements ActionListener {
         }
     
         // track (follow) ball's X position if ball is close to the enemy
-        if (ball.yy <= 385)
+        if (ball.yy <= 385) {
             if (enemy.xx < ball.xx) enemy.xx += enemy.velocity; 
             else if (enemy.xx > ball.xx) enemy.xx -= enemy.velocity;
     
             // same thing but for ball's Y posiition.
             if (ball.yy < enemy.yy) enemy.yy -= enemy.velocity; 
             else if (ball.yy > enemy.yy) enemy.yy += enemy.velocity;
+        }
+        
+       
+        //checks if the ball is moving towards the enemy or towards the player
+        if (ball.theta < 90) {
+            
+        } else {
+            
+        }
+
     }
     
     /**
@@ -441,13 +476,13 @@ public class Main implements ActionListener {
             ball.yy += 10;
             // Updated the velocity for the ball to be returned.
             ball.velocity *= -1;
+            // Set playerHitLast to false.
+            playerHitLast = false;
         } else {
             // Debug message.
             System.out.println("Enemy missed the ball!");
         }
     }
-    
-
     
     /**
      * Method checks if the ball has collided with the enemy. I reference the method in the actionPerformed() method, where if this bool is true, the enemyStrike() method will run.
@@ -482,5 +517,18 @@ public class Main implements ActionListener {
         }
         b.xx += vx;
         b.yy += vy;
+    }
+
+    public void resetGame() {
+        player.xx = 282;
+        player.yy = 125;
+        player.updatePosition();
+        enemy.xx = 495;
+        enemy.yy = 100;
+        enemy.updatePosition();
+        ball.xx = 300;
+        ball.yy = 500;
+        ball.updatePosition();
+        ball.velocity = 0;
     }
 }
