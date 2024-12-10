@@ -9,7 +9,7 @@ import java.awt.event.*;
 public class KeyHandler implements KeyListener{
 
     //booleans of whether a key (up, down, left, right, enter) is currently being pressed
-    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, dashPressed, abilityPressed;
     
     /**
      * Updates the corresponding variable when a key gets pressed
@@ -18,6 +18,16 @@ public class KeyHandler implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
+
+        //Ability
+        if (code == KeyEvent.VK_Q) {
+            abilityPressed = true;
+        }
+        //Dash
+        if (code == KeyEvent.VK_E) {
+            dashPressed = true;
+        }
+        //swing/enter
         if (code == KeyEvent.VK_F) {
             enterPressed = true;
         }
@@ -45,7 +55,15 @@ public class KeyHandler implements KeyListener{
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
-        
+        //Ability
+        if (code == KeyEvent.VK_Q) {
+            abilityPressed = false;
+        }
+        //Dash
+        if (code == KeyEvent.VK_E) {
+            dashPressed = false;
+        }
+        //swing/enter
         if (code == KeyEvent.VK_F) {
             enterPressed = false;
         }

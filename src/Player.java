@@ -28,4 +28,9 @@ public class Player extends Entity{
         this.y = (int)yy;
     }
 
+    public void dash(int paces) {
+        this.xx += paces; // Update player's position by the specified number of paces
+        System.out.println("Player dashed to position: " + this.xx);
+    }
+
 }

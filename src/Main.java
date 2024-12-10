@@ -36,7 +36,7 @@ public class Main implements ActionListener {
     Ball ball;
     Enemy enemy;
 
-    boolean playerHitLast;
+    boolean playerHitLast, lookRightLast;
 
     final int 
         playerPositionXRelativeTo = 230,
@@ -221,10 +221,12 @@ public class Main implements ActionListener {
             break;
         case inGame:
             if (KeyH.rightPressed) {
+                lookRightLast=true;
                 player.xx += player.velocity;
                 if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
             }
             if (KeyH.leftPressed) {
+                lookRightLast=false;
                 player.xx -= player.velocity;
                 if (player.xx < 0) player.xx = 0;
             }
@@ -258,6 +260,18 @@ public class Main implements ActionListener {
                     
                     
                 }
+            }
+
+            if (KeyH.dashPressed){
+                if(lookRightLast){
+                    player.dash(10);
+                    if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
+                }
+                if(!lookRightLast){
+                    player.dash(-10);
+                    if (player.xx < 0) player.xx = 0;
+                }
+                
             }
             break;
         default:
