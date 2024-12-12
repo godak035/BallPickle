@@ -7,7 +7,7 @@
 public class Ball extends Entity {
 
     public int size;
-    double theta;
+    double destinationX, destinationY, theta;
 
    /**
     * Constructor
@@ -27,28 +27,80 @@ public class Ball extends Entity {
      */
     @Override
     public void updatePosition() {
-        double vx, vy; //x and y components of velocity
-        vx = Math.cos(Math.toRadians(theta)) * velocity;
-        vy = Math.sin(Math.toRadians(theta)) * velocity;
-        xx += vx;
-        yy += vy;
         this.x = (int)xx;
         this.y = (int)yy;
-
-        
-        
-    }
-    public int checkPosition(){
-
-        return this.y;
-    }
-
-    /**
-     * Sets the theta angle of the ball
-     * @param t: The new angle, in degrees, of the ball
-     */
-    public void setTheta(double t) {
-        this.theta = t;
     }
     
+    public void setDestination(double dX, double dY) {
+        this.destinationX = dX;
+        this.destinationY = dY;
+
+        /*
+         * sets the theta
+         * 0 = up
+         * 90 = right
+         * 180 = down
+         * 270 = left
+         * -1 = no direction (ball is already at the right position)
+         */
+        if (this.yy < dY) {
+            if (this.xx < dX) {
+                this.theta = 90 + Math.toDegrees(Math.atan(Math.abs((this.yy - dY)/(this.xx - dX))));
+            } else if (this.xx > dX) {
+                this.theta = 270 - Math.toDegrees(Math.atan(Math.abs((this.yy - dY)/(this.xx - dX))));
+            } else {
+                this.theta = 180;
+            }
+        } else if (this.yy > dY) {
+            if (this.xx < dX) {
+                this.theta = 90 - Math.toDegrees(Math.atan(Math.abs((this.yy - dY)/(this.xx - dX))));
+            } else if (this.xx > dX) {
+                this.theta = 270 + Math.toDegrees(Math.atan(Math.abs((this.yy - dY)/(this.xx - dX))));
+            } else {
+                this.theta = 0;
+            }
+        } else {
+            if (this.xx < dX) {
+                this.theta = 270;
+            } else if (this.xx > dX) {
+                this.theta = 90;
+            } else {
+                this.theta = -1;
+            }
+        }
+    }
+
+    public void move() {
+        double vx, vy;
+        if (this.theta == 0) {
+            vx = 0;
+            vy = this.velocity * -1;
+        } else if (this.theta < 90) {
+            vx = Math.sin(Math.toRadians(this.theta)) * this.velocity;
+            vy = Math.cos(Math.toRadians(this.theta)) * this.velocity * -1;
+        } else if (this.theta == 90) {
+            vx = this.velocity;
+            vy = 0;
+        } else if (this.theta < 180) {
+            vx = Math.sin(Math.toRadians(180 - this.theta)) * this.velocity;
+            vy = Math.cos(Math.toRadians(180 - this.theta)) * this.velocity;
+        } else if (this.theta == 180) {
+            vx = 0;
+            vy = this.velocity;
+        } else if (this.theta < 270) {
+            vx = Math.sin(Math.toRadians(180 + this.theta)) * this.velocity * -1;
+            vy = Math.cos(Math.toRadians(180 + this.theta)) * this.velocity;
+        } else if (this.theta == 270) {
+            vx = this.velocity * -1;
+            vy = 0;
+        } else if (this.theta < 360) {
+            vx = Math.sin(Math.toRadians(360 - this.theta)) * this.velocity * -1;
+            vy = Math.cos(Math.toRadians(360 - this.theta)) * this.velocity * -1;
+        } else {
+            vx = 0;
+            vy = 0;
+        }
+        this.xx += vx;
+        this.yy += vy;
+    }
 }
