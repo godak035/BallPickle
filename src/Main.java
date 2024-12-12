@@ -12,7 +12,7 @@ import java.awt.image.*;
 import java.util.Random;
 import java.awt.event.*;
 
-public class Main implements ActionListener {
+public class Main implements Runnable{
     
     JFrame frame;
     //Different panels that are drawn on for the title screen, game screen, help screen and character select screen
@@ -38,6 +38,7 @@ public class Main implements ActionListener {
 
     boolean playerHitLast, lookRightLast;
 
+
     final int 
         playerPositionXRelativeTo = 230,
         playerPositionYRelativeTo = 475,
@@ -45,6 +46,98 @@ public class Main implements ActionListener {
         playerYMax = 218;
 
     // int frameCount = 0; //for debugging
+
+    private Thread gameThread;
+    private final int FPS = 60;
+    private final long OPTIMAL_TIME = 1000000000 / FPS;
+
+    public void startGameThread() {
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
+
+    @Override
+    public void run() {
+        long lastTime = System.nanoTime();
+        long timer = System.currentTimeMillis();
+        double deltaTime = 0;
+        int frameCount = 0;
+
+        while (gameThread != null) {
+            long now = System.nanoTime();
+            long elapsedTime = now - lastTime;
+            lastTime = now;
+
+            // Calculate delta time
+            deltaTime += elapsedTime / (double) OPTIMAL_TIME;
+
+            // Update game logic when delta reaches 1
+            if (deltaTime >= 1) {
+                updateGame();
+                repaintPanels();
+                deltaTime--;
+                frameCount++;
+            }
+
+            // Optional: Sleep to prevent CPU overuse
+            try {
+                long sleepTime = (lastTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
+                if (sleepTime > 0) {
+                    Thread.sleep(sleepTime);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Optional: FPS counter (every second)
+            if (System.currentTimeMillis() - timer > 1000) {
+                timer += 1000;
+                System.out.println("FPS: " + frameCount);
+                frameCount = 0;
+            }
+        }
+    }
+
+    private void updateGame() {
+        // Consolidate all game update logic here
+
+        getInputs();
+        player.updatePosition();
+        ball.move();
+        ball.updatePosition();
+        enemy.move(ball);
+        enemy.updatePosition();
+        
+        if (ballCollidesWithEnemy(ball, enemy)) {
+            enemyStrike(enemy, ball);
+        }
+
+        // Score and game reset logic
+        if (ball.y <= 0) {
+            if (playerHitLast) {
+                player.score++;
+                resetGame();
+            }
+        }
+                 
+        if (ball.y >= 724) {
+            if (!playerHitLast) {
+                enemy.score++;
+                resetGame();
+            }
+        } 
+    }
+
+    private void repaintPanels() {
+        // Repaint all panels
+        SwingUtilities.invokeLater(() -> {
+            title.repaint();
+            help.repaint();
+            characterSelect.repaint();
+            inGame.repaint();
+        });
+    }
+
 
     /**
      * Main method
@@ -72,10 +165,6 @@ public class Main implements ActionListener {
 			System.out.println("Failed to load image.");
 		}
 
-        gameLoopTimer = new Timer(5, this);
-        gameLoopTimer.setInitialDelay(5);
-        gameLoopTimer.setActionCommand("gameLoopTimer");
-        gameLoopTimer.start();
 
         currentHovered = hovered.titleStart;
 
@@ -116,6 +205,7 @@ public class Main implements ActionListener {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        startGameThread();
     }
 
     /**
@@ -286,64 +376,6 @@ public class Main implements ActionListener {
         if (!KeyH.enterPressed) enterPressedThisTick = false;
     }//end getInputs
 
-    /**
-     * Responds to game loop timer, updates all values.
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String event = e.getActionCommand();
-        switch (event) {
-        case "gameLoopTimer":
-            getInputs();
-
-            //Repaints each panel
-            title.repaint();
-            help.repaint();
-            characterSelect.repaint();
-            inGame.repaint();
-            
-            //updates the position of the player, ball, and enemy
-            player.updatePosition();
-            ball.move();
-            ball.updatePosition();
-            enemy.move(ball);
-            //enemyMove(enemy, ball);
-            enemy.updatePosition();
-            if (ballCollidesWithEnemy(ball, enemy)) { //Checks the bool to see if ball has hit enemy, if true, tries to do enemy strike (success based on enemy level and probability)
-               enemyStrike(enemy, ball);
-            }
-
-            if (ball.y <=0){
-                if (playerHitLast) {
-                    player.score++;
-                    resetGame();
-                }
-            }
-                 
-            if (ball.y >= 724) {
-                if (!playerHitLast){
-                    enemy.score++;
-                    resetGame();
-                }
-            } 
-            //for debugging
-            //System.out.println("BALL DESTINATION X: " + ball.destinationX + ", Y: " + ball.destinationY);
-            //System.out.println("ENEMY DESTINATION X: " + enemy.destinationX + ", Y: " + enemy.destinationY);
-            //System.out.println("Enemy score: " + enemy.score + ", Player score: " + player.score);
-            //System.out.println("Player hitlast: " + playerHitLast);
-            // System.out.print("frame: " + frameCount + ", hovered: " + currentHovered + ", key pressed: ");
-            // if (KeyH.upPressed) System.out.print("UP ");
-            // if (KeyH.downPressed) System.out.print("DOWN ");
-            // if (KeyH.leftPressed) System.out.print("LEFT ");
-            // if (KeyH.rightPressed) System.out.print("RIGHT ");
-            // if (KeyH.enterPressed) System.out.print("F ");
-            // System.out.println();
-            // frameCount++;
-            break;
-        default:
-            break;
-        }
-    }//end actionPerformed
 
     /***
      * TitlePanel is the panel where the title screen is drawn
