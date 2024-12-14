@@ -16,10 +16,7 @@ public class Main implements Runnable{
     
     JFrame frame;
     //Different panels that are drawn on for the title screen, game screen, help screen and character select screen
-    TitlePanel title;
-    GamePanel inGame;
-    HelpPanel help;
-    CharacterSelectPanel characterSelect;
+    GamePanel title, inGame, help, characterSelect;
 
     BufferedImage characterSelectBg, select, titleBg, titleSelect, helpBg, court;
 
@@ -189,16 +186,16 @@ public class Main implements Runnable{
 		frame.setResizable(false);
         frame.addKeyListener(KeyH);
 
-        title = new TitlePanel();
+        title = new GamePanel("title");
         title.setPreferredSize(new Dimension(1024, 768));
 
-        inGame = new GamePanel();
+        inGame = new GamePanel("game");
         title.setPreferredSize(new Dimension(1024, 768));
 
-        help = new HelpPanel();
+        help = new GamePanel("help");
         title.setPreferredSize(new Dimension(1024, 768));
 
-        characterSelect = new CharacterSelectPanel();
+        characterSelect = new GamePanel("character select");
         title.setPreferredSize(new Dimension(1024, 768));
         
         frame.add(title);
@@ -376,97 +373,79 @@ public class Main implements Runnable{
         if (!KeyH.enterPressed) enterPressedThisTick = false;
     }//end getInputs
 
-
     /***
-     * TitlePanel is the panel where the title screen is drawn
-     */
-    private class TitlePanel extends JPanel {
-        @Override
-        public void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D)g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.drawImage(titleBg, 0, 0, null);
-            switch (currentHovered) {
-            case titleStart:
-                g2.drawImage(titleSelect, 385, 379, null);
-                g2.rotate(Math.PI);
-                g2.drawImage(titleSelect, -630, -438, null);
-                g2.rotate(Math.PI);
-                break;
-            case titleCharSelect:
-                g2.drawImage(titleSelect, 152, 428, null);
-                g2.rotate(Math.PI);
-                g2.drawImage(titleSelect, -867, -490, null);
-                g2.rotate(Math.PI);
-                break;
-            case titleHelp:
-                g2.drawImage(titleSelect, 407, 479, null);
-                g2.rotate(Math.PI);
-                g2.drawImage(titleSelect, -612, -538, null);
-                g2.rotate(Math.PI);
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    /***
-     * HelpPanel is the panel where the help screen is drawn
-     */
-    private class HelpPanel extends JPanel {
-        @Override
-        public void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D)g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.drawImage(helpBg, 0, 0, null);
-        }
-    }
-
-    /***
-     * CharacterSelectPanel is the panel where the character select screen is drawn
-     */
-    private class CharacterSelectPanel extends JPanel {
-        @Override
-        public void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D)g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.drawImage(characterSelectBg, 0, 0, null);
-            g2.drawImage(select, 32, 615, null);
-            g2.drawImage(select, 384, 615, null);
-            g2.drawImage(select, 720, 615, null);
-
-            //Inflates the size of the button that the user is hovering
-            switch (currentHovered) {
-            case charSelect1:
-                g2.drawImage(select, 12, 605, select.getWidth() + 40, select.getHeight() + 20, null);
-                break;
-            case charSelect2:
-                g2.drawImage(select, 364, 605, select.getWidth() + 40, select.getHeight() + 20, null);
-                break;
-            case charSelect3:
-                g2.drawImage(select, 700, 605, select.getWidth() + 40, select.getHeight() + 20, null);
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    /***
-     * GamePanel is the panel where the game screen is drawn
+     * GamePanel is the panel where the graphics are drawn
      */
     private class GamePanel extends JPanel {
+
+        String type;
+        GamePanel(String t) {
+            type = t;
+        }
+
         @Override
         public void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D)g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.drawImage(court, 0, 0, null);
-            g2.fillRect(player.x + playerPositionXRelativeTo, player.y + playerPositionYRelativeTo, player.size, player.size);
-            g2.fillRect(ball.x, ball.y, ball.size, ball.size); //draws the ball
-            g2.fillRect(enemy.x, enemy.y, enemy.size, enemy.size); //draws the enemy
-            g2.drawString("Enemy: " + enemy.score, 150, 60);
-            g2.drawString("Player: " + player.score, 800, 720);
+            switch (type) {
+            case "game":
+                g2.drawImage(court, 0, 0, null);
+                g2.fillRect(player.x + playerPositionXRelativeTo, player.y + playerPositionYRelativeTo, player.size, player.size);
+                g2.fillRect(ball.x, ball.y, ball.size, ball.size); //draws the ball
+                g2.fillRect(enemy.x, enemy.y, enemy.size, enemy.size); //draws the enemy
+                g2.drawString("Enemy: " + enemy.score, 150, 60);
+                g2.drawString("Player: " + player.score, 800, 720);
+                break;
+            case "help":
+                g2.drawImage(helpBg, 0, 0, null);
+                break;
+            case "character select":
+                g2.drawImage(characterSelectBg, 0, 0, null);
+                g2.drawImage(select, 32, 615, null);
+                g2.drawImage(select, 384, 615, null);
+                g2.drawImage(select, 720, 615, null);
+
+                //Inflates the size of the button that the user is hovering
+                switch (currentHovered) {
+                case charSelect1:
+                    g2.drawImage(select, 12, 605, select.getWidth() + 40, select.getHeight() + 20, null);
+                    break;
+                case charSelect2:
+                    g2.drawImage(select, 364, 605, select.getWidth() + 40, select.getHeight() + 20, null);
+                    break;
+                case charSelect3:
+                    g2.drawImage(select, 700, 605, select.getWidth() + 40, select.getHeight() + 20, null);
+                    break;
+                default:
+                    break;
+                }
+                break;
+            case "title":
+                g2.drawImage(titleBg, 0, 0, null);
+                switch (currentHovered) {
+                case titleStart:
+                    g2.drawImage(titleSelect, 385, 379, null);
+                    g2.rotate(Math.PI);
+                    g2.drawImage(titleSelect, -630, -438, null);
+                    g2.rotate(Math.PI);
+                    break;
+                case titleCharSelect:
+                    g2.drawImage(titleSelect, 152, 428, null);
+                    g2.rotate(Math.PI);
+                    g2.drawImage(titleSelect, -867, -490, null);
+                    g2.rotate(Math.PI);
+                    break;
+                case titleHelp:
+                    g2.drawImage(titleSelect, 407, 479, null);
+                    g2.rotate(Math.PI);
+                    g2.drawImage(titleSelect, -612, -538, null);
+                    g2.rotate(Math.PI);
+                    break;
+                default:
+                    break;
+                }
+                break;
+            }
         }
     }
     

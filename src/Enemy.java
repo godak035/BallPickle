@@ -88,8 +88,6 @@ public class Enemy extends Entity {
                 theta = -1;
             }
         }
-
-        System.out.println(theta);
         
         //checks if the enemy will have to move less than 1 frame to get the the destination
         double distanceToDestination = Math.sqrt(Math.pow(Math.abs(centerX - this.destinationX), 2) + Math.pow(Math.abs(centerY - this.destinationY), 2));
