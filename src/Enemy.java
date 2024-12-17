@@ -91,7 +91,7 @@ public class Enemy extends Entity {
         
         //checks if the enemy will have to move less than 1 frame to get the the destination
         double distanceToDestination = Math.sqrt(Math.pow(Math.abs(centerX - this.destinationX), 2) + Math.pow(Math.abs(centerY - this.destinationY), 2));
-        if (distanceToDestination < 10) {
+        if (distanceToDestination < this.velocity) {
             this.xx = this.destinationX - (this.size / 2);
             this.yy = this.destinationY - (this.size / 2);
         } else {

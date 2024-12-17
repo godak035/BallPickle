@@ -170,7 +170,7 @@ public class Main implements Runnable{
         ball = new Ball(300, 500, 10, 0);
         ball.setDestination(300, 500);
 
-        enemy = new Enemy(495, 100, 2, 30, 5, 512, 100); // prototype opponent. Level determines probability of enemy hitting the ball back.
+        enemy = new Enemy(495, 100, 2, 30, 5, 512, 250); // prototype opponent. Level determines probability of enemy hitting the ball back.
 
         upPressedThisTick = false;
         leftPressedThisTick = false;
@@ -335,10 +335,10 @@ public class Main implements Runnable{
                     if (player.x + playerPositionXRelativeTo < ball.x && player.x + playerPositionXRelativeTo + player.size > ball.x && player.y + playerPositionYRelativeTo < ball.y && player.y + playerPositionYRelativeTo + player.size > ball.y) {
                         ball.velocity = 4;
                         if (KeyH.leftPressed) {
-                            ball.setDestination(312, 100);
+                            ball.setDestination(312, 150);
                             //ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 312)) * -1));
                         } else if (KeyH.rightPressed) {
-                            ball.setDestination(712, 100);
+                            ball.setDestination(712, 150);
                             //ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 712)) * -1));
                         } else {
                             ball.setDestination(512, 100);
