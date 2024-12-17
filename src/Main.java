@@ -328,9 +328,9 @@ public class Main implements Runnable{
                 if (!enterPressedThisTick) {
                     enterPressedThisTick = true;
                     /*spots ball flies to:
-                     * left: (312, 100)
+                     * left: (312, 150)
                      * centre: (512, 100)
-                     * right: (712, 100)
+                     * right: (712, 150)
                     */
                     if (player.x + playerPositionXRelativeTo < ball.x && player.x + playerPositionXRelativeTo + player.size > ball.x && player.y + playerPositionYRelativeTo < ball.y && player.y + playerPositionYRelativeTo + player.size > ball.y) {
                         ball.velocity = 4;

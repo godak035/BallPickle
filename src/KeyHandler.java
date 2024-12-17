@@ -20,30 +20,30 @@ public class KeyHandler implements KeyListener{
         int code = e.getKeyCode();
 
         //Ability
-        if (code == KeyEvent.VK_Q) {
+        if (code == KeyEvent.VK_I) {
             abilityPressed = true;
         }
         //Dash
-        if (code == KeyEvent.VK_E) {
+        if (code == KeyEvent.VK_J) {
             dashPressed = true;
         }
         //swing/enter
-        if (code == KeyEvent.VK_F) {
+        if (code == KeyEvent.VK_U) {
             enterPressed = true;
         }
         
-        if (code == KeyEvent.VK_LEFT) {
+        if (code == KeyEvent.VK_A) {
             leftPressed = true;
         }
         
-        if (code == KeyEvent.VK_RIGHT) {
+        if (code == KeyEvent.VK_D) {
             rightPressed = true;
         }
-        if (code == KeyEvent.VK_UP) {
+        if (code == KeyEvent.VK_W) {
             upPressed = true;
         }
         
-        if (code == KeyEvent.VK_DOWN) {
+        if (code == KeyEvent.VK_S) {
             downPressed = true;
         }
     }
@@ -56,30 +56,30 @@ public class KeyHandler implements KeyListener{
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
         //Ability
-        if (code == KeyEvent.VK_Q) {
+        if (code == KeyEvent.VK_I) {
             abilityPressed = false;
         }
         //Dash
-        if (code == KeyEvent.VK_E) {
+        if (code == KeyEvent.VK_J) {
             dashPressed = false;
         }
         //swing/enter
-        if (code == KeyEvent.VK_F) {
+        if (code == KeyEvent.VK_U) {
             enterPressed = false;
         }
         
-        if (code == KeyEvent.VK_LEFT) {
+        if (code == KeyEvent.VK_A) {
             leftPressed = false;
         }
         
-        if (code == KeyEvent.VK_RIGHT) {
+        if (code == KeyEvent.VK_D) {
             rightPressed = false;
         }
-        if (code == KeyEvent.VK_UP) {
+        if (code == KeyEvent.VK_W) {
             upPressed = false;
         }
         
-        if (code == KeyEvent.VK_DOWN) {
+        if (code == KeyEvent.VK_S) {
             downPressed = false;
         }
     }
