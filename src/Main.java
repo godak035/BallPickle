@@ -18,7 +18,7 @@ public class Main implements Runnable{
     //Different panels that are drawn on for the title screen, game screen, help screen and character select screen
     GamePanel title, inGame, help, characterSelect;
 
-    BufferedImage characterSelectBg, select, titleBg, titleSelect, helpBg, court;
+    BufferedImage characterSelectBg, select, titleBg, titleSelect, helpBg, court, courtSlowedTime;
 
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
     static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleCharSelect, titleHelp, inGame, helpExit };
@@ -33,8 +33,7 @@ public class Main implements Runnable{
     Ball ball;
     Enemy enemy;
 
-    boolean playerHitLast, lookRightLast;
-
+    boolean playerHitLast, lookRightLast, timeSlowed;
 
     final int 
         playerPositionXRelativeTo = 230,
@@ -43,7 +42,6 @@ public class Main implements Runnable{
         playerYMax = 218;
 
     // int frameCount = 0; //for debugging
-
     private Thread gameThread;
     private final int FPS = 60;
     private final long OPTIMAL_TIME = 1000000000 / FPS;
@@ -93,6 +91,7 @@ public class Main implements Runnable{
                 frameCount = 0;
             }
         }
+        
     }
 
     private void updateGame() {
@@ -158,6 +157,7 @@ public class Main implements Runnable{
 			titleSelect = ImageIO.read(this.getClass().getResource("sprites/titleSelect.png"));
 			helpBg = ImageIO.read(this.getClass().getResource("sprites/help.png"));
             court = ImageIO.read(this.getClass().getResource("sprites/court.png"));
+            courtSlowedTime = ImageIO.read(this.getClass().getResource("sprites/courtSlowedTime.png"));
         } catch (Exception e) {
 			System.out.println("Failed to load image.");
 		}
@@ -350,7 +350,6 @@ public class Main implements Runnable{
                     
                 }
             }
-
             if (KeyH.dashPressed){
                 if(lookRightLast){
                     player.dash(10);
@@ -361,6 +360,13 @@ public class Main implements Runnable{
                     if (player.xx < 0) player.xx = 0;
                 }
                 
+            }
+            if (KeyH.abilityPressed) {
+                timeSlowed = true;
+                slowDownTime(ball, enemy);
+            } else {
+                timeSlowed = false;
+                normalTime(ball, enemy);
             }
             break;
         default:
@@ -389,7 +395,11 @@ public class Main implements Runnable{
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             switch (type) {
             case "game":
-                g2.drawImage(court, 0, 0, null);
+                if (!timeSlowed) {
+                    g2.drawImage(court, 0, 0, null);
+                } else {
+                    g2.drawImage(courtSlowedTime, 0, 0, null);
+                }
                 g2.fillRect(player.x + playerPositionXRelativeTo, player.y + playerPositionYRelativeTo, player.size, player.size);
                 g2.fillRect(ball.x, ball.y, ball.size, ball.size); //draws the ball
                 g2.fillRect(enemy.x, enemy.y, enemy.size, enemy.size); //draws the enemy
@@ -482,7 +492,34 @@ public class Main implements Runnable{
         return ballRect.intersects(enemyRect);
     }
 
-    
+    private void slowDownTime(Ball ball, Enemy enemy) {
+        if (ball.velocity == 0) {
+            ball.velocity = 0;
+        } else {
+            ball.velocity = 2;
+        }
+            enemy.velocity = 1;
+            
+    }
+
+    private void normalTime(Ball ball, Enemy enemy) {
+        if (ball.velocity == 0) {
+            ball.velocity = 0;
+        } else {
+            ball.velocity = 4;
+        }
+        enemy.velocity = 2;
+        
+           
+            
+    }
+
+    private void speedUpPlayer(Player player) {
+        boolean isAbilityActive = false;
+        if (isAbilityActive) {
+            player.velocity *= 2;
+        }
+    }
 
     public void resetGame() {
         player.xx = 282;

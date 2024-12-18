@@ -22,6 +22,7 @@ public class Player extends Entity{
         this.size = s;
     }
 
+
     @Override
     public void updatePosition() {
         this.x = (int)xx;
@@ -29,6 +30,10 @@ public class Player extends Entity{
     }
 
     public void dash(int paces) {
+
+        /**
+         * We need to use a timer or something so that all other controls go null. 
+         */
         this.xx += paces; // Update player's position by the specified number of paces
         System.out.println("Player dashed to position: " + this.xx);
     }
