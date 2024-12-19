@@ -369,14 +369,11 @@ public class Main implements Runnable {
                 }
             }
             if (KeyH.dashPressed){
-                if(lookRightLast){
-                    player.dash(10);
+                
+                    player.dash(lookRightLast);
                     if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
-                }
-                if(!lookRightLast){
-                    player.dash(-10);
                     if (player.xx < 0) player.xx = 0;
-                }
+                
                 
             }
             if (KeyH.abilityPressed) {
