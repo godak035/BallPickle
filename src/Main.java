@@ -324,6 +324,7 @@ public class Main implements Runnable {
             }
             break;
         case inGame:
+            if (!player.dasnOH)
             if (KeyH.rightPressed) {
                 lookRightLast=true;
                 player.xx += player.velocity;
@@ -364,17 +365,12 @@ public class Main implements Runnable {
                         }
                         playerHitLast = true;
                     }
-                    
-                    
                 }
             }
             if (KeyH.dashPressed){
-                
-                    player.dash(lookRightLast);
-                    if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
-                    if (player.xx < 0) player.xx = 0;
-                
-                
+                player.dash(lookRightLast, frames);
+                if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
+                if (player.xx < 0) player.xx = 0;
             }
             if (KeyH.abilityPressed) {
                 timeSlowed = true;
