@@ -10,15 +10,24 @@ import javax.swing.*;
 import javax.imageio.*;
 import java.awt.image.*;
 import java.util.Random;
-import java.awt.event.*;
 
-public class Main implements Runnable{
+public class Main implements Runnable {
     
     JFrame frame;
     //Different panels that are drawn on for the title screen, game screen, help screen and character select screen
     GamePanel title, inGame, help, characterSelect;
 
-    BufferedImage characterSelectBg, select, titleBg, titleSelect, helpBg, court, courtSlowedTime;
+    BufferedImage
+        logo,
+        titleScreen,
+        titleStart,
+        titleCharSelect,
+        titleHelp,
+        helpBg,
+        characterSelectBg,
+        select,
+        court,
+        courtSlowedTime;
 
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
     static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleCharSelect, titleHelp, inGame, helpExit };
@@ -28,7 +37,6 @@ public class Main implements Runnable{
     boolean upPressedThisTick, downPressedThisTick, leftPressedThisTick, rightPressedThisTick, enterPressedThisTick;
     
     KeyHandler KeyH;
-    Timer gameLoopTimer;
     Player player;
     Ball ball;
     Enemy enemy;
@@ -39,9 +47,12 @@ public class Main implements Runnable{
         playerPositionXRelativeTo = 230,
         playerPositionYRelativeTo = 475,
         playerXMax = 562,
-        playerYMax = 218;
+        playerYMax = 218,
+        winW = 1024,
+        winH = 768;
 
-    // int frameCount = 0; //for debugging
+    int frames = 0;
+
     private Thread gameThread;
     private final int FPS = 60;
     private final long OPTIMAL_TIME = 1000000000 / FPS;
@@ -96,8 +107,9 @@ public class Main implements Runnable{
 
     private void updateGame() {
         // Consolidate all game update logic here
-
-        getInputs();
+        frames++;
+        //System.out.println(frames); //for debugging
+        if (frames > 363) getInputs();
         player.updatePosition();
         ball.move();
         ball.updatePosition();
@@ -107,7 +119,7 @@ public class Main implements Runnable{
         if (ballCollidesWithEnemy(ball, enemy)) {
             enemyStrike(enemy, ball);
         }
-
+        
         // Score and game reset logic
         if (ball.y <= 0) {
             if (playerHitLast) {
@@ -140,6 +152,7 @@ public class Main implements Runnable{
      */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 Main m = new Main();
             }
@@ -151,17 +164,22 @@ public class Main implements Runnable{
      */
     Main() {
         try {
+            logo = ImageIO.read(this.getClass().getResource("sprites/logo.png"));
 			characterSelectBg = ImageIO.read(this.getClass().getResource("sprites/characterSelect.png"));
 			select = ImageIO.read(this.getClass().getResource("sprites/select.png"));
-			titleBg = ImageIO.read(this.getClass().getResource("sprites/title.png"));
-			titleSelect = ImageIO.read(this.getClass().getResource("sprites/titleSelect.png"));
+			//titleStart = ImageIO.read(this.getClass().getResource("sprites/titleStart.png"));
+			//titleCharSelect = ImageIO.read(this.getClass().getResource("sprites/titleCharSelect.png"));
+            //titleHelp = ImageIO.read(this.getClass().getResource("sprites/titleHelp.png"));
 			helpBg = ImageIO.read(this.getClass().getResource("sprites/help.png"));
             court = ImageIO.read(this.getClass().getResource("sprites/court.png"));
             courtSlowedTime = ImageIO.read(this.getClass().getResource("sprites/courtSlowedTime.png"));
+            titleScreen = ImageIO.read(this.getClass().getResource("sprites/title.png"));
+            titleStart = ImageIO.read(this.getClass().getResource("sprites/titleStart.png"));
+            titleCharSelect = ImageIO.read(this.getClass().getResource("sprites/titleCharSelect.png"));
+            titleHelp = ImageIO.read(this.getClass().getResource("sprites/titleHelp.png"));
         } catch (Exception e) {
 			System.out.println("Failed to load image.");
 		}
-
 
         currentHovered = hovered.titleStart;
 
@@ -187,16 +205,16 @@ public class Main implements Runnable{
         frame.addKeyListener(KeyH);
 
         title = new GamePanel("title");
-        title.setPreferredSize(new Dimension(1024, 768));
+        title.setPreferredSize(new Dimension(winW, winH));
 
         inGame = new GamePanel("game");
-        title.setPreferredSize(new Dimension(1024, 768));
+        title.setPreferredSize(new Dimension(winW, winH));
 
         help = new GamePanel("help");
-        title.setPreferredSize(new Dimension(1024, 768));
+        title.setPreferredSize(new Dimension(winW, winH));
 
         characterSelect = new GamePanel("character select");
-        title.setPreferredSize(new Dimension(1024, 768));
+        title.setPreferredSize(new Dimension(winW, winH));
         
         frame.add(title);
         frame.pack();
@@ -431,30 +449,40 @@ public class Main implements Runnable{
                 }
                 break;
             case "title":
-                g2.drawImage(titleBg, 0, 0, null);
-                switch (currentHovered) {
-                case titleStart:
-                    g2.drawImage(titleSelect, 385, 379, null);
-                    g2.rotate(Math.PI);
-                    g2.drawImage(titleSelect, -630, -438, null);
-                    g2.rotate(Math.PI);
-                    break;
-                case titleCharSelect:
-                    g2.drawImage(titleSelect, 152, 428, null);
-                    g2.rotate(Math.PI);
-                    g2.drawImage(titleSelect, -867, -490, null);
-                    g2.rotate(Math.PI);
-                    break;
-                case titleHelp:
-                    g2.drawImage(titleSelect, 407, 479, null);
-                    g2.rotate(Math.PI);
-                    g2.drawImage(titleSelect, -612, -538, null);
-                    g2.rotate(Math.PI);
-                    break;
-                default:
-                    break;
+                if (frames < 127) {
+                    g2.drawImage(logo, 0, 0, winW, winH,  null);
+                    g2.setColor(new Color(0, 0, 0, 255 - (frames * 2)));
+                    g2.fillRect(0, 0, winW, winH);
+                // } else if (frames < 200) {
+                    // g2.drawImage(logo, 0, 0, winW, winH,  null);
+                } else if (frames < 254) {
+                    g2.drawImage(logo, 0, 0, winW, winH,  null);
+                    g2.setColor(new Color(0, 0, 0, (frames - 127) * 2));
+                    g2.fillRect(0, 0, winW, winH);
+                } else if (frames < 300) {
+                    g2.setColor(new Color(0, 0, 0));
+                    g2.fillRect(0, 0, winW, winH);
+                } else if (frames < 363) {
+                    g2.drawImage(titleScreen, 0, 0, winW, winH,  null);
+                    g2.setColor(new Color(0, 0, 0, 255 - ((frames - 300) * 4)));
+                    g2.fillRect(0, 0, winW, winH);
+                } else {
+                    g2.drawImage(titleScreen, 0, 0, winW, winH,  null);
+                    switch (currentHovered) {
+                        case titleStart:
+                            g2.drawImage(titleStart, 0, 0, winW, winH,  null);
+                            break;
+                        case titleCharSelect:
+                            g2.drawImage(titleCharSelect, 0, 0, winW, winH, null);
+                            break;
+                        case titleHelp:
+                            g2.drawImage(titleHelp, 0, 0, winW, winH, null);
+                            break;
+                        default:
+                            break;
+                        }
+                        break;
                 }
-                break;
             }
         }
     }
@@ -493,32 +521,13 @@ public class Main implements Runnable{
     }
 
     private void slowDownTime(Ball ball, Enemy enemy) {
-        if (ball.velocity == 0) {
-            ball.velocity = 0;
-        } else {
-            ball.velocity = 2;
-        }
-            enemy.velocity = 1;
-            
+        if (ball.velocity != 0) ball.velocity = 2;
+        enemy.velocity = 1;   
     }
 
     private void normalTime(Ball ball, Enemy enemy) {
-        if (ball.velocity == 0) {
-            ball.velocity = 0;
-        } else {
-            ball.velocity = 4;
-        }
-        enemy.velocity = 2;
-        
-           
-            
-    }
-
-    private void speedUpPlayer(Player player) {
-        boolean isAbilityActive = false;
-        if (isAbilityActive) {
-            player.velocity *= 2;
-        }
+        if (ball.velocity != 0) ball.velocity = 4;
+        enemy.velocity = 2;  
     }
 
     public void resetGame() {
