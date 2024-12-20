@@ -111,6 +111,7 @@ public class Main implements Runnable {
         //System.out.println(frames); //for debugging
         if (frames > 363) getInputs();
         tickAbilities();
+        checkTimeSlow();
         player.updatePosition();
         ball.move();
         ball.updatePosition();
@@ -183,6 +184,7 @@ public class Main implements Runnable {
 		}
 
         currentHovered = hovered.titleStart;
+        timeSlowed = false;
 
         player = new Player(282, 125, 5, 40);
 
@@ -395,13 +397,12 @@ public class Main implements Runnable {
                     player.useAbility(lookRightLast);
                     break;
                 case tasha:
-                    timeSlowed = true;
-                    slowDownTime(ball, enemy);
+                    player.useAbility(lookRightLast);
                     break;
                 }
-            } else {
-                timeSlowed = false;
-                normalTime(ball, enemy);
+            // } else {
+            //     timeSlowed = false;
+            //     normalTime(ball, enemy);
             }
             break;
         default:
@@ -514,6 +515,12 @@ public class Main implements Runnable {
             Random random = new Random();
             if (random.nextInt(100) < enemy.level * 20) { // Success probability based on enemy's level. Right now I made it so that level 5 = 100%.
                 // Updated the velocity for the ball to be returned.
+                if (!timeSlowed) {
+                    ball.velocity = 4;
+                } else {
+                    ball.velocity = 2;
+                }
+                
                 ball.setDestination((Math.random() * 400) + 312, 500);
                 // Set playerHitLast to false.
                 playerHitLast = false;
@@ -537,12 +544,12 @@ public class Main implements Runnable {
         return ballRect.intersects(enemyRect);
     }
 
-    private void slowDownTime(Ball ball, Enemy enemy) {
+    private void slowDownTime() {
         if (ball.velocity != 0) ball.velocity = 2;
         enemy.velocity = 1;   
     }
 
-    private void normalTime(Ball ball, Enemy enemy) {
+    private void normalTime() {
         if (ball.velocity != 0) {
             if (player.abilityON && player.ability == Player.abilityChoices.adonis) ball.velocity = 10;
             else ball.velocity = 4;
@@ -567,6 +574,7 @@ public class Main implements Runnable {
     public void tickAbilities() {
         if (player.abilityON) {
             player.abilityTime++;
+            System.out.println(player.abilityTime);
             switch (player.ability) {
             case riso:
                 if (player.abilityTime == 10) {
@@ -583,10 +591,22 @@ public class Main implements Runnable {
             case tasha:
                 if (player.abilityTime == 100) {
                     player.abilityON = !player.abilityON;
+                    timeSlowed = false;
+                    ball.velocity *= 2;
+                    enemy.velocity *= 2;
+                    System.out.println("back to normal time");
                     player.abilityTime = 0;
                 }
                 break;
             }
+        }
+    }
+
+    public void checkTimeSlow() {
+        if (!timeSlowed && player.abilityON && player.ability == Player.abilityChoices.tasha) {
+            timeSlowed = true;
+            ball.velocity /= 2;
+            enemy.velocity /= 2;
         }
     }
 }
