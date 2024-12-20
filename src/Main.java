@@ -366,7 +366,8 @@ public class Main implements Runnable {
                         if (playerRect.intersects(ballRect)) {
                             if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
                                 ball.velocity = 10;
-                            } else {
+                            } 
+                            if (ball.velocity == 0) {
                                 ball.velocity = 4;
                             }
                             if (KeyH.leftPressed) {
