@@ -431,11 +431,25 @@ public class Main implements Runnable {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             switch (type) {
             case "game":
-                if (!timeSlowed) {
-                    g2.drawImage(court, 0, 0, null);
-                } else {
-                    g2.drawImage(courtSlowedTime, 0, 0, null);
+                g2.drawImage(court, 0, 0, null);
+                if (timeSlowed) {
+                    double opacity;
+                    if (player.abilityTime < 20) {
+                        opacity = player.abilityTime * 0.05;
+                    } else if (player.abilityTime < 80) {
+                        opacity = 1;
+                    } else {
+                        opacity = (100 - player.abilityTime) * 0.05;
+                    }
+                    for (int i = 0; i < 64; i++) {
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+                        g2.setColor(new Color(0, 0, 0, (int)(4.0 * (double)i * opacity)));
+                        g2.fillRect(0, 252 - (i * 4), winW, 4);
+                        g2.fillRect(0, winH - 252 + (i * 4), winW, 4);
+                    }
                 }
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(0, 0, 0, 255));
                 g2.fillRect(player.x + playerPositionXRelativeTo, player.y + playerPositionYRelativeTo, player.size, player.size);
                 g2.fillRect(ball.x, ball.y, ball.size, ball.size); //draws the ball
                 g2.fillRect(enemy.x, enemy.y, enemy.size, enemy.size); //draws the enemy
@@ -542,19 +556,6 @@ public class Main implements Runnable {
         Rectangle ballRect = new Rectangle(ball.x, ball.y, ball.size, ball.size);
         Rectangle enemyRect = new Rectangle(enemy.x, enemy.y, enemy.size, enemy.size);
         return ballRect.intersects(enemyRect);
-    }
-
-    private void slowDownTime() {
-        if (ball.velocity != 0) ball.velocity = 2;
-        enemy.velocity = 1;   
-    }
-
-    private void normalTime() {
-        if (ball.velocity != 0) {
-            if (player.abilityON && player.ability == Player.abilityChoices.adonis) ball.velocity = 10;
-            else ball.velocity = 4;
-        }
-        enemy.velocity = 2; 
     }
 
     public void resetGame() {
