@@ -110,6 +110,7 @@ public class Main implements Runnable {
         frames++;
         //System.out.println(frames); //for debugging
         if (frames > 363) getInputs();
+        tickAbilities();
         player.updatePosition();
         ball.move();
         ball.updatePosition();
@@ -241,6 +242,7 @@ public class Main implements Runnable {
                 frame.revalidate();
             }
             break;
+        //mauyybe the real characters wre the friends we made along the way <3
         case titleCharSelect:
             if (KeyH.downPressed && !downPressedThisTick) {
                 downPressedThisTick = true;
@@ -278,6 +280,7 @@ public class Main implements Runnable {
             }
             if (KeyH.enterPressed && !enterPressedThisTick) {
                 enterPressedThisTick = true;
+                player.changeAbility(Player.abilityChoices.riso);
                 frame.remove(characterSelect);
                 frame.add(title);
                 currentHovered = hovered.titleStart;
@@ -295,6 +298,7 @@ public class Main implements Runnable {
             }
             if (KeyH.enterPressed && !enterPressedThisTick) {
                 enterPressedThisTick = true;
+                player.changeAbility(Player.abilityChoices.adonis);
                 frame.remove(characterSelect);
                 frame.add(title);
                 currentHovered = hovered.titleStart;
@@ -308,6 +312,7 @@ public class Main implements Runnable {
             }
             if (KeyH.enterPressed && !enterPressedThisTick) {
                 enterPressedThisTick = true;
+                player.changeAbility(Player.abilityChoices.tasha);
                 frame.remove(characterSelect);
                 frame.add(title);
                 currentHovered = hovered.titleStart;
@@ -324,57 +329,76 @@ public class Main implements Runnable {
             }
             break;
         case inGame:
-            if (!player.dasnOH)
-            if (KeyH.rightPressed) {
-                lookRightLast=true;
-                player.xx += player.velocity;
-                if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
-            }
-            if (KeyH.leftPressed) {
-                lookRightLast=false;
-                player.xx -= player.velocity;
-                if (player.xx < 0) player.xx = 0;
-            }
-            if (KeyH.upPressed) {
-                player.yy -= player.velocity;
-                if (player.yy < 0) player.yy = 0;
-            }
-            if (KeyH.downPressed) {
-                player.yy += player.velocity;
-                if (player.yy + player.size > playerYMax) player.yy = playerYMax - player.size;
-            }
-            if (KeyH.enterPressed) {
-                if (!enterPressedThisTick) {
-                    enterPressedThisTick = true;
-                    /*spots ball flies to:
-                     * left: (312, 150)
-                     * centre: (512, 100)
-                     * right: (712, 150)
-                    */
-                    if (player.x + playerPositionXRelativeTo < ball.x && player.x + playerPositionXRelativeTo + player.size > ball.x && player.y + playerPositionYRelativeTo < ball.y && player.y + playerPositionYRelativeTo + player.size > ball.y) {
-                        ball.velocity = 4;
-                        if (KeyH.leftPressed) {
-                            ball.setDestination(312, 150);
-                            //ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 312)) * -1));
-                        } else if (KeyH.rightPressed) {
-                            ball.setDestination(712, 150);
-                            //ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 712)) * -1));
-                        } else {
-                            ball.setDestination(512, 100);
-                            //ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 512)) * -1));
+            if (player.abilityON && player.ability == Player.abilityChoices.riso) {
+                if (lookRightLast) {
+                    player.xx += 20;
+                    if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
+                } else {
+                    player.xx -= 20;
+                    if (player.xx < 0) player.xx = 0;
+                }
+            } else {
+                if (KeyH.rightPressed) {
+                    lookRightLast=true;
+                    player.xx += player.velocity;
+                    if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
+                }
+                if (KeyH.leftPressed) {
+                    lookRightLast=false;
+                    player.xx -= player.velocity;
+                    if (player.xx < 0) player.xx = 0;
+                }
+                if (KeyH.upPressed) {
+                    player.yy -= player.velocity;
+                    if (player.yy < 0) player.yy = 0;
+                }
+                if (KeyH.downPressed) {
+                    player.yy += player.velocity;
+                    if (player.yy + player.size > playerYMax) player.yy = playerYMax - player.size;
+                }
+                if (KeyH.enterPressed) {
+                    if (!enterPressedThisTick) {
+                        enterPressedThisTick = true;
+                        /*spots ball flies to:
+                         * left: (312, 150)
+                         * centre: (512, 100)
+                         * right: (712, 150)
+                        */
+                        if (player.x + playerPositionXRelativeTo < ball.x && player.x + playerPositionXRelativeTo + player.size > ball.x && player.y + playerPositionYRelativeTo < ball.y && player.y + playerPositionYRelativeTo + player.size > ball.y) {
+                            if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
+                                System.out.println("HARD HIT");
+                                ball.velocity = 10;
+                            } else {
+                                ball.velocity = 4;
+                            }
+                            if (KeyH.leftPressed) {
+                                ball.setDestination(312, 150);
+                                //ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 312)) * -1));
+                            } else if (KeyH.rightPressed) {
+                                ball.setDestination(712, 150);
+                                //ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 712)) * -1));
+                            } else {
+                                ball.setDestination(512, 100);
+                                //ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 512)) * -1));
+                            }
+                            playerHitLast = true;
                         }
-                        playerHitLast = true;
                     }
                 }
             }
-            if (KeyH.dashPressed){
-                player.dash(lookRightLast, frames);
-                if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
-                if (player.xx < 0) player.xx = 0;
-            }
             if (KeyH.abilityPressed) {
-                timeSlowed = true;
-                slowDownTime(ball, enemy);
+                switch (player.ability) {
+                case riso:
+                    player.useAbility(lookRightLast);
+                    break;
+                case adonis:
+                    player.useAbility(lookRightLast);
+                    break;
+                case tasha:
+                    timeSlowed = true;
+                    slowDownTime(ball, enemy);
+                    break;
+                }
             } else {
                 timeSlowed = false;
                 normalTime(ball, enemy);
@@ -519,8 +543,11 @@ public class Main implements Runnable {
     }
 
     private void normalTime(Ball ball, Enemy enemy) {
-        if (ball.velocity != 0) ball.velocity = 4;
-        enemy.velocity = 2;  
+        if (ball.velocity != 0) {
+            if (player.abilityON && player.ability == Player.abilityChoices.adonis) ball.velocity = 10;
+            else ball.velocity = 4;
+        }
+        enemy.velocity = 2; 
     }
 
     public void resetGame() {
@@ -535,5 +562,31 @@ public class Main implements Runnable {
         ball.velocity = 0;
         ball.setDestination(300, 500);
         ball.updatePosition();
+    }
+
+    public void tickAbilities() {
+        if (player.abilityON) {
+            player.abilityTime++;
+            switch (player.ability) {
+            case riso:
+                if (player.abilityTime == 10) {
+                    player.abilityON = !player.abilityON;
+                    player.abilityTime = 0;
+                }
+                break;
+            case adonis:
+                if (player.abilityTime == 100) {
+                    player.abilityON = !player.abilityON;
+                    player.abilityTime = 0;
+                }
+                break;
+            case tasha:
+                if (player.abilityTime == 100) {
+                    player.abilityON = !player.abilityON;
+                    player.abilityTime = 0;
+                }
+                break;
+            }
+        }
     }
 }
