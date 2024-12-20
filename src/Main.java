@@ -26,8 +26,7 @@ public class Main implements Runnable {
         helpBg,
         characterSelectBg,
         select,
-        court,
-        courtSlowedTime;
+        court;
 
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
     static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleCharSelect, titleHelp, inGame, helpExit };
@@ -169,12 +168,8 @@ public class Main implements Runnable {
             logo = ImageIO.read(this.getClass().getResource("sprites/logo.png"));
 			characterSelectBg = ImageIO.read(this.getClass().getResource("sprites/characterSelect.png"));
 			select = ImageIO.read(this.getClass().getResource("sprites/select.png"));
-			//titleStart = ImageIO.read(this.getClass().getResource("sprites/titleStart.png"));
-			//titleCharSelect = ImageIO.read(this.getClass().getResource("sprites/titleCharSelect.png"));
-            //titleHelp = ImageIO.read(this.getClass().getResource("sprites/titleHelp.png"));
 			helpBg = ImageIO.read(this.getClass().getResource("sprites/help.png"));
             court = ImageIO.read(this.getClass().getResource("sprites/court.png"));
-            courtSlowedTime = ImageIO.read(this.getClass().getResource("sprites/courtSlowedTime.png"));
             titleScreen = ImageIO.read(this.getClass().getResource("sprites/title.png"));
             titleStart = ImageIO.read(this.getClass().getResource("sprites/titleStart.png"));
             titleCharSelect = ImageIO.read(this.getClass().getResource("sprites/titleCharSelect.png"));
@@ -366,9 +361,10 @@ public class Main implements Runnable {
                          * centre: (512, 100)
                          * right: (712, 150)
                         */
-                        if (player.x + playerPositionXRelativeTo < ball.x && player.x + playerPositionXRelativeTo + player.size > ball.x && player.y + playerPositionYRelativeTo < ball.y && player.y + playerPositionYRelativeTo + player.size > ball.y) {
+                        Rectangle playerRect = new Rectangle((int)player.xx + playerPositionXRelativeTo, (int)player.yy + playerPositionYRelativeTo, player.size, player.size);
+                        Rectangle ballRect = new Rectangle((int)ball.xx, (int)ball.yy, ball.size, ball.size);
+                        if (playerRect.intersects(ballRect)) {
                             if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
-                                System.out.println("HARD HIT");
                                 ball.velocity = 10;
                             } else {
                                 ball.velocity = 4;
@@ -400,9 +396,6 @@ public class Main implements Runnable {
                     player.useAbility(lookRightLast);
                     break;
                 }
-            // } else {
-            //     timeSlowed = false;
-            //     normalTime(ball, enemy);
             }
             break;
         default:
@@ -431,7 +424,7 @@ public class Main implements Runnable {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             switch (type) {
             case "game":
-                g2.drawImage(court, 0, 0, null);
+                g2.drawImage(court, 0, 0, winW, winH, null);
                 if (timeSlowed) {
                     double opacity;
                     if (player.abilityTime < 20) {
@@ -575,7 +568,6 @@ public class Main implements Runnable {
     public void tickAbilities() {
         if (player.abilityON) {
             player.abilityTime++;
-            System.out.println(player.abilityTime);
             switch (player.ability) {
             case riso:
                 if (player.abilityTime == 10) {
@@ -595,7 +587,6 @@ public class Main implements Runnable {
                     timeSlowed = false;
                     ball.velocity *= 2;
                     enemy.velocity *= 2;
-                    System.out.println("back to normal time");
                     player.abilityTime = 0;
                 }
                 break;

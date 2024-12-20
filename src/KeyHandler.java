@@ -85,5 +85,6 @@ public class KeyHandler implements KeyListener{
     }
     
     //method form KeyListener that is not used
+    @Override
     public void keyTyped(KeyEvent e) {}
 }
