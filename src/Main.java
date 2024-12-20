@@ -41,6 +41,7 @@ public class Main implements Runnable {
     Enemy enemy;
 
     boolean playerHitLast, lookRightLast, timeSlowed;
+    boolean playerLose=false, playerWin=false;
 
     final int 
         playerPositionXRelativeTo = 230,
@@ -125,6 +126,9 @@ public class Main implements Runnable {
         if (ball.y <= 0) {
             if (playerHitLast) {
                 player.score++;
+                if (player.score==5){
+                    player.score=0;
+                }
                 resetGame();
             }
         }
@@ -132,10 +136,17 @@ public class Main implements Runnable {
         if (ball.y >= 724) {
             if (!playerHitLast) {
                 enemy.score++;
+                if (enemy.score==5){
+                    resetGame();
+                    enemy.score=0;
+                    player.score=0;
+                }
                 resetGame();
             }
         } 
     }
+
+        
 
     private void repaintPanels() {
         // Repaint all panels
