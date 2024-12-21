@@ -18,6 +18,9 @@
      //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
      static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleCharSelect, titleHelp, inGame, helpExit };
      static hovered currentHovered;
+
+     static enum level {level1, level2, level3, level4, level5};
+     static level currentLevel;
  
      //Whether or not the user has released the keys since they have pressed them (used in the menus, to ensure that you don't move down 2 options if you press the down key for 2 frames)
      boolean upPressedThisTick, downPressedThisTick, leftPressedThisTick, rightPressedThisTick, enterPressedThisTick;
