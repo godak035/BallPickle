@@ -5,12 +5,15 @@ public class Player extends Entity {
     int abilityTime = 0;
     boolean abilityON = false;
     static enum abilityChoices { riso, adonis, tasha }
-    static abilityChoices ability;
+    abilityChoices ability;
     
     private long lastAbilityTime = 0; 
-    private final int dashCooldown = 1000;  //Time duration in milliseconds of dash ability
-    private final int timeSlowCooldown = 1000;  //Time duration in milliseconds of time slowdown ability
-    private final int strongHitCooldown = 1000;  //Time duration in milliseconds of strong hit ability
+    private final int 
+        dashCooldown = 1000,  //Time duration in milliseconds of dash ability
+        timeSlowCooldown = 1000,  //Time duration in milliseconds of time slowdown ability
+        strongHitCooldown = 1000,  //Time duration in milliseconds of strong hit ability
+        positionXRelativeTo = 230,
+        positionYRelativeTo = 475;
 
     public Player(double xx, double yy, double v, int s) {
         super(xx, yy, v);
@@ -24,8 +27,8 @@ public class Player extends Entity {
 
     @Override
     public void updatePosition() {
-        this.x = (int) xx;
-        this.y = (int) yy;
+        this.x = (int)xx + positionXRelativeTo;
+        this.y = (int)yy + positionYRelativeTo;
     }
     
     public void useAbility(boolean rightPressed) {
@@ -53,4 +56,7 @@ public class Player extends Entity {
         System.out.println("Ability activated!");
         abilityON=true;
     }
+
+    public int getPositionXRelativeTo() { return this.positionXRelativeTo; }
+    public int getPositionYRelativeTo() { return this.positionYRelativeTo; }
 }
