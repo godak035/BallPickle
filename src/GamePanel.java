@@ -141,6 +141,8 @@ public class GamePanel extends JPanel {
             g2.setColor(new Color(0, 0, 0, (int)(4.0 * (double)i * opacity)));
             g2.fillRect(0, 252 - (i * 4), winW, 4);
             g2.fillRect(0, winH - 252 + (i * 4), winW, 4);
+            g2.fillRect(252 - (i * 4), 0, 4, winH);
+            g2.fillRect(winW - 252 + (i * 4), 0, 4, winH);
         }
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
