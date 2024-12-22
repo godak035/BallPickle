@@ -58,10 +58,10 @@ public class GamePanel extends JPanel {
         case "game":
             g2.drawImage(court, 0, 0, winW, winH, null);
             if (timeSlowed) drawTimeSlowVignette(g2);
-            g2.setColor(new Color(0, 0, 0, 255));
-            g2.fillRect(player.x, player.y, player.size, player.size);
-            g2.fillRect(ball.x, ball.y, ball.size, ball.size); //draws the ball
-            g2.fillRect(enemy.x, enemy.y, enemy.size, enemy.size); //draws the enemy
+            drawCooldown(g2, 50, 500, 20, Color.BLUE);
+            drawEntity(g2, player, Color.BLACK);
+            drawEntity(g2, ball, Color.BLACK);
+            drawEntity(g2, enemy, Color.BLACK);
             g2.drawString("Enemy: " + enemy.score, 150, 60);
             g2.drawString("Player: " + player.score, 800, 720);
             break;
@@ -94,8 +94,6 @@ public class GamePanel extends JPanel {
                 g2.drawImage(logo, 0, 0, winW, winH,  null);
                 g2.setColor(new Color(0, 0, 0, 255 - (Main.frames * 2)));
                 g2.fillRect(0, 0, winW, winH);
-            // } else if (frames < 200) {
-                // g2.drawImage(logo, 0, 0, winW, winH,  null);
             } else if (Main.frames < 254) {
                 g2.drawImage(logo, 0, 0, winW, winH,  null);
                 g2.setColor(new Color(0, 0, 0, (Main.frames - 127) * 2));
@@ -110,19 +108,19 @@ public class GamePanel extends JPanel {
             } else {
                 g2.drawImage(titleScreen, 0, 0, winW, winH,  null);
                 switch (Main.currentHovered) {
-                    case titleStart:
-                        g2.drawImage(titleStart, 0, 0, winW, winH,  null);
-                        break;
-                    case titleCharSelect:
-                        g2.drawImage(titleCharSelect, 0, 0, winW, winH, null);
-                        break;
-                    case titleHelp:
-                        g2.drawImage(titleHelp, 0, 0, winW, winH, null);
-                        break;
-                    default:
-                        break;
-                    }
+                case titleStart:
+                    g2.drawImage(titleStart, 0, 0, winW, winH,  null);
                     break;
+                case titleCharSelect:
+                    g2.drawImage(titleCharSelect, 0, 0, winW, winH, null);
+                    break;
+                case titleHelp:
+                    g2.drawImage(titleHelp, 0, 0, winW, winH, null);
+                    break;
+                default:
+                    break;
+                }
+                break;
             }
         }
     }
@@ -145,5 +143,66 @@ public class GamePanel extends JPanel {
             g2.fillRect(winW - 252 + (i * 4), 0, 4, winH);
         }
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    }
+
+    private void drawEntity(Graphics2D g2, Entity e, Color c) {
+        g2.setColor(c);
+        g2.fillRect(e.x, e.y, e.size, e.size);
+    }
+
+    private void drawCooldown(Graphics2D g2, int x, int y, double radius, Color c) {
+        double totalCooldown;
+        int cooldownLeft = (int)System.currentTimeMillis() - (int)player.getLastAbilityTime();
+        switch (player.ability) {
+        case riso:
+            totalCooldown = player.getDashCooldown();
+            break;
+        case adonis:
+            totalCooldown = player.getStrongHitCooldown();
+            break;
+        case tasha:
+            totalCooldown = player.getTimeSlowCooldown();
+            break;
+        default:
+            totalCooldown = 0;
+            break;
+        }
+        
+        g2.setColor(c);
+        if (totalCooldown == cooldownLeft) {
+            g2.fillOval(x - (int)radius, y - (int)radius, (int)radius * 2, (int)radius * 2);
+        } else {
+            Polygon cooldown = new Polygon();
+            cooldown.addPoint(x, y - (int)radius);
+            int degrees = (int)((cooldownLeft / totalCooldown) * 360);
+            for (int i = 1; i <= degrees; i++) {
+                int x2, y2;
+                if (i < 90) {
+                    x2 = (int)(radius * Math.sin(Math.toRadians(i))) * -1;
+                    y2 = (int)(radius * Math.cos(Math.toRadians(i))) * -1;
+                } else if (i == 90) {
+                    x2 = (int)radius * -1;
+                    y2 = 0;
+                } else if (i < 180) {
+                    x2 = (int)(radius * Math.sin(Math.toRadians(i))) * -1;
+                    y2 = (int)(radius * Math.cos(Math.toRadians(i)));
+                } else if (i == 180) {
+                    x2 = 0;
+                    y2 = (int)radius * -1;
+                } else if (i < 270) {
+                    x2 = (int)(radius * Math.sin(Math.toRadians(i)));
+                    y2 = (int)(radius * Math.cos(Math.toRadians(i)));
+                } else if (i == 270) {
+                    x2 = (int)radius;
+                    y2 = 0;
+                } else {
+                    x2 = (int)(radius * Math.sin(Math.toRadians(i)));
+                    y2 = (int)(radius * Math.cos(Math.toRadians(i))) * -1;
+                }
+                cooldown.addPoint(x + x2, y + y2);
+            }
+            cooldown.addPoint(x, y);
+            g2.fillPolygon(cooldown);
+        }
     }
 }

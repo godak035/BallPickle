@@ -5,7 +5,7 @@
  * December 2, 2024
  */
 public abstract class Entity {
-    int x, y;
+    int x, y, size;
     double xx, yy, velocity;
 
     /**
@@ -14,10 +14,11 @@ public abstract class Entity {
      * @param yy: The precise y position of the entity
      * @param v: The velocity of the entity
      */
-    Entity(double xx, double yy, double v) {
+    Entity(double xx, double yy, double v, int s) {
         this.xx = xx;
         this.yy = yy;
         this.velocity = v;
+        this.size = s;
         this.x = (int)xx;
         this.y = (int)yy;
     }

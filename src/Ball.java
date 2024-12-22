@@ -6,7 +6,6 @@
  */
 public class Ball extends Entity {
 
-    public int size;
     double destinationX, destinationY, theta;
 
    /**
@@ -18,8 +17,7 @@ public class Ball extends Entity {
     * @param t: The direction of velocity vector
     */
     public Ball(double xx, double yy, int s, double v) {
-        super(xx, yy, v);
-        this.size = s;
+        super(xx, yy, v, s);
     }
 
     /**

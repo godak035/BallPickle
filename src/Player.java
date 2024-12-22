@@ -1,6 +1,5 @@
 public class Player extends Entity {
 
-    int size;
     int score = 0;
     int abilityTime = 0;
     boolean abilityON = false;
@@ -16,8 +15,7 @@ public class Player extends Entity {
         positionYRelativeTo = 475;
 
     public Player(double xx, double yy, double v, int s) {
-        super(xx, yy, v);
-        this.size = s;
+        super(xx, yy, v, s);
         this.ability = abilityChoices.riso;
     }
 
@@ -57,6 +55,11 @@ public class Player extends Entity {
         abilityON=true;
     }
 
+    //getter methods because encapsulation yes
     public int getPositionXRelativeTo() { return this.positionXRelativeTo; }
     public int getPositionYRelativeTo() { return this.positionYRelativeTo; }
+    public int getDashCooldown() { return this.dashCooldown; }
+    public int getStrongHitCooldown() { return this.strongHitCooldown; }
+    public int getTimeSlowCooldown() { return this.timeSlowCooldown; }
+    public long getLastAbilityTime() { return this.lastAbilityTime; }
 }

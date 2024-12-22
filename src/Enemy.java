@@ -8,7 +8,7 @@
  */
 public class Enemy extends Entity {
     
-    int size, level;
+    int level;
     int score = 0;
     double destinationX, destinationY;
     double idleX, idleY;
@@ -22,8 +22,7 @@ public class Enemy extends Entity {
     * @param level: The level difficulty of the enemy
     */
     public Enemy(double xx, double yy, double v, int s, int level, double iX, double iY) {
-        super(xx, yy, v);
-        this.size = s;
+        super(xx, yy, v, s);
         this.level = level;
         this.idleX = iX;
         this.idleY = iY;
