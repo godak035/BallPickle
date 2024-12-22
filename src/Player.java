@@ -6,17 +6,18 @@ public class Player extends Entity {
     static enum abilityChoices { riso, adonis, tasha }
     abilityChoices ability;
     
-    private long lastAbilityTime = 0; 
+    private long lastAbilityTime; 
     private final int 
-        dashCooldown = 1000,  //Time duration in milliseconds of dash ability
-        timeSlowCooldown = 1000,  //Time duration in milliseconds of time slowdown ability
-        strongHitCooldown = 1000,  //Time duration in milliseconds of strong hit ability
+        dashCooldown = 3000,  //Time duration in milliseconds of dash ability
+        timeSlowCooldown = 3000,  //Time duration in milliseconds of time slowdown ability
+        strongHitCooldown = 3000,  //Time duration in milliseconds of strong hit ability
         positionXRelativeTo = 230,
         positionYRelativeTo = 475;
 
     public Player(double xx, double yy, double v, int s) {
         super(xx, yy, v, s);
         this.ability = abilityChoices.riso;
+        this.lastAbilityTime = System.currentTimeMillis();
     }
 
     public void changeAbility(abilityChoices a) {

@@ -58,7 +58,7 @@ public class GamePanel extends JPanel {
         case "game":
             g2.drawImage(court, 0, 0, winW, winH, null);
             if (timeSlowed) drawTimeSlowVignette(g2);
-            drawCooldown(g2, 50, 500, 20, Color.BLUE);
+            drawCooldown(g2, 70, 500, 50, Color.BLUE);
             drawEntity(g2, player, Color.BLACK);
             drawEntity(g2, ball, Color.BLACK);
             drawEntity(g2, enemy, Color.BLACK);
@@ -169,40 +169,22 @@ public class GamePanel extends JPanel {
         }
         
         g2.setColor(c);
-        if (totalCooldown == cooldownLeft) {
-            g2.fillOval(x - (int)radius, y - (int)radius, (int)radius * 2, (int)radius * 2);
-        } else {
+
+        if (cooldownLeft < totalCooldown) {
             Polygon cooldown = new Polygon();
             cooldown.addPoint(x, y - (int)radius);
             int degrees = (int)((cooldownLeft / totalCooldown) * 360);
             for (int i = 1; i <= degrees; i++) {
                 int x2, y2;
-                if (i < 90) {
-                    x2 = (int)(radius * Math.sin(Math.toRadians(i))) * -1;
-                    y2 = (int)(radius * Math.cos(Math.toRadians(i))) * -1;
-                } else if (i == 90) {
-                    x2 = (int)radius * -1;
-                    y2 = 0;
-                } else if (i < 180) {
-                    x2 = (int)(radius * Math.sin(Math.toRadians(i))) * -1;
-                    y2 = (int)(radius * Math.cos(Math.toRadians(i)));
-                } else if (i == 180) {
-                    x2 = 0;
-                    y2 = (int)radius * -1;
-                } else if (i < 270) {
-                    x2 = (int)(radius * Math.sin(Math.toRadians(i)));
-                    y2 = (int)(radius * Math.cos(Math.toRadians(i)));
-                } else if (i == 270) {
-                    x2 = (int)radius;
-                    y2 = 0;
-                } else {
-                    x2 = (int)(radius * Math.sin(Math.toRadians(i)));
-                    y2 = (int)(radius * Math.cos(Math.toRadians(i))) * -1;
-                }
-                cooldown.addPoint(x + x2, y + y2);
+                x2 = (int)(radius * Math.sin(Math.toRadians(i)));
+                y2 = (int)(radius * Math.cos(Math.toRadians(i)));
+                cooldown.addPoint(x - x2, y - y2);
             }
             cooldown.addPoint(x, y);
             g2.fillPolygon(cooldown);
+        } else {
+            g2.fillOval(x - (int)radius + 1, y - (int)radius + 1, (int)(radius * 2) - 2, (int)(radius * 2) - 2);
+
         }
     }
 }
