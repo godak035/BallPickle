@@ -113,7 +113,7 @@ public class Main implements Runnable {
         }
         
         // Score and game reset logic
-        if (ballShadow.y <= 0) {
+        if (ball.y <= 0) {
             if (playerHitLast) {
                 player.score++;
                 if (player.score==5){
@@ -123,7 +123,7 @@ public class Main implements Runnable {
             }
         }
                  
-        if (ballShadow.y >= 724) {
+        if (ball.y >= 724) {
             if (!playerHitLast) {
                 enemy.score++;
                 if (enemy.score==5){
@@ -353,7 +353,7 @@ public class Main implements Runnable {
                              * right: (712, 150)
                             */
                             Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
-                            Rectangle ballRect = new Rectangle((int)ballShadow.xx, (int)ballShadow.yy, ballShadow.size, ballShadow.size);
+                            Rectangle ballRect = new Rectangle((int)ball.xx, (int)ball.yy, ball.size, ball.size);
                             if (playerRect.intersects(ballRect)) {
                                 if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
                                    ballShadow.velocity = 10;
@@ -363,13 +363,10 @@ public class Main implements Runnable {
                                     }
                                 if (KeyH.leftPressed) {
                                    ballShadow.setDestination(312, 150);
-                                    //ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 312)) * -1));
                                 } else if (KeyH.rightPressed) {
                                    ballShadow.setDestination(712, 150);
-                                    //ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 712)) * -1));
                                 } else {
                                    ballShadow.setDestination(512, 100);
-                                    //ball.theta = Math.toDegrees(Math.atan(Math.abs((ball.yy - 100)/(ball.xx - 512)) * -1));
                                 }
                                 playerHitLast = true;
                             }
