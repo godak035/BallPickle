@@ -42,7 +42,7 @@ public class Enemy extends Entity {
         this.destinationY = dY;
     }
 
-    public void move(Ball b) {
+    public void move(BallShadow b) {
         if (b.destinationY < 300) { //ball is moving towards enemy, enemy must move towards ball's destination
             this.destinationX = b.destinationX;
             this.destinationY = b.destinationY;

@@ -10,6 +10,7 @@ public class GamePanel extends JPanel {
 
     Player player;
     Enemy enemy;
+    BallShadow ballShadow;
     Ball ball;
     boolean timeSlowed;
 
@@ -43,8 +44,9 @@ public class GamePanel extends JPanel {
 		}
     }
 
-    public void updateValues(Player p, Ball b, Enemy e, boolean ts) {
+    public void updateValues(Player p, BallShadow bs, Ball b, Enemy e, boolean ts) {
         this.player = p;
+        this.ballShadow = bs;
         this.ball = b;
         this.enemy = e;
         this.timeSlowed = ts;
@@ -60,8 +62,10 @@ public class GamePanel extends JPanel {
             if (timeSlowed) drawTimeSlowVignette(g2);
             drawCooldown(g2, 70, 500, 50, Color.BLUE);
             drawEntity(g2, player, Color.BLACK);
-            drawEntity(g2, ball, Color.BLACK);
+            drawEntity(g2, ballShadow, Color.BLACK);
             drawEntity(g2, enemy, Color.BLACK);
+            drawEntity(g2, ball, Color.BLUE);
+            //drawDebugStuff(g2);
             g2.drawString("Enemy: " + enemy.score, 150, 60);
             g2.drawString("Player: " + player.score, 800, 720);
             break;
@@ -186,5 +190,13 @@ public class GamePanel extends JPanel {
             g2.fillOval(x - (int)radius + 1, y - (int)radius + 1, (int)(radius * 2) - 2, (int)(radius * 2) - 2);
 
         }
+    }
+
+    private void drawDebugStuff(Graphics2D g2) {
+        g2.setStroke(new BasicStroke(10));
+        g2.setColor(Color.RED);
+        g2.drawLine((int)ballShadow.destinationX, (int)ballShadow.destinationY, (int)ballShadow.destinationX, (int)ballShadow.destinationY);
+        g2.setColor(Color.GREEN);
+        g2.drawLine((int)ballShadow.departureX, (int)ballShadow.departureY, (int)ballShadow.departureX, (int)ballShadow.departureY);
     }
 }
