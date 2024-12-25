@@ -31,7 +31,7 @@ public class Main implements Runnable {
     Ball ball;
     Enemy enemy;
 
-    boolean playerHitLast, lookRightLast, timeSlowed;
+    boolean playerHitLast, lookRightLast, timeSlowed, serve=false;
     boolean playerLose=false, playerWin=false;
 
     final int 
@@ -316,6 +316,38 @@ public class Main implements Runnable {
             }
             break;
         case inGame:
+        if(serve){
+            if (KeyH.enterPressed) {
+                if (!enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    if (!playerHitLast) {
+                        /*spots ball flies to:
+                         * left: (312, 150)
+                         * centre: (512, 100)
+                         * right: (712, 150)
+                         */
+                        Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
+                        Rectangle ballRect = new Rectangle((int)ball.xx, (int)ball.yy, ball.size, ball.size);
+                        if (playerRect.intersects(ballRect)) {
+                            if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
+                                ballShadow.velocity = 10;
+                            } 
+                            if (ballShadow.velocity == 0) {
+                                ballShadow.velocity = 4;
+                            }
+                            ballShadow.setDestination(712, 150);
+                            
+                            playerHitLast = true;
+                            serve=false;
+                            return;
+                            }
+                        }
+                    }
+                }
+                
+                
+            
+        }
             if (player.abilityON && player.ability == Player.abilityChoices.riso) {
                 if (lookRightLast) {
                     player.xx += 20;
@@ -396,6 +428,8 @@ public class Main implements Runnable {
         if (!KeyH.leftPressed) leftPressedThisTick = false;
         if (!KeyH.rightPressed) rightPressedThisTick = false;
         if (!KeyH.enterPressed) enterPressedThisTick = false;
+
+        
     }//end getInputs
 
     /**
@@ -451,6 +485,7 @@ public class Main implements Runnable {
         ballShadow.setDeparture(100, 100);
         ballShadow.updatePosition();
         playerHitLast=  false;
+        serve=true;
     }
 
     public void tickAbilities() {
