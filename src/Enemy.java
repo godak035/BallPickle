@@ -1,4 +1,4 @@
-
+import java.awt.Rectangle;
 
 /***
  * Enemy.java
@@ -12,6 +12,7 @@ public class Enemy extends Entity {
     int score = 0;
     double destinationX, destinationY;
     double idleX, idleY;
+    boolean hitLast;
 
    /**
     * Constructor
@@ -26,6 +27,7 @@ public class Enemy extends Entity {
         this.level = level;
         this.idleX = iX;
         this.idleY = iY;
+        this.hitLast = true;
     }
 
     /**
@@ -125,5 +127,19 @@ public class Enemy extends Entity {
             this.xx += vx;
             this.yy += vy;    
         }
-    }
+    }//end move
+
+    public void hit(BallShadow b, boolean timeSlowed) {
+        Rectangle ball = new Rectangle((int)b.xx, (int)b.yy, b.size, b.size);
+        Rectangle enemy = new Rectangle((int)this.xx, (int)this.yy, this.size, this.size);
+        if (!this.hitLast && enemy.intersects(ball)) {
+            //Updated the velocity for the ball to be returned.
+            if (!timeSlowed) b.velocity = 4;
+            else b.velocity = 2;
+            b.setDestination((Math.random() * 400) + 312, 500);
+            //Set hitLast to true.
+            this.hitLast = true;
+            //System.out.println("Enemy hit the ball!");
+        }
+    }//end hit
 }

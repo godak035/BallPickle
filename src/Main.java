@@ -31,7 +31,7 @@ public class Main implements Runnable {
     Ball ball;
     Enemy enemy;
 
-    boolean playerHitLast, lookRightLast, timeSlowed, serve=false;
+    boolean lookRightLast, timeSlowed, serve=true;
     boolean playerLose=false, playerWin=false;
 
     final int 
@@ -107,14 +107,11 @@ public class Main implements Runnable {
         ball.updatePosition();
         enemy.move(ballShadow);
         enemy.updatePosition();
-        
-        if (ballCollidesWithEnemy(ballShadow, enemy)) {
-            enemyStrike(enemy, ballShadow);
-        }
+        enemy.hit(ballShadow, timeSlowed);
         
         // Score and game reset logic
         if (ball.y <= 0) {
-            if (playerHitLast) {
+            if (!enemy.hitLast) {
                 player.score++;
                 if (player.score==5){
                     player.score=0;
@@ -124,7 +121,7 @@ public class Main implements Runnable {
         }
                  
         if (ball.y >= 724) {
-            if (!playerHitLast) {
+            if (enemy.hitLast) {
                 enemy.score++;
                 if (enemy.score==5){
                     resetGame();
@@ -320,7 +317,7 @@ public class Main implements Runnable {
             if (KeyH.enterPressed) {
                 if (!enterPressedThisTick) {
                     enterPressedThisTick = true;
-                    if (!playerHitLast) {
+                    if (enemy.hitLast) {
                         /*spots ball flies to:
                          * left: (312, 150)
                          * centre: (512, 100)
@@ -337,7 +334,7 @@ public class Main implements Runnable {
                             }
                             ballShadow.setDestination(712, 150);
                             
-                            playerHitLast = true;
+                            enemy.hitLast = false;
                             serve=false;
                             return;
                             }
@@ -378,7 +375,7 @@ public class Main implements Runnable {
                 if (KeyH.enterPressed) {
                     if (!enterPressedThisTick) {
                         enterPressedThisTick = true;
-                        if (!playerHitLast) {
+                        if (enemy.hitLast) {
                             /*spots ball flies to:
                              * left: (312, 150)
                              * centre: (512, 100)
@@ -400,7 +397,7 @@ public class Main implements Runnable {
                                 } else {
                                    ballShadow.setDestination(512, 100);
                                 }
-                                playerHitLast = true;
+                                enemy.hitLast = false;
                             }
                         }
                     }
@@ -432,45 +429,6 @@ public class Main implements Runnable {
         
     }//end getInputs
 
-    /**
-     * Responsible for having the enemy strike the ball.
-     * @param enemy needed for enemy level to be checked, in order to measure probability of a successful return.
-     * @param ball needed to change velocity of the ball (return the ball)
-     */
-    private void enemyStrike(Enemy enemy, BallShadow ball) {
-        if (playerHitLast) {
-            Random random = new Random();
-            if (random.nextInt(100) < enemy.level * 20) { // Success probability based on enemy's level. Right now I made it so that level 5 = 100%.
-                // Updated the velocity for the ball to be returned.
-                if (!timeSlowed) {
-                    ball.velocity = 4;
-                } else {
-                    ball.velocity = 2;
-                }
-                
-                ball.setDestination((Math.random() * 400) + 312, 500);
-                // Set playerHitLast to false.
-                playerHitLast = false;
-                //System.out.println("Enemy hit the ball!");
-            } else {
-                // Debug message.
-                //System.out.println("Enemy missed the ball!");
-            }
-        }
-    }
-    
-    /**
-     * Method checks if the ball has collided with the enemy. I reference the method in the actionPerformed() method, where if this bool is true, the enemyStrike() method will run.
-     * @param ball: The ball that is checked if it has a collision with the enemy.
-     * @param enemy The enemy that is checked if it has a collision with the ball.
-     * @return whether or not the ball rectangle intersets with the enemy rectangle (collision detection).
-     */
-    private boolean ballCollidesWithEnemy(BallShadow ball, Enemy enemy) {
-        Rectangle ballRect = new Rectangle(ball.x, ball.y, ball.size, ball.size);
-        Rectangle enemyRect = new Rectangle(enemy.x, enemy.y, enemy.size, enemy.size);
-        return ballRect.intersects(enemyRect);
-    }
-
     public void resetGame() {
         player.xx = 282;
         player.yy = 125;
@@ -484,7 +442,7 @@ public class Main implements Runnable {
         ballShadow.setDestination(300, 500);
         ballShadow.setDeparture(100, 100);
         ballShadow.updatePosition();
-        playerHitLast=  false;
+        enemy.hitLast = true;
         serve=true;
     }
 
