@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel {
 
-    final static int winW = 1024, winH = 768;
+    final static int WINW = 1024, WINH = 768;
 
     Player player;
     ArrayList<Enemy> enemies;
@@ -61,78 +61,62 @@ public class GamePanel extends JPanel {
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         switch (type) {
-        case "game":
-            g2.drawImage(court, 0, 0, winW, winH, null);
-            if (timeSlowed) drawTimeSlowVignette(g2);
-            drawCooldown(g2, 70, 500, 50, Color.BLUE);
-            drawEntity(g2, player, Color.BLACK);
-            drawEntity(g2, ballShadow, Color.BLACK);
-            for (Enemy e: enemies) {
-                if (e.isActive) {
-                    drawEntity(g2, e, Color.BLACK);
+            case "game" -> {
+                g2.drawImage(court, 0, 0, WINW, WINH, null);
+                if (timeSlowed) drawTimeSlowVignette(g2);
+                drawCooldown(g2, 70, 500, 50, Color.BLUE);
+                drawEntity(g2, player, Color.BLACK);
+                drawEntity(g2, ballShadow, Color.BLACK);
+                for (Enemy e: enemies) {
+                    if (e.isActive) {
+                        drawEntity(g2, e, Color.BLACK);
+                    }
                 }
+                drawEntity(g2, ball, Color.BLUE);
+                //drawDebugStuff(g2);
+                g2.drawString("Enemy: " + enemyScore, 150, 60);
+                g2.drawString("Player: " + playerScore, 800, 720);
             }
-            drawEntity(g2, ball, Color.BLUE);
-            //drawDebugStuff(g2);
-            g2.drawString("Enemy: " + enemyScore, 150, 60);
-            g2.drawString("Player: " + playerScore, 800, 720);
-            break;
-        case "help":
-            g2.drawImage(helpBg, 0, 0, null);
-            break;
-        case "character select":
-            g2.drawImage(characterSelectBg, 0, 0, null);
-            g2.drawImage(select, 32, 615, null);
-            g2.drawImage(select, 384, 615, null);
-            g2.drawImage(select, 720, 615, null);
+            case "help" -> g2.drawImage(helpBg, 0, 0, null);
+            case "character select" -> {
+                g2.drawImage(characterSelectBg, 0, 0, null);
+                g2.drawImage(select, 32, 615, null);
+                g2.drawImage(select, 384, 615, null);
+                g2.drawImage(select, 720, 615, null);
 
-            //Inflates the size of the button that the user is hovering
-            switch (Main.currentHovered) {
-            case charSelect1:
-                g2.drawImage(select, 12, 605, select.getWidth() + 40, select.getHeight() + 20, null);
-                break;
-            case charSelect2:
-                g2.drawImage(select, 364, 605, select.getWidth() + 40, select.getHeight() + 20, null);
-                break;
-            case charSelect3:
-                g2.drawImage(select, 700, 605, select.getWidth() + 40, select.getHeight() + 20, null);
-                break;
-            default:
-                break;
-            }
-            break;
-        case "title":
-            if (Main.frames < 127) {
-                g2.drawImage(logo, 0, 0, winW, winH,  null);
-                g2.setColor(new Color(0, 0, 0, 255 - (Main.frames * 2)));
-                g2.fillRect(0, 0, winW, winH);
-            } else if (Main.frames < 254) {
-                g2.drawImage(logo, 0, 0, winW, winH,  null);
-                g2.setColor(new Color(0, 0, 0, (Main.frames - 127) * 2));
-                g2.fillRect(0, 0, winW, winH);
-            } else if (Main.frames < 300) {
-                g2.setColor(new Color(0, 0, 0));
-                g2.fillRect(0, 0, winW, winH);
-            } else if (Main.frames < 363) {
-                g2.drawImage(titleScreen, 0, 0, winW, winH,  null);
-                g2.setColor(new Color(0, 0, 0, 255 - ((Main.frames - 300) * 4)));
-                g2.fillRect(0, 0, winW, winH);
-            } else {
-                g2.drawImage(titleScreen, 0, 0, winW, winH,  null);
+                //Inflates the size of the button that the user is hovering
                 switch (Main.currentHovered) {
-                case titleStart:
-                    g2.drawImage(titleStart, 0, 0, winW, winH,  null);
-                    break;
-                case titleCharSelect:
-                    g2.drawImage(titleCharSelect, 0, 0, winW, winH, null);
-                    break;
-                case titleHelp:
-                    g2.drawImage(titleHelp, 0, 0, winW, winH, null);
-                    break;
-                default:
-                    break;
+                    case charSelect1 -> g2.drawImage(select, 12, 605, select.getWidth() + 40, select.getHeight() + 20, null);
+                    case charSelect2 -> g2.drawImage(select, 364, 605, select.getWidth() + 40, select.getHeight() + 20, null);
+                    case charSelect3 -> g2.drawImage(select, 700, 605, select.getWidth() + 40, select.getHeight() + 20, null);
+                    default -> {}
                 }
-                break;
+            }
+            case "title" -> {
+                if (Main.frames < 127) {
+                    g2.drawImage(logo, 0, 0, WINW, WINH,  null);
+                    g2.setColor(new Color(0, 0, 0, 255 - (Main.frames * 2)));
+                    g2.fillRect(0, 0, WINW, WINH);
+                } else if (Main.frames < 254) {
+                    g2.drawImage(logo, 0, 0, WINW, WINH,  null);
+                    g2.setColor(new Color(0, 0, 0, (Main.frames - 127) * 2));
+                    g2.fillRect(0, 0, WINW, WINH);
+                } else if (Main.frames < 300) {
+                    g2.setColor(new Color(0, 0, 0));
+                    g2.fillRect(0, 0, WINW, WINH);
+                } else if (Main.frames < 363) {
+                    g2.drawImage(titleScreen, 0, 0, WINW, WINH,  null);
+                    g2.setColor(new Color(0, 0, 0, 255 - ((Main.frames - 300) * 4)));
+                    g2.fillRect(0, 0, WINW, WINH);
+                } else {
+                    g2.drawImage(titleScreen, 0, 0, WINW, WINH,  null);
+                    switch (Main.currentHovered) {
+                        case titleStart -> g2.drawImage(titleStart, 0, 0, WINW, WINH,  null);
+                        case titleCharSelect -> g2.drawImage(titleCharSelect, 0, 0, WINW, WINH, null);
+                        case titleHelp -> g2.drawImage(titleHelp, 0, 0, WINW, WINH, null);
+                        default -> {}
+                    }
+                }
             }
         }
     }
@@ -149,10 +133,10 @@ public class GamePanel extends JPanel {
         }
         for (int i = 0; i < 64; i++) {
             g2.setColor(new Color(0, 0, 0, (int)(4.0 * (double)i * opacity)));
-            g2.fillRect(0, 252 - (i * 4), winW, 4);
-            g2.fillRect(0, winH - 252 + (i * 4), winW, 4);
-            g2.fillRect(252 - (i * 4), 0, 4, winH);
-            g2.fillRect(winW - 252 + (i * 4), 0, 4, winH);
+            g2.fillRect(0, 252 - (i * 4), WINW, 4);
+            g2.fillRect(0, WINH - 252 + (i * 4), WINW, 4);
+            g2.fillRect(252 - (i * 4), 0, 4, WINH);
+            g2.fillRect(WINW - 252 + (i * 4), 0, 4, WINH);
         }
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
@@ -165,20 +149,12 @@ public class GamePanel extends JPanel {
     private void drawCooldown(Graphics2D g2, int x, int y, double radius, Color c) {
         double totalCooldown;
         int cooldownLeft = (int)System.currentTimeMillis() - (int)player.getLastAbilityTime();
-        switch (player.ability) {
-        case riso:
-            totalCooldown = player.getDashCooldown();
-            break;
-        case adonis:
-            totalCooldown = player.getStrongHitCooldown();
-            break;
-        case tasha:
-            totalCooldown = player.getTimeSlowCooldown();
-            break;
-        default:
-            totalCooldown = 0;
-            break;
-        }
+        totalCooldown = switch (player.ability) {
+            case riso -> player.getDashCooldown();
+            case adonis -> player.getStrongHitCooldown();
+            case tasha -> player.getTimeSlowCooldown();
+            default -> 0;
+        };
         
         g2.setColor(c);
 

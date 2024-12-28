@@ -26,23 +26,19 @@ public class Enemy extends Entity {
         super(xx, yy, v, s);
         this.enemyType = e;
         switch (e) {
-        case AverageJoe:
-        case StrongHercules:
-        case TwoBallWalter:
-        case TeleportSicilia:                
-            this.idleX = 512;
-            this.idleY = 250;
-            break;
-        case GradyTwin1:
-            this.idleX = 412;
-            this.idleY = 250;
-            break;
-        case GradyTwin2:
-            this.idleX = 612;
-            this.idleY = 250;
-            break;
-        default:
-            break;
+            case AverageJoe, StrongHercules, TwoBallWalter, TeleportSicilia -> {                
+                this.idleX = 512;
+                this.idleY = 250;
+                }
+            case GradyTwin1 -> {
+                this.idleX = 412;
+                this.idleY = 250;
+                }
+            case GradyTwin2 -> {
+                this.idleX = 612;
+                this.idleY = 250;
+                }
+            default -> {}
         }
         this.hitLast = true;
     }

@@ -201,22 +201,24 @@ public class Main implements Runnable {
         frame.addKeyListener(KeyH);
 
         title = new GamePanel("title");
-        title.setPreferredSize(new Dimension(GamePanel.winW, GamePanel.winH));
+        title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
 
         inGame = new GamePanel("game");
-        title.setPreferredSize(new Dimension(GamePanel.winW, GamePanel.winH));
+        title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
 
         help = new GamePanel("help");
-        title.setPreferredSize(new Dimension(GamePanel.winW, GamePanel.winH));
+        title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
 
         characterSelect = new GamePanel("character select");
-        title.setPreferredSize(new Dimension(GamePanel.winW, GamePanel.winH));
+        title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
+        
         updateValues();
         
         frame.add(title);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        
         startGameThread();
     }
 
@@ -225,183 +227,175 @@ public class Main implements Runnable {
      */
     public void getInputs() {
         switch (currentHovered) {
-        case titleStart:
-            if (KeyH.downPressed && !downPressedThisTick) {
-                downPressedThisTick = true;
-                currentHovered = hovered.titleCharSelect;
+            case titleStart -> {
+                if (KeyH.downPressed && !downPressedThisTick) {
+                    downPressedThisTick = true;
+                    currentHovered = hovered.titleCharSelect;
+                }
+                if (KeyH.enterPressed && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(title);
+                    frame.add(inGame);
+                    currentHovered = hovered.inGame;
+                    frame.revalidate();
+                }
             }
-            if (KeyH.enterPressed && !enterPressedThisTick) {
-                enterPressedThisTick = true;
-                frame.remove(title);
-                frame.add(inGame);
-                currentHovered = hovered.inGame;
-                frame.revalidate();
+            case titleCharSelect -> {
+                if (KeyH.downPressed && !downPressedThisTick) {
+                    downPressedThisTick = true;
+                    currentHovered = hovered.titleHelp;
+                }
+                if (KeyH.upPressed && !upPressedThisTick) {
+                    upPressedThisTick = true;
+                    currentHovered = hovered.titleStart;
+                }
+                if (KeyH.enterPressed && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(title);
+                    frame.add(characterSelect);
+                    currentHovered = hovered.charSelect1;
+                    frame.revalidate();
+                }
             }
-            break;
-        case titleCharSelect:
-            if (KeyH.downPressed && !downPressedThisTick) {
-                downPressedThisTick = true;
-                currentHovered = hovered.titleHelp;
+            case titleHelp -> {
+                if (KeyH.upPressed && !upPressedThisTick) {
+                    upPressedThisTick = true;
+                    currentHovered = hovered.titleCharSelect;
+                }
+                if (KeyH.enterPressed && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.add(help);
+                    frame.remove(title);
+                    currentHovered = hovered.helpExit;
+                    frame.revalidate();
+                }
             }
-            if (KeyH.upPressed && !upPressedThisTick) {
-                upPressedThisTick = true;
-                currentHovered = hovered.titleStart;
+            case charSelect1 -> {
+                if (KeyH.rightPressed && !rightPressedThisTick) {
+                    rightPressedThisTick = true;
+                    currentHovered = hovered.charSelect2;
+                }
+                if (KeyH.enterPressed && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    player.changeAbility(Player.abilityChoices.riso);
+                    frame.remove(characterSelect);
+                    frame.add(title);
+                    currentHovered = hovered.titleStart;
+                    frame.revalidate();
+                }
             }
-            if (KeyH.enterPressed && !enterPressedThisTick) {
-                enterPressedThisTick = true;
-                frame.remove(title);
-                frame.add(characterSelect);
-                currentHovered = hovered.charSelect1;
-                frame.revalidate();
+            case charSelect2 -> {
+                if (KeyH.rightPressed && !rightPressedThisTick) {
+                    rightPressedThisTick = true;
+                    currentHovered = hovered.charSelect3;
+                }
+                if (KeyH.leftPressed && !leftPressedThisTick) {
+                    leftPressedThisTick = true;
+                    currentHovered = hovered.charSelect1;
+                }
+                if (KeyH.enterPressed && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    player.changeAbility(Player.abilityChoices.adonis);
+                    frame.remove(characterSelect);
+                    frame.add(title);
+                    currentHovered = hovered.titleStart;
+                    frame.revalidate();
+                }
             }
-            break;
-        case titleHelp:
-            if (KeyH.upPressed && !upPressedThisTick) {
-                upPressedThisTick = true;
-                currentHovered = hovered.titleCharSelect;
+            case charSelect3 -> {
+                if (KeyH.leftPressed && !leftPressedThisTick) {
+                    leftPressedThisTick = true;
+                    currentHovered = hovered.charSelect2;
+                }
+                if (KeyH.enterPressed && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    player.changeAbility(Player.abilityChoices.tasha);
+                    frame.remove(characterSelect);
+                    frame.add(title);
+                    currentHovered = hovered.titleStart;
+                    frame.revalidate();
+                }
             }
-            if (KeyH.enterPressed && !enterPressedThisTick) {
-                enterPressedThisTick = true;
-                frame.add(help);
-                frame.remove(title);
-                currentHovered = hovered.helpExit;
-                frame.revalidate();
+            case helpExit -> {
+                if (KeyH.enterPressed && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(help);
+                    frame.add(title);
+                    currentHovered = hovered.titleStart;
+                    frame.revalidate();
+                }
             }
-            break;
-        case charSelect1:
-            if (KeyH.rightPressed && !rightPressedThisTick) {
-                rightPressedThisTick = true;
-                currentHovered = hovered.charSelect2;
-            }
-            if (KeyH.enterPressed && !enterPressedThisTick) {
-                enterPressedThisTick = true;
-                player.changeAbility(Player.abilityChoices.riso);
-                frame.remove(characterSelect);
-                frame.add(title);
-                currentHovered = hovered.titleStart;
-                frame.revalidate();
-            }
-            break;
-        case charSelect2:
-            if (KeyH.rightPressed && !rightPressedThisTick) {
-                rightPressedThisTick = true;
-                currentHovered = hovered.charSelect3;
-            }
-            if (KeyH.leftPressed && !leftPressedThisTick) {
-                leftPressedThisTick = true;
-                currentHovered = hovered.charSelect1;
-            }
-            if (KeyH.enterPressed && !enterPressedThisTick) {
-                enterPressedThisTick = true;
-                player.changeAbility(Player.abilityChoices.adonis);
-                frame.remove(characterSelect);
-                frame.add(title);
-                currentHovered = hovered.titleStart;
-                frame.revalidate();
-            }
-            break;
-        case charSelect3:
-            if (KeyH.leftPressed && !leftPressedThisTick) {
-                leftPressedThisTick = true;
-                currentHovered = hovered.charSelect2;
-            }
-            if (KeyH.enterPressed && !enterPressedThisTick) {
-                enterPressedThisTick = true;
-                player.changeAbility(Player.abilityChoices.tasha);
-                frame.remove(characterSelect);
-                frame.add(title);
-                currentHovered = hovered.titleStart;
-                frame.revalidate();
-            }
-            break;
-        case helpExit:
-            if (KeyH.enterPressed && !enterPressedThisTick) {
-                enterPressedThisTick = true;
-                frame.remove(help);
-                frame.add(title);
-                currentHovered = hovered.titleStart;
-                frame.revalidate();
-            }
-            break;
-        case inGame:
-            if (player.abilityON && player.ability == Player.abilityChoices.riso) {
-                if (lookRightLast) {
-                    player.xx += 20;
-                    if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
+            case inGame -> {
+                if (player.abilityON && player.ability == Player.abilityChoices.riso) {
+                    if (lookRightLast) {
+                        player.xx += 20;
+                        if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
+                    } else {
+                        player.xx -= 20;
+                        if (player.xx < 0) player.xx = 0;
+                    }
                 } else {
-                    player.xx -= 20;
-                    if (player.xx < 0) player.xx = 0;
-                }
-            } else {
-                if (KeyH.rightPressed) {
-                    lookRightLast=true;
-                    player.xx += player.velocity;
-                    if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
-                }
-                if (KeyH.leftPressed) {
-                    lookRightLast=false;
-                    player.xx -= player.velocity;
-                    if (player.xx < 0) player.xx = 0;
-                }
-                if (KeyH.upPressed) {
-                    player.yy -= player.velocity;
-                    if (player.yy < 0) player.yy = 0;
-                }
-                if (KeyH.downPressed) {
-                    player.yy += player.velocity;
-                    if (player.yy + player.size > playerYMax) player.yy = playerYMax - player.size;
-                }
-                if (KeyH.enterPressed) {
-                    if (!enterPressedThisTick) {
-                        enterPressedThisTick = true;
-                        if (!playerHitLast) {
-                            /*spots ball flies to:
-                             * left: (312, 150)
-                             * centre: (512, 100)
-                             * right: (712, 150)
-                            */
-                            Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
-                            Rectangle ballRect = new Rectangle((int)ball.xx, (int)ball.yy, ball.size, ball.size);
-                            if (playerRect.intersects(ballRect)) {
-                                if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
-                                   ballShadow.velocity = 10;
-                                } else {
-                                    if (!timeSlowed) ballShadow.velocity = 4;
-                                    else ballShadow.velocity = 2;
+                    if (KeyH.rightPressed) {
+                        lookRightLast=true;
+                        player.xx += player.velocity;
+                        if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
+                    }
+                    if (KeyH.leftPressed) {
+                        lookRightLast=false;
+                        player.xx -= player.velocity;
+                        if (player.xx < 0) player.xx = 0;
+                    }
+                    if (KeyH.upPressed) {
+                        player.yy -= player.velocity;
+                        if (player.yy < 0) player.yy = 0;
+                    }
+                    if (KeyH.downPressed) {
+                        player.yy += player.velocity;
+                        if (player.yy + player.size > playerYMax) player.yy = playerYMax - player.size;
+                    }
+                    if (KeyH.enterPressed) {
+                        if (!enterPressedThisTick) {
+                            enterPressedThisTick = true;
+                            if (!playerHitLast) {
+                                /*spots ball flies to:
+                                * left: (312, 150)
+                                * centre: (512, 100)
+                                * right: (712, 150)
+                                */
+                                Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
+                                Rectangle ballRect = new Rectangle((int)ball.xx, (int)ball.yy, ball.size, ball.size);
+                                if (playerRect.intersects(ballRect)) {
+                                    if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
+                                        ballShadow.velocity = 10;
+                                    } else {
+                                        if (!timeSlowed) ballShadow.velocity = 4;
+                                        else ballShadow.velocity = 2;
+                                    }  
+                                    if (serve) {
+                                        ballShadow.setDestination(712, 150);
+                                        serve = false;
+                                    } else if (KeyH.leftPressed) {
+                                        ballShadow.setDestination(312, 150);
+                                    } else if (KeyH.rightPressed) {
+                                        ballShadow.setDestination(712, 150);
+                                    } else {
+                                        ballShadow.setDestination(512, 100);
+                                    }
+                                    setHitLast(false);
                                 }
-                                
-                                if (serve) {
-                                    ballShadow.setDestination(712, 150);
-                                    serve = false;
-                                } else if (KeyH.leftPressed) {
-                                   ballShadow.setDestination(312, 150);
-                                } else if (KeyH.rightPressed) {
-                                   ballShadow.setDestination(712, 150);
-                                } else {
-                                   ballShadow.setDestination(512, 100);
-                                }
-                                setHitLast(false);
                             }
                         }
                     }
                 }
-            }
-            if (KeyH.abilityPressed) {
-                switch (player.ability) {
-                case riso:
-                    player.useAbility(lookRightLast);
-                    break;
-                case adonis:
-                    player.useAbility(lookRightLast);
-                    break;
-                case tasha:
-                    player.useAbility(lookRightLast);
-                    break;
+                if (KeyH.abilityPressed) {
+                    switch (player.ability) {
+                        case riso -> player.useAbility(lookRightLast);
+                        case adonis -> player.useAbility(lookRightLast);
+                        case tasha -> player.useAbility(lookRightLast);
+                    }
                 }
             }
-            break;
-        default:
-            break;
+            default -> {}
         }
         if (!KeyH.upPressed) upPressedThisTick = false;
         if (!KeyH.downPressed) downPressedThisTick = false;
@@ -433,30 +427,30 @@ public class Main implements Runnable {
         if (player.abilityON) {
             player.abilityTime++;
             switch (player.ability) {
-            case riso:
-                if (player.abilityTime == 10) {
-                    player.abilityON = !player.abilityON;
-                    player.abilityTime = 0;
+                case riso -> {
+                    if (player.abilityTime == 10) {
+                        player.abilityON = !player.abilityON;
+                        player.abilityTime = 0;
+                    }
                 }
-                break;
-            case adonis:
-                if (player.abilityTime == 100) {
-                    player.abilityON = !player.abilityON;
-                    player.abilityTime = 0;
+                case adonis -> {
+                    if (player.abilityTime == 100) {
+                        player.abilityON = !player.abilityON;
+                        player.abilityTime = 0;
+                    }
                 }
-                break;
-            case tasha:
-                if (player.abilityTime == 100) {
-                    player.abilityON = !player.abilityON;
-                    timeSlowed = false;
-                    ballShadow.velocity *= 2;
-                    for (Enemy e: enemies) e.velocity *= 2;
-                    player.abilityTime = 0;
+                case tasha -> {
+                    if (player.abilityTime == 100) {
+                        player.abilityON = !player.abilityON;
+                        timeSlowed = false;
+                        ballShadow.velocity *= 2;
+                        for (Enemy e: enemies) e.velocity *= 2;
+                        player.abilityTime = 0;
+                    }
                 }
-                break;
             }
         }
-    }
+    }//end tickAbilities
 
     public void checkTimeSlow() {
         if (!timeSlowed && player.abilityON && player.ability == Player.abilityChoices.tasha) {
@@ -508,7 +502,7 @@ public class Main implements Runnable {
 
     private void checkWin() {
         // Score and game reset logic
-        if (ball.y <= 0 || ball.y >= GamePanel.winH) {
+        if (ball.y <= 0 || ball.y >= GamePanel.WINH) {
             if (playerHitLast) {
                 playerScore++;
                 if (playerScore == 5) {
