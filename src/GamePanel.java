@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.image.*;
+import java.util.*;
 import javax.imageio.*;
 import javax.swing.*;
 
@@ -9,10 +10,11 @@ public class GamePanel extends JPanel {
     final static int winW = 1024, winH = 768;
 
     Player player;
-    Enemy enemy;
+    ArrayList<Enemy> enemies;
     BallShadow ballShadow;
     Ball ball;
     boolean timeSlowed;
+    int playerScore, enemyScore;
 
     String type;
 
@@ -44,12 +46,14 @@ public class GamePanel extends JPanel {
 		}
     }
 
-    public void updateValues(Player p, BallShadow bs, Ball b, Enemy e, boolean ts) {
+    public void updateValues(Player p, BallShadow bs, Ball b, ArrayList<Enemy> e, boolean ts, int playerScore, int enemyScore) {
         this.player = p;
         this.ballShadow = bs;
         this.ball = b;
-        this.enemy = e;
+        this.enemies = e;
         this.timeSlowed = ts;
+        this.playerScore = playerScore;
+        this.enemyScore = enemyScore;
     }
 
     @Override
@@ -63,11 +67,15 @@ public class GamePanel extends JPanel {
             drawCooldown(g2, 70, 500, 50, Color.BLUE);
             drawEntity(g2, player, Color.BLACK);
             drawEntity(g2, ballShadow, Color.BLACK);
-            drawEntity(g2, enemy, Color.BLACK);
+            for (Enemy e: enemies) {
+                if (e.isActive) {
+                    drawEntity(g2, e, Color.BLACK);
+                }
+            }
             drawEntity(g2, ball, Color.BLUE);
             //drawDebugStuff(g2);
-            g2.drawString("Enemy: " + enemy.score, 150, 60);
-            g2.drawString("Player: " + player.score, 800, 720);
+            g2.drawString("Enemy: " + enemyScore, 150, 60);
+            g2.drawString("Player: " + playerScore, 800, 720);
             break;
         case "help":
             g2.drawImage(helpBg, 0, 0, null);

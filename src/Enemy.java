@@ -8,11 +8,11 @@ import java.awt.Rectangle;
  */
 public class Enemy extends Entity {
     
-    int level;
-    int score = 0;
+    public static enum enemyTypes { AverageJoe, StrongHercules, GradyTwin1, GradyTwin2, TwoBallWalter, TeleportSicilia }
+    enemyTypes enemyType;
     double destinationX, destinationY;
     double idleX, idleY;
-    boolean hitLast;
+    boolean hitLast, isActive;
 
    /**
     * Constructor
@@ -22,11 +22,28 @@ public class Enemy extends Entity {
     * @param v: The velocity of the enemy
     * @param level: The level difficulty of the enemy
     */
-    public Enemy(double xx, double yy, double v, int s, int level, double iX, double iY) {
+    public Enemy(double xx, double yy, double v, int s, enemyTypes e) {
         super(xx, yy, v, s);
-        this.level = level;
-        this.idleX = iX;
-        this.idleY = iY;
+        this.enemyType = e;
+        switch (e) {
+        case AverageJoe:
+        case StrongHercules:
+        case TwoBallWalter:
+        case TeleportSicilia:                
+            this.idleX = 512;
+            this.idleY = 250;
+            break;
+        case GradyTwin1:
+            this.idleX = 412;
+            this.idleY = 250;
+            break;
+        case GradyTwin2:
+            this.idleX = 612;
+            this.idleY = 250;
+            break;
+        default:
+            break;
+        }
         this.hitLast = true;
     }
 
@@ -39,6 +56,8 @@ public class Enemy extends Entity {
         this.y = (int) yy;
     }
 
+    public void setActive(boolean activity) { this.isActive = activity; }
+
     public void setDestination(double dX, double dY) {
         this.destinationX = dX;
         this.destinationY = dY;
@@ -46,8 +65,26 @@ public class Enemy extends Entity {
 
     public void move(BallShadow b) {
         if (b.destinationY < 300) { //ball is moving towards enemy, enemy must move towards ball's destination
-            this.destinationX = b.destinationX;
-            this.destinationY = b.destinationY;
+            if (this.enemyType != enemyTypes.GradyTwin1 && this.enemyType != enemyTypes.GradyTwin2) {
+                this.destinationX = this.idleX;
+                this.destinationY = this.idleY;
+            } else if (this.enemyType == enemyTypes.GradyTwin1) {
+                if (b.destinationX < 512) {
+                    this.destinationX = b.destinationX;
+                    this.destinationY = b.destinationY;
+                } else {
+                    this.destinationX = this.idleX;
+                    this.destinationY = this.idleY;
+                }  
+            } else if (this.enemyType == enemyTypes.GradyTwin2) {
+                if (b.destinationX >= 512) {
+                    this.destinationX = b.destinationX;
+                    this.destinationY = b.destinationY;
+                } else {
+                    this.destinationX = this.idleX;
+                    this.destinationY = this.idleY;
+                }
+            }
         } else { //ball is moving away from enemy, enemy must move towards idle position
             this.destinationX = this.idleX;
             this.destinationY = this.idleY;
@@ -134,7 +171,7 @@ public class Enemy extends Entity {
         Rectangle enemy = new Rectangle((int)this.xx, (int)this.yy, this.size, this.size);
         if (!this.hitLast && enemy.intersects(ball)) {
             //Updated the velocity for the ball to be returned.
-            if (this.level != 2) {
+            if (this.enemyType != enemyTypes.StrongHercules) {
                 if (!timeSlowed) b.velocity = 4;
                 else b.velocity = 2;
             } else {
@@ -144,7 +181,7 @@ public class Enemy extends Entity {
             b.setDestination((Math.random() * 400) + 312, 500);
             //Set hitLast to true.
             this.hitLast = true;
-            //System.out.println("Enemy hit the ball!");
+            //System.out.println("Enemy hit the ball!");S
         }
     }//end hit
 }

@@ -1,6 +1,5 @@
 public class Player extends Entity {
 
-    int score = 0;
     int abilityTime = 0;
     boolean abilityON = false;
     static enum abilityChoices { riso, adonis, tasha }
