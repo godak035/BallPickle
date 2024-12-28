@@ -313,38 +313,6 @@ public class Main implements Runnable {
             }
             break;
         case inGame:
-        if(serve){
-            if (KeyH.enterPressed) {
-                if (!enterPressedThisTick) {
-                    enterPressedThisTick = true;
-                    if (enemy.hitLast) {
-                        /*spots ball flies to:
-                         * left: (312, 150)
-                         * centre: (512, 100)
-                         * right: (712, 150)
-                         */
-                        Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
-                        Rectangle ballRect = new Rectangle((int)ball.xx, (int)ball.yy, ball.size, ball.size);
-                        if (playerRect.intersects(ballRect)) {
-                            if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
-                                ballShadow.velocity = 10;
-                            } 
-                            if (ballShadow.velocity == 0) {
-                                ballShadow.velocity = 4;
-                            }
-                            ballShadow.setDestination(712, 150);
-                            
-                            enemy.hitLast = false;
-                            serve=false;
-                            return;
-                            }
-                        }
-                    }
-                }
-                
-                
-            
-        }
             if (player.abilityON && player.ability == Player.abilityChoices.riso) {
                 if (lookRightLast) {
                     player.xx += 20;
@@ -389,8 +357,10 @@ public class Main implements Runnable {
                                 } 
                                 if (ballShadow.velocity == 0) {
                                    ballShadow.velocity = 4;
-                                    }
-                                if (KeyH.leftPressed) {
+                                }
+                                if (serve) {
+                                    ballShadow.setDestination(712, 150);
+                                } else if (KeyH.leftPressed) {
                                    ballShadow.setDestination(312, 150);
                                 } else if (KeyH.rightPressed) {
                                    ballShadow.setDestination(712, 150);
