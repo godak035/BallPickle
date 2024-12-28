@@ -134,8 +134,13 @@ public class Enemy extends Entity {
         Rectangle enemy = new Rectangle((int)this.xx, (int)this.yy, this.size, this.size);
         if (!this.hitLast && enemy.intersects(ball)) {
             //Updated the velocity for the ball to be returned.
-            if (!timeSlowed) b.velocity = 4;
-            else b.velocity = 2;
+            if (this.level != 2) {
+                if (!timeSlowed) b.velocity = 4;
+                else b.velocity = 2;
+            } else {
+                if (!timeSlowed) b.velocity = 6;
+                else b.velocity = 3;
+            }
             b.setDestination((Math.random() * 400) + 312, 500);
             //Set hitLast to true.
             this.hitLast = true;
