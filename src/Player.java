@@ -51,7 +51,6 @@ public class Player extends Entity {
             }
         }
         lastAbilityTime = System.currentTimeMillis();
-        System.out.println("Ability activated!");
         abilityON=true;
     }
 

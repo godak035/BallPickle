@@ -62,32 +62,55 @@ public class Enemy extends Entity {
         this.destinationY = dY;
     }
 
-    public void move(BallShadow b) {
-        if (b.destinationY < 300) { //ball is moving towards enemy, enemy must move towards ball's destination
-            if (this.enemyType != enemyTypes.GradyTwin1 && this.enemyType != enemyTypes.GradyTwin2) {
-                this.destinationX = b.destinationX;
-                this.destinationY = b.destinationY;
-            } else if (this.enemyType == enemyTypes.GradyTwin1) {
-                if (b.destinationX < 512) {
-                    this.destinationX = b.destinationX;
-                    this.destinationY = b.destinationY;
-                } else {
-                    this.destinationX = this.idleX;
-                    this.destinationY = this.idleY;
-                }  
-            } else if (this.enemyType == enemyTypes.GradyTwin2) {
-                if (b.destinationX >= 512) {
-                    this.destinationX = b.destinationX;
-                    this.destinationY = b.destinationY;
-                } else {
-                    this.destinationX = this.idleX;
-                    this.destinationY = this.idleY;
+    public void move(ArrayList<BallShadow> bs) {
+        if (!bs.get(1).getActive()) { //only one ball in play
+            if (bs.get(0).destinationY < 300) { //ball is moving towards enemy, enemy must move towards ball's destination
+                if (this.enemyType != enemyTypes.GradyTwin1 && this.enemyType != enemyTypes.GradyTwin2) {
+                    this.destinationX = bs.get(0).destinationX;
+                    this.destinationY = bs.get(0).destinationY;
+                } else if (this.enemyType == enemyTypes.GradyTwin1) {
+                    if (bs.get(0).destinationX < 512) {
+                        this.destinationX = bs.get(0).destinationX;
+                        this.destinationY = bs.get(0).destinationY;
+                    } else {
+                        this.destinationX = this.idleX;
+                        this.destinationY = this.idleY;
+                    }  
+                } else if (this.enemyType == enemyTypes.GradyTwin2) {
+                    if (bs.get(0).destinationX >= 512) {
+                        this.destinationX = bs.get(0).destinationX;
+                        this.destinationY = bs.get(0).destinationY;
+                    } else {
+                        this.destinationX = this.idleX;
+                        this.destinationY = this.idleY;
+                    }
+                }
+            } else { //ball is moving away from enemy, enemy must move towards idle position
+                this.destinationX = this.idleX;
+                this.destinationY = this.idleY;
+            }
+        } else { //multiple balls in play, must decide which to go for
+            if (ballShadows.get(0).destinationY > 300 && ballShadows.get(1).destinationY > 300) { //both balls are moving away from Walter
+                this.destinationX = this.idleX;
+                this.destinationY = this.idleY;
+            } else if (ballShadows.get(0).destinationY < 300 && ballShadows.get(1).destinationY < 300) { //both balls are moving towards enemy, must choose one to go for
+                if (ballShadows.get(0).yy < ballShadows.get(1).yy) { //ballShadows.get(0) is closer to leaking
+                    this.destinationX = ballShadows.get(0).destinationX;
+                    this.destinationY = ballShadows.get(0).destinationY;
+                } else { //ballShadows.get(1) must be closer to leaking then
+                    this.destinationX = ballShadows.get(1).destinationX;
+                    this.destinationY = ballShadows.get(1).destinationY;
+                }
+            } else { //only one ball is moving towardds enemy
+                for (BallShadow b: ballShadows) {
+                    if (b.destinationY < 300) {
+                        this.destinationX = b.destinationX;
+                        this.destinationY = b.destinationY;
+                    }
                 }
             }
-        } else { //ball is moving away from enemy, enemy must move towards idle position
-            this.destinationX = this.idleX;
-            this.destinationY = this.idleY;
         }
+        
 
         double vx, vy, theta;
         double centerX = this.xx + (this.size / 2);

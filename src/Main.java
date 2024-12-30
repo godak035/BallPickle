@@ -522,7 +522,7 @@ public class Main implements Runnable {
     private void moveEnemies() {
         for (Enemy e: enemies) {
             if (e.isActive) {
-                e.move(ballShadow);
+                e.move(ballShadows);
                 e.updatePosition();
                 if (playerScore > enemyScore) e.hit(timeSlowed, true);
                 else e.hit(timeSlowed, false);
