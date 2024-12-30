@@ -1,4 +1,5 @@
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 /***
  * Enemy.java
@@ -12,7 +13,8 @@ public class Enemy extends Entity {
     enemyTypes enemyType;
     double destinationX, destinationY;
     double idleX, idleY;
-    boolean hitLast, isActive;
+    boolean isActive;
+    ArrayList<BallShadow> ballShadows;
 
    /**
     * Constructor
@@ -40,7 +42,7 @@ public class Enemy extends Entity {
                 }
             default -> {}
         }
-        this.hitLast = true;
+        this.isActive = true;
     }
 
     /**
@@ -53,6 +55,7 @@ public class Enemy extends Entity {
     }
 
     public void setActive(boolean activity) { this.isActive = activity; }
+    public void updateValues(ArrayList<BallShadow> bs) { this.ballShadows = bs; }
 
     public void setDestination(double dX, double dY) {
         this.destinationX = dX;
@@ -62,8 +65,8 @@ public class Enemy extends Entity {
     public void move(BallShadow b) {
         if (b.destinationY < 300) { //ball is moving towards enemy, enemy must move towards ball's destination
             if (this.enemyType != enemyTypes.GradyTwin1 && this.enemyType != enemyTypes.GradyTwin2) {
-                this.destinationX = this.idleX;
-                this.destinationY = this.idleY;
+                this.destinationX = b.destinationX;
+                this.destinationY = b.destinationY;
             } else if (this.enemyType == enemyTypes.GradyTwin1) {
                 if (b.destinationX < 512) {
                     this.destinationX = b.destinationX;
@@ -162,22 +165,24 @@ public class Enemy extends Entity {
         }
     }//end move
 
-    public void hit(BallShadow b, boolean timeSlowed) {
-        Rectangle ball = new Rectangle((int)b.xx, (int)b.yy, b.size, b.size);
-        Rectangle enemy = new Rectangle((int)this.xx, (int)this.yy, this.size, this.size);
-        if (!this.hitLast && enemy.intersects(ball)) {
-            //Updated the velocity for the ball to be returned.
-            if (this.enemyType != enemyTypes.StrongHercules) {
-                if (!timeSlowed) b.velocity = 4;
-                else b.velocity = 2;
-            } else {
-                if (!timeSlowed) b.velocity = 6;
-                else b.velocity = 3;
+    public void hit(boolean timeSlowed) {
+        for (BallShadow b: ballShadows) {
+            Rectangle ball = new Rectangle((int)b.xx, (int)b.yy, b.size, b.size);
+            Rectangle enemy = new Rectangle((int)this.xx, (int)this.yy, this.size, this.size);
+            if (b.getPlayerHitLast() && enemy.intersects(ball)) {
+                //Updated the velocity for the ball to be returned.
+                if (this.enemyType != enemyTypes.StrongHercules) {
+                    if (!timeSlowed) b.velocity = 4;
+                    else b.velocity = 2;
+                } else {
+                    if (!timeSlowed) b.velocity = 6;
+                    else b.velocity = 3;
+                }
+                b.setDestination((Math.random() * 400) + 312, 500);
+                //Set hitLast to true.
+                b.setPlayerHitLast(false);
+                //System.out.println("Enemy hit the ball!");S
             }
-            b.setDestination((Math.random() * 400) + 312, 500);
-            //Set hitLast to true.
-            this.hitLast = true;
-            //System.out.println("Enemy hit the ball!");S
         }
     }//end hit
 }

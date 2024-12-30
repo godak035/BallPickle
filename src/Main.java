@@ -27,16 +27,17 @@ public class Main implements Runnable {
     KeyHandler KeyH;
 
     Player player;
-    BallShadow ballShadow;
-    Ball ball;
+    BallShadow ballShadow, ballShadowWalter;
+    ArrayList<BallShadow> ballShadows;
+    Ball ball, ballWalter;
+    ArrayList<Ball> balls;
     Enemy averageJoe, strongHercules, gradyTwin1, gradyTwin2, twoBallWalter, teleportSicilia;
     ArrayList<Enemy> enemies;
 
     static int playerScore, enemyScore;
 
-    boolean lookRightLast, playerHitLast, timeSlowed, serve=true;
+    boolean lookRightLast, timeSlowed, serve=true;
     
-
     final int 
         playerXMax = 562,
         playerYMax = 218;
@@ -101,11 +102,11 @@ public class Main implements Runnable {
 
         //logic stuff
         updateValues();
+        syncBalls();
         if (frames > 363) getInputs();
         tickAbilities();
         checkTimeSlow();
         checkWin();
-        syncHitLast();
 
         //player stuff
         player.updatePosition();
@@ -115,7 +116,7 @@ public class Main implements Runnable {
         ballShadow.updatePosition();
 
         //ball stuff
-        ball.syncLocation(ballShadow);
+        ball.syncLocation();
         ball.updatePosition();
 
         //enemy stuff
@@ -161,8 +162,23 @@ public class Main implements Runnable {
         ballShadow = new BallShadow(300, 500, 0, 10);
         ballShadow.setDestination(300, 500);
         ballShadow.setDeparture(100, 100);
+        ballShadow.setActive(true);
 
-        ball = new Ball(300, 500, 10);
+        ballShadowWalter = new BallShadow(300, 500, 0, 10);
+        ballShadowWalter.setDestination(300, 500);
+        ballShadowWalter.setDeparture(100, 100);
+        ballShadowWalter.setActive(false);
+
+        ballShadows = new ArrayList<>();
+        ballShadows.add(ballShadow);
+        ballShadows.add(ballShadowWalter);
+
+        ball = new Ball(ballShadow);
+        ballWalter = new Ball(ballShadowWalter);
+
+        balls = new ArrayList<>();
+        balls.add(ball);
+        balls.add(ballWalter);
 
         averageJoe = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.AverageJoe);
         strongHercules = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.StrongHercules);
@@ -173,9 +189,9 @@ public class Main implements Runnable {
 
         averageJoe.setActive(false);
         strongHercules.setActive(false);
-        gradyTwin1.setActive(true);
-        gradyTwin2.setActive(true);
-        twoBallWalter.setActive(false);
+        gradyTwin1.setActive(false);
+        gradyTwin2.setActive(false);
+        twoBallWalter.setActive(true);
         teleportSicilia.setActive(false);
 
         enemies = new ArrayList<>();
@@ -356,32 +372,31 @@ public class Main implements Runnable {
                     if (KeyH.enterPressed) {
                         if (!enterPressedThisTick) {
                             enterPressedThisTick = true;
-                            if (!playerHitLast) {
-                                /*spots ball flies to:
-                                * left: (312, 150)
-                                * centre: (512, 100)
-                                * right: (712, 150)
-                                */
-                                Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
-                                Rectangle ballRect = new Rectangle((int)ball.xx, (int)ball.yy, ball.size, ball.size);
-                                if (playerRect.intersects(ballRect)) {
-                                    if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
-                                        ballShadow.velocity = 10;
-                                    } else {
-                                        if (!timeSlowed) ballShadow.velocity = 4;
-                                        else ballShadow.velocity = 2;
-                                    }  
-                                    if (serve) {
-                                        ballShadow.setDestination(712, 150);
+                            for (BallShadow b: ballShadows) {
+                                if (!b.getPlayerHitLast()) {
+                                    /*spots ball flies to:
+                                    * left: (312, 150)
+                                    * centre: (512, 100)
+                                    * right: (712, 150)
+                                    */
+                                    Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
+                                    Rectangle ballRect = new Rectangle((int)ball.xx, (int)ball.yy, ball.size, ball.size);
+                                    if (playerRect.intersects(ballRect)) {
+                                        if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
+                                            b.velocity = 10;
+                                        } else {
+                                            if (!timeSlowed) b.velocity = 4;
+                                            else b.velocity = 2;
+                                        }
+                                        
+                                        if (serve) b.setDestination(712, 150);
+                                        else if (KeyH.leftPressed) b.setDestination(312, 150);
+                                        else if (KeyH.rightPressed) b.setDestination(712, 150);
+                                        else b.setDestination(512, 100);
+                                        
                                         serve = false;
-                                    } else if (KeyH.leftPressed) {
-                                        ballShadow.setDestination(312, 150);
-                                    } else if (KeyH.rightPressed) {
-                                        ballShadow.setDestination(712, 150);
-                                    } else {
-                                        ballShadow.setDestination(512, 100);
+                                        b.setPlayerHitLast(true);
                                     }
-                                    setHitLast(false);
                                 }
                             }
                         }
@@ -413,13 +428,17 @@ public class Main implements Runnable {
             e.yy = 100;
             e.updatePosition();
         }
-        ballShadow.xx = 300;
-        ballShadow.yy = 500;
-        ballShadow.velocity = 0;
-        ballShadow.setDestination(300, 500);
-        ballShadow.setDeparture(100, 100);
-        ballShadow.updatePosition();
-        setHitLast(true);
+        for (BallShadow b: ballShadows) {
+            b.xx = 300;
+            b.yy = 500;
+            b.velocity = 0;
+            b.setDestination(300, 500);
+            b.setDeparture(100, 100);
+            b.updatePosition();
+            setHitLast(false);
+        }
+        ballShadowWalter.setActive(false);
+        
         serve=true;
     }
 
@@ -466,27 +485,26 @@ public class Main implements Runnable {
     }
     
     public void updateValues() {
-        title.updateValues(player, ballShadow, ball, enemies, timeSlowed, playerScore, enemyScore);
-        inGame.updateValues(player, ballShadow, ball, enemies, timeSlowed, playerScore, enemyScore);
-        help.updateValues(player, ballShadow, ball, enemies, timeSlowed, playerScore, enemyScore);
-        characterSelect.updateValues(player, ballShadow, ball, enemies, timeSlowed, playerScore, enemyScore);
-    }
-
-    private void syncHitLast() {
-        boolean hitLast = true;
-        for (Enemy e: enemies) {
-            if (e.isActive) {
-                if (e.hitLast) {
-                    hitLast = false;
-                }
-            }
-        }
-        playerHitLast = hitLast;
+        title.updateValues(player, ballShadows, balls, enemies, timeSlowed, playerScore, enemyScore);
+        inGame.updateValues(player, ballShadows, balls, enemies, timeSlowed, playerScore, enemyScore);
+        help.updateValues(player, ballShadows, balls, enemies, timeSlowed, playerScore, enemyScore);
+        characterSelect.updateValues(player, ballShadows, balls, enemies, timeSlowed, playerScore, enemyScore);
+        for (Enemy e: enemies) e.updateValues(ballShadows);
     }
 
     private void setHitLast(boolean hitLast) {
+        for (BallShadow b: ballShadows) {
+            b.setPlayerHitLast(hitLast);
+        }
+    }
+
+    private void syncBalls() {
         for (Enemy e: enemies) {
-            e.hitLast = hitLast;
+            for (int i = 0; i < ballShadows.size(); i++) {
+                if (ballShadows.get(i).destinationX != e.ballShadows.get(i).destinationX || ballShadows.get(i).destinationY != e.ballShadows.get(i).destinationY) {
+                    ballShadows.get(i).setDestination(e.ballShadows.get(i).destinationX, e.ballShadows.get(i).destinationX);
+                }
+            }
         }
     }
 
@@ -495,30 +513,32 @@ public class Main implements Runnable {
             if (e.isActive) {
                 e.move(ballShadow);
                 e.updatePosition();
-                e.hit(ballShadow, timeSlowed);
+                e.hit(timeSlowed);
             }
         }
     }
 
     private void checkWin() {
         // Score and game reset logic
-        if (ball.y <= 0 || ball.y >= GamePanel.WINH) {
-            if (playerHitLast) {
-                playerScore++;
-                if (playerScore == 5) {
+        for (BallShadow b: ballShadows) {
+            if (b.y <= 0 || b.y >= GamePanel.WINH) {
+                if (b.getPlayerHitLast()) {
+                    playerScore++;
+                    if (playerScore == 5) {
+                        resetGame();
+                        enemyScore = 0;
+                        playerScore = 0;
+                    }
                     resetGame();
-                    enemyScore = 0;
-                    playerScore = 0;
-                }
-                resetGame();
-            } else {
-                enemyScore++;
-                if (enemyScore == 5) {
+                } else {
+                    enemyScore++;
+                    if (enemyScore == 5) {
+                        resetGame();
+                        enemyScore = 0;
+                        playerScore = 0;
+                    }
                     resetGame();
-                    enemyScore = 0;
-                    playerScore = 0;
                 }
-                resetGame();
             }
         }
     }

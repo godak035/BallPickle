@@ -11,8 +11,8 @@ public class GamePanel extends JPanel {
 
     Player player;
     ArrayList<Enemy> enemies;
-    BallShadow ballShadow;
-    Ball ball;
+    ArrayList<BallShadow> ballShadows;
+    ArrayList<Ball> balls;
     boolean timeSlowed;
     int playerScore, enemyScore;
 
@@ -46,10 +46,10 @@ public class GamePanel extends JPanel {
 		}
     }
 
-    public void updateValues(Player p, BallShadow bs, Ball b, ArrayList<Enemy> e, boolean ts, int playerScore, int enemyScore) {
+    public void updateValues(Player p, ArrayList<BallShadow> bs, ArrayList<Ball> b, ArrayList<Enemy> e, boolean ts, int playerScore, int enemyScore) {
         this.player = p;
-        this.ballShadow = bs;
-        this.ball = b;
+        this.ballShadows = bs;
+        this.balls = b;
         this.enemies = e;
         this.timeSlowed = ts;
         this.playerScore = playerScore;
@@ -66,13 +66,21 @@ public class GamePanel extends JPanel {
                 if (timeSlowed) drawTimeSlowVignette(g2);
                 drawCooldown(g2, 70, 500, 50, Color.BLUE);
                 drawEntity(g2, player, Color.BLACK);
-                drawEntity(g2, ballShadow, Color.BLACK);
                 for (Enemy e: enemies) {
                     if (e.isActive) {
                         drawEntity(g2, e, Color.BLACK);
                     }
                 }
-                drawEntity(g2, ball, Color.BLUE);
+                for (BallShadow b: ballShadows) {
+                    if (b.getActive()) {
+                        drawEntity(g2, b, Color.BLACK);
+                    }
+                }
+                for (Ball b: balls) {
+                    if (b.getShadow().getActive()) {
+                        drawEntity(g2, b, Color.BLUE);
+                    }
+                }
                 //drawDebugStuff(g2);
                 g2.drawString("Enemy: " + enemyScore, 150, 60);
                 g2.drawString("Player: " + playerScore, 800, 720);
@@ -178,9 +186,11 @@ public class GamePanel extends JPanel {
 
     private void drawDebugStuff(Graphics2D g2) {
         g2.setStroke(new BasicStroke(10));
-        g2.setColor(Color.RED);
-        g2.drawLine((int)ballShadow.destinationX, (int)ballShadow.destinationY, (int)ballShadow.destinationX, (int)ballShadow.destinationY);
-        g2.setColor(Color.GREEN);
-        g2.drawLine((int)ballShadow.departureX, (int)ballShadow.departureY, (int)ballShadow.departureX, (int)ballShadow.departureY);
+        for (BallShadow b: ballShadows) {
+            g2.setColor(Color.RED);
+            g2.drawLine((int)b.destinationX, (int)b.destinationY, (int)b.destinationX, (int)b.destinationY);
+            g2.setColor(Color.GREEN);
+            g2.drawLine((int)b.departureX, (int)b.departureY, (int)b.departureX, (int)b.departureY);
+        }
     }
 }

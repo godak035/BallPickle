@@ -7,6 +7,7 @@
 public class BallShadow extends Entity {
 
     double destinationX, destinationY, departureX, departureY, theta;
+    private boolean isActive, playerHitLast;
 
    /**
     * Constructor
@@ -18,6 +19,8 @@ public class BallShadow extends Entity {
     */
     public BallShadow(double xx, double yy, double v, int s) {
         super(xx, yy, v, s);
+        isActive = true;
+        playerHitLast = false;
     }
 
     /**
@@ -28,6 +31,11 @@ public class BallShadow extends Entity {
         this.x = (int)xx;
         this.y = (int)yy;
     }
+
+    public void setActive(boolean active) { this.isActive = active; }
+    public boolean getActive() { return this.isActive; }
+    public void setPlayerHitLast(boolean PlayerHitLast) { this.playerHitLast = PlayerHitLast; }
+    public boolean getPlayerHitLast() { return this.playerHitLast; }
 
     public void setDeparture(double dX, double dY) {
         this.departureX = dX;
