@@ -380,30 +380,30 @@ public class Main implements Runnable {
                     if (KeyH.enterPressed) {
                         if (!enterPressedThisTick) {
                             enterPressedThisTick = true;
-                            for (BallShadow b: ballShadows) {
-                                if (!b.getPlayerHitLast()) {
+                            for (int i = 0; i < ballShadows.size(); i++) {
+                                if (!ballShadows.get(i).getPlayerHitLast()) {
                                     /*spots ball flies to:
                                     * left: (312, 150)
                                     * centre: (512, 100)
                                     * right: (712, 150)
                                     */
                                     Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
-                                    Rectangle ballRect = new Rectangle((int)b.xx, (int)b.yy, b.size, b.size);
+                                    Rectangle ballRect = new Rectangle((int)balls.get(i).xx, (int)balls.get(i).yy, balls.get(i).size, balls.get(i).size);
                                     if (playerRect.intersects(ballRect)) {
                                         if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
-                                            b.velocity = 10;
+                                            ballShadows.get(i).velocity = 10;
                                         } else {
-                                            if (!timeSlowed) b.velocity = 4;
-                                            else b.velocity = 2;
+                                            if (!timeSlowed) ballShadows.get(i).velocity = 4;
+                                            else ballShadows.get(i).velocity = 2;
                                         }
                                         
-                                        if (serve) b.setDestination(712, 150);
-                                        else if (KeyH.leftPressed) b.setDestination(312, 150);
-                                        else if (KeyH.rightPressed) b.setDestination(712, 150);
-                                        else b.setDestination(512, 100);
+                                        if (serve) ballShadows.get(i).setDestination(712, 150);
+                                        else if (KeyH.leftPressed) ballShadows.get(i).setDestination(312, 150);
+                                        else if (KeyH.rightPressed) ballShadows.get(i).setDestination(712, 150);
+                                        else ballShadows.get(i).setDestination(512, 100);
                                         
                                         serve = false;
-                                        b.setPlayerHitLast(true);
+                                        ballShadows.get(i).setPlayerHitLast(true);
                                     }
                                 }
                             }

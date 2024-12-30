@@ -220,7 +220,17 @@ public class Enemy extends Entity {
 
                 //checks if Sicilia needs to do something cool
                 if (this.enemyType == enemyTypes.TeleportSicilia) {
-                    b.setSpin(true);
+                    int attackType = (int)(Math.random() * 5);
+                    switch (attackType) {
+                        case 1, 2 -> {
+                            b.setSpin(true);
+                        }
+                        case 3, 4 -> {
+                            b.velocity *= 1.5;
+                        }
+                        case 5 -> {}
+                        default -> {}
+                    }
                 }
             }
         }
