@@ -112,12 +112,20 @@ public class Main implements Runnable {
         player.updatePosition();
 
         //ball shadow stuff
-        ballShadow.move();
-        ballShadow.updatePosition();
-
+        for (BallShadow b: ballShadows) {
+            if (b.getActive()) {
+                b.move();
+                b.updatePosition();
+            }
+        }
+        
         //ball stuff
-        ball.syncLocation();
-        ball.updatePosition();
+        for (Ball b: balls) {
+            if (b.getShadow().getActive()) {
+                b.syncLocation();
+                b.updatePosition();
+            }
+        }
 
         //enemy stuff
         moveEnemies();
@@ -380,7 +388,7 @@ public class Main implements Runnable {
                                     * right: (712, 150)
                                     */
                                     Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
-                                    Rectangle ballRect = new Rectangle((int)ball.xx, (int)ball.yy, ball.size, ball.size);
+                                    Rectangle ballRect = new Rectangle((int)b.xx, (int)b.yy, b.size, b.size);
                                     if (playerRect.intersects(ballRect)) {
                                         if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
                                             b.velocity = 10;
@@ -504,6 +512,9 @@ public class Main implements Runnable {
                 if (ballShadows.get(i).destinationX != e.ballShadows.get(i).destinationX || ballShadows.get(i).destinationY != e.ballShadows.get(i).destinationY) {
                     ballShadows.get(i).setDestination(e.ballShadows.get(i).destinationX, e.ballShadows.get(i).destinationX);
                 }
+                if (ballShadows.get(i).getActive() != e.ballShadows.get(i).getActive()) {
+                    ballShadows.get(i).setActive(e.ballShadows.get(i).getActive());
+                }
             }
         }
     }
@@ -513,7 +524,8 @@ public class Main implements Runnable {
             if (e.isActive) {
                 e.move(ballShadow);
                 e.updatePosition();
-                e.hit(timeSlowed);
+                if (playerScore > enemyScore) e.hit(timeSlowed, true);
+                else e.hit(timeSlowed, false);
             }
         }
     }

@@ -165,7 +165,7 @@ public class Enemy extends Entity {
         }
     }//end move
 
-    public void hit(boolean timeSlowed) {
+    public void hit(boolean timeSlowed, boolean enemyLosing) {
         for (BallShadow b: ballShadows) {
             Rectangle ball = new Rectangle((int)b.xx, (int)b.yy, b.size, b.size);
             Rectangle enemy = new Rectangle((int)this.xx, (int)this.yy, this.size, this.size);
@@ -181,7 +181,18 @@ public class Enemy extends Entity {
                 b.setDestination((Math.random() * 400) + 312, 500);
                 //Set hitLast to true.
                 b.setPlayerHitLast(false);
-                //System.out.println("Enemy hit the ball!");S
+                //System.out.println("Enemy hit the ball!");
+
+                if (this.enemyType == enemyTypes.TwoBallWalter && enemyLosing && !ballShadows.get(1).getActive()) {
+                    ballShadows.get(1).setActive(true);
+                    ballShadows.get(1).xx = this.xx;
+                    ballShadows.get(1).yy = this.yy;
+                    if (!timeSlowed) ballShadows.get(1).velocity = 4;
+                    else ballShadows.get(1).velocity = 2;
+                    ballShadows.get(1).setDestination((Math.random() * 400) + 312, 500);
+                    ballShadows.get(1).setDeparture(100, 500);
+                    ballShadows.get(1).setPlayerHitLast(false);
+                }
             }
         }
     }//end hit
