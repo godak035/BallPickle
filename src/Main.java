@@ -199,8 +199,8 @@ public class Main implements Runnable {
         strongHercules.setActive(false);
         gradyTwin1.setActive(false);
         gradyTwin2.setActive(false);
-        twoBallWalter.setActive(true);
-        teleportSicilia.setActive(false);
+        twoBallWalter.setActive(false);
+        teleportSicilia.setActive(true);
 
         enemies = new ArrayList<>();
         enemies.add(averageJoe);
@@ -514,6 +514,9 @@ public class Main implements Runnable {
                 }
                 if (ballShadows.get(i).getActive() != e.ballShadows.get(i).getActive()) {
                     ballShadows.get(i).setActive(e.ballShadows.get(i).getActive());
+                }
+                if (ballShadows.get(i).getSpin() != e.ballShadows.get(i).getSpin()) {
+                    ballShadows.get(i).setSpin(e.ballShadows.get(i).getSpin());
                 }
             }
         }

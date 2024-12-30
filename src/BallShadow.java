@@ -7,7 +7,7 @@
 public class BallShadow extends Entity {
 
     double destinationX, destinationY, departureX, departureY, theta;
-    private boolean isActive, playerHitLast;
+    private boolean isActive, playerHitLast, doSpin;
 
    /**
     * Constructor
@@ -19,8 +19,9 @@ public class BallShadow extends Entity {
     */
     public BallShadow(double xx, double yy, double v, int s) {
         super(xx, yy, v, s);
-        isActive = true;
-        playerHitLast = false;
+        this.isActive = true;
+        this.playerHitLast = false;
+        this.doSpin = false;
     }
 
     /**
@@ -36,6 +37,8 @@ public class BallShadow extends Entity {
     public boolean getActive() { return this.isActive; }
     public void setPlayerHitLast(boolean PlayerHitLast) { this.playerHitLast = PlayerHitLast; }
     public boolean getPlayerHitLast() { return this.playerHitLast; }
+    public void setSpin(boolean spin) { this.doSpin = spin; }
+    public boolean getSpin() { return this.doSpin; }
 
     public void setDeparture(double dX, double dY) {
         this.departureX = dX;
@@ -123,6 +126,14 @@ public class BallShadow extends Entity {
     }
 
     public void move() {
+        if (this.yy > this.destinationY && this.yy > this.departureY && doSpin) {
+            if (this.theta < 180) {
+                this.theta += (Math.random() * 60) + 30;
+            } else {
+                this.theta -= (Math.random() * 60) + 30;
+            }
+            doSpin = false;
+        }
         double vx, vy;
         if (this.theta == 0) {
             vx = 0;

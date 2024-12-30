@@ -206,6 +206,7 @@ public class Enemy extends Entity {
                 b.setPlayerHitLast(false);
                 //System.out.println("Enemy hit the ball!");
 
+                //checks if walter needs to throw out a second ball
                 if (this.enemyType == enemyTypes.TwoBallWalter && enemyLosing && !ballShadows.get(1).getActive()) {
                     ballShadows.get(1).setActive(true);
                     ballShadows.get(1).xx = this.xx;
@@ -215,6 +216,11 @@ public class Enemy extends Entity {
                     ballShadows.get(1).setDestination((Math.random() * 400) + 312, 500);
                     ballShadows.get(1).setDeparture(100, 500);
                     ballShadows.get(1).setPlayerHitLast(false);
+                }
+
+                //checks if Sicilia needs to do something cool
+                if (this.enemyType == enemyTypes.TeleportSicilia) {
+                    b.setSpin(true);
                 }
             }
         }
