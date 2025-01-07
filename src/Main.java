@@ -113,6 +113,7 @@ public class Main implements Runnable {
         tickAbilities();
         checkTimeSlow();
         checkWin();
+        updatePlayerState();
 
         //player stuff
         player.updatePosition();
@@ -357,6 +358,7 @@ public class Main implements Runnable {
                     currentHovered = hovered.titleStart;
                     frame.revalidate();
                 }
+               
             }
             case inGame -> {
                 if (player.abilityON && player.ability == Player.abilityChoices.riso) {
@@ -370,35 +372,26 @@ public class Main implements Runnable {
                 } else {
                     if (KeyH.rightPressed) {
                         lookRightLast=true;
-                        if (player.currentState != PlayerStates.move_right) {
-                            player.currentState = PlayerStates.move_right;
-                            player.lastKeyPressed = "d";
-                        }
+                        
+                      
+                            
+                        
                         player.xx += player.velocity;
                         if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
                     }
                     if (KeyH.leftPressed) {
                         lookRightLast=false;
-                        if (player.currentState != PlayerStates.move_left) {
-                            player.currentState = PlayerStates.move_left;
-                            player.lastKeyPressed = "a";
-                        }
+                       
                         player.xx -= player.velocity;
                         if (player.xx < 0) player.xx = 0;
                     }
-                    if (KeyH.upPressed) {
-                        if (player.currentState != PlayerStates.move_up) {
-                            player.currentState = PlayerStates.move_up;
-                            player.lastKeyPressed = "w";
-                        }
+                    if (KeyH.upPressed) { 
+                        
                         player.yy -= player.velocity;
                         if (player.yy < 0) player.yy = 0;
                     }
-                    if (KeyH.downPressed) {
-                        if (player.currentState != PlayerStates.move_down) {
-                            player.currentState = PlayerStates.move_down;
-                            player.lastKeyPressed = "s";
-                        }
+                    if (KeyH.downPressed) { 
+                              
                         player.yy += player.velocity;
                         if (player.yy + player.size > playerYMax) player.yy = playerYMax - player.size;
                     }
@@ -449,22 +442,22 @@ public class Main implements Runnable {
         }
         if (!KeyH.upPressed) 
             upPressedThisTick = false;
-            player.currentState = PlayerStates.idle_right;
+            
           
 
         if (!KeyH.downPressed) 
             downPressedThisTick = false;
-            player.currentState = PlayerStates.idle_right;
+           
             
 
         if (!KeyH.leftPressed) 
             leftPressedThisTick = false;
-            player.currentState = PlayerStates.idle_right;
+            
             
 
         if (!KeyH.rightPressed) 
             rightPressedThisTick = false;
-            player.currentState = PlayerStates.idle_right;
+        
             
 
         if (!KeyH.enterPressed) 
@@ -580,23 +573,41 @@ public class Main implements Runnable {
         }
     }
 
-
-    public void startPlayerHitAnim() {
-       
-        if (player.currentState != PlayerStates.hit) {
-           
-            player.currentState = PlayerStates.hit;
-    
+    public void updatePlayerState() {
+        if (player.velocity == 0) {
+            // If player is not moving, set to idle
             
-            animTimer = new Timer(1000, e -> {
-                
                 player.currentState = PlayerStates.idle_right;
-                animTimer.stop(); //Stop the timer
-            });
-            animTimer.setRepeats(false);
-            animTimer.start(); //Start the timer
+            
+        } else {
+            // If player is moving, determine direction
+            //if (player.x + player.velocity > 0) {
+                //player.currentState = PlayerStates.move_right;
+            //} else if (player.x + player.velocity < 0) {
+                //player.currentState = PlayerStates.move_left;
+           // } else if (player.y + player.velocity > 0) {
+                //player.currentState = PlayerStates.move_down;
+           // } else if (player.y + player.velocity < 0) {
+                //player.currentState = PlayerStates.move_up;
+           // }
         }
     }
+    
+
+
+    public void startPlayerHitAnim() {
+        player.currentState = PlayerStates.hit;
+    
+            
+        animTimer = new Timer(1000, e -> {
+                
+        player.currentState = PlayerStates.idle_right;
+        animTimer.stop(); //Stop the timer
+    });
+        animTimer.setRepeats(false);
+        animTimer.start(); //Start the timer
+    }
+
     
 
 

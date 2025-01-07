@@ -200,16 +200,16 @@ public class GamePanel extends JPanel {
                 player.risoIdleRightAnim.paintIcon(this, g2, player.x, player.y);
                 break;
             case PlayerStates.move_right:
-                player.risoMoveRightAnim.paintIcon(this, g2, player.x, player.y);
+                //player.risoMoveRightAnim.paintIcon(this, g2, player.x, player.y);
                 break;
             case PlayerStates.move_down:
-                player.risoMoveDownAnim.paintIcon(this, g2, player.x, player.y);
+                //player.risoMoveDownAnim.paintIcon(this, g2, player.x, player.y);
                 break;
             case PlayerStates.move_left:
-                player.risoMoveLeftAnim.paintIcon(this, g2, player.x, player.y);
+                //player.risoMoveLeftAnim.paintIcon(this, g2, player.x, player.y);
                 break;
             case PlayerStates.move_up:
-                player.risoMoveUpAnim.paintIcon(this, g2, player.x, player.y);
+                //player.risoMoveUpAnim.paintIcon(this, g2, player.x, player.y);
                 break;
             case PlayerStates.hit:
                 player.risoHitAnim.paintIcon(this, g2, player.x, player.y);
