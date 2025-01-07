@@ -1,3 +1,5 @@
+import javax.swing.ImageIcon;
+
 public class Player extends Entity {
 
     int abilityTime = 0;
@@ -32,18 +34,21 @@ public class Player extends Entity {
     public void useAbility(boolean rightPressed) {
         switch (ability) {
             case riso -> {
+                
                 if (System.currentTimeMillis() - lastAbilityTime < dashCooldown) {
                     //System.out.println("Dash on cooldown!");
                     return;
                 }
                 }
             case adonis -> {
+                
                 if (System.currentTimeMillis() - lastAbilityTime < strongHitCooldown) {
                     //System.out.println("Strong hit on cooldown!");
                     return;
                 }
             }
             case tasha -> {
+               
                 if (System.currentTimeMillis() - lastAbilityTime < timeSlowCooldown) {
                     //System.out.println("Time slow on cooldown!");
                     return;
@@ -61,4 +66,21 @@ public class Player extends Entity {
     public int getStrongHitCooldown() { return this.strongHitCooldown; }
     public int getTimeSlowCooldown() { return this.timeSlowCooldown; }
     public long getLastAbilityTime() { return this.lastAbilityTime; }
+
+    
+    public int currentState = PlayerStates.idle_right;
+    public String lastKeyPressed = "";
+
+    //animations for different states for Riso
+    public ImageIcon risoIdleRightAnim = new ImageIcon(this.getClass().getResource("sprites/char1_idle_anim_left.gif")); //named it left but actually meant right.
+    public ImageIcon risoMoveRightAnim = new ImageIcon(this.getClass().getResource("sprites/char1_move_right.gif.gif"));
+    public ImageIcon risoMoveDownAnim = new ImageIcon(this.getClass().getResource("sprites/char1_move_down.gif"));
+    public ImageIcon risoMoveLeftAnim = new ImageIcon(this.getClass().getResource("sprites/char1_move_left.gif"));
+    public ImageIcon risoMoveUpAnim = new ImageIcon(this.getClass().getResource("sprites/char1_move_up.gif"));
+    public ImageIcon risoHitAnim = new ImageIcon(this.getClass().getResource("sprites/char1_strike_anim2.gif"));
+
+    //animations for different states for 
 }
+
+
+

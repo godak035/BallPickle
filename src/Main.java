@@ -8,6 +8,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.*;
+import javax.swing.Timer;
 
 public class Main implements Runnable {
     
@@ -33,6 +34,11 @@ public class Main implements Runnable {
     ArrayList<Ball> balls;
     Enemy averageJoe, strongHercules, gradyTwin1, gradyTwin2, twoBallWalter, teleportSicilia;
     ArrayList<Enemy> enemies;
+
+    // timer for the animations.
+    private Timer animTimer;
+    // default charactermodel selection. This is to determine which character model is used for animations, based on your character selections.
+    int characterModel = 1;
 
     static int playerScore, enemyScore;
 
@@ -189,9 +195,9 @@ public class Main implements Runnable {
         balls.add(ballWalter);
 
         averageJoe = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.AverageJoe);
-        strongHercules = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.StrongHercules);
-        gradyTwin1 = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.GradyTwin1);
-        gradyTwin2 = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.GradyTwin2);
+        strongHercules = new Enemy(495, 100, 2, 40, Enemy.enemyTypes.StrongHercules);
+        gradyTwin1 = new Enemy(495, 100, 2, 20, Enemy.enemyTypes.GradyTwin1);
+        gradyTwin2 = new Enemy(495, 100, 2, 20, Enemy.enemyTypes.GradyTwin2);
         twoBallWalter = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.TwoBallWalter);
         teleportSicilia = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.TeleportSicilia);
 
@@ -224,16 +230,16 @@ public class Main implements Runnable {
         frame.setResizable(false);
         frame.addKeyListener(KeyH);
 
-        title = new GamePanel("title");
+        title = new GamePanel("title", this);
         title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
 
-        inGame = new GamePanel("game");
+        inGame = new GamePanel("game", this);
         title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
 
-        help = new GamePanel("help");
+        help = new GamePanel("help", this);
         title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
 
-        characterSelect = new GamePanel("character select");
+        characterSelect = new GamePanel("character select", this);
         title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
         
         updateValues();
@@ -302,6 +308,7 @@ public class Main implements Runnable {
                 if (KeyH.enterPressed && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     player.changeAbility(Player.abilityChoices.riso);
+                    characterModel = 1;
                     frame.remove(characterSelect);
                     frame.add(title);
                     currentHovered = hovered.titleStart;
@@ -320,6 +327,7 @@ public class Main implements Runnable {
                 if (KeyH.enterPressed && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     player.changeAbility(Player.abilityChoices.adonis);
+                    characterModel = 2;
                     frame.remove(characterSelect);
                     frame.add(title);
                     currentHovered = hovered.titleStart;
@@ -334,6 +342,7 @@ public class Main implements Runnable {
                 if (KeyH.enterPressed && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     player.changeAbility(Player.abilityChoices.tasha);
+                    characterModel = 3;
                     frame.remove(characterSelect);
                     frame.add(title);
                     currentHovered = hovered.titleStart;
@@ -361,23 +370,40 @@ public class Main implements Runnable {
                 } else {
                     if (KeyH.rightPressed) {
                         lookRightLast=true;
+                        if (player.currentState != PlayerStates.move_right) {
+                            player.currentState = PlayerStates.move_right;
+                            player.lastKeyPressed = "d";
+                        }
                         player.xx += player.velocity;
                         if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
                     }
                     if (KeyH.leftPressed) {
                         lookRightLast=false;
+                        if (player.currentState != PlayerStates.move_left) {
+                            player.currentState = PlayerStates.move_left;
+                            player.lastKeyPressed = "a";
+                        }
                         player.xx -= player.velocity;
                         if (player.xx < 0) player.xx = 0;
                     }
                     if (KeyH.upPressed) {
+                        if (player.currentState != PlayerStates.move_up) {
+                            player.currentState = PlayerStates.move_up;
+                            player.lastKeyPressed = "w";
+                        }
                         player.yy -= player.velocity;
                         if (player.yy < 0) player.yy = 0;
                     }
                     if (KeyH.downPressed) {
+                        if (player.currentState != PlayerStates.move_down) {
+                            player.currentState = PlayerStates.move_down;
+                            player.lastKeyPressed = "s";
+                        }
                         player.yy += player.velocity;
                         if (player.yy + player.size > playerYMax) player.yy = playerYMax - player.size;
                     }
                     if (KeyH.enterPressed) {
+                        startPlayerHitAnim();
                         if (!enterPressedThisTick) {
                             enterPressedThisTick = true;
                             for (int i = 0; i < ballShadows.size(); i++) {
@@ -387,6 +413,7 @@ public class Main implements Runnable {
                                     * centre: (512, 100)
                                     * right: (712, 150)
                                     */
+                                   
                                     Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
                                     Rectangle ballRect = new Rectangle((int)balls.get(i).xx, (int)balls.get(i).yy, balls.get(i).size, balls.get(i).size);
                                     if (playerRect.intersects(ballRect)) {
@@ -420,11 +447,31 @@ public class Main implements Runnable {
             }
             default -> {}
         }
-        if (!KeyH.upPressed) upPressedThisTick = false;
-        if (!KeyH.downPressed) downPressedThisTick = false;
-        if (!KeyH.leftPressed) leftPressedThisTick = false;
-        if (!KeyH.rightPressed) rightPressedThisTick = false;
-        if (!KeyH.enterPressed) enterPressedThisTick = false;
+        if (!KeyH.upPressed) 
+            upPressedThisTick = false;
+            player.currentState = PlayerStates.idle_right;
+          
+
+        if (!KeyH.downPressed) 
+            downPressedThisTick = false;
+            player.currentState = PlayerStates.idle_right;
+            
+
+        if (!KeyH.leftPressed) 
+            leftPressedThisTick = false;
+            player.currentState = PlayerStates.idle_right;
+            
+
+        if (!KeyH.rightPressed) 
+            rightPressedThisTick = false;
+            player.currentState = PlayerStates.idle_right;
+            
+
+        if (!KeyH.enterPressed) 
+            enterPressedThisTick = false;
+            
+           
+
     }//end getInputs
 
     public void resetGame() {
@@ -532,6 +579,26 @@ public class Main implements Runnable {
             }
         }
     }
+
+
+    public void startPlayerHitAnim() {
+       
+        if (player.currentState != PlayerStates.hit) {
+           
+            player.currentState = PlayerStates.hit;
+    
+            
+            animTimer = new Timer(1000, e -> {
+                
+                player.currentState = PlayerStates.idle_right;
+                animTimer.stop(); //Stop the timer
+            });
+            animTimer.setRepeats(false);
+            animTimer.start(); //Start the timer
+        }
+    }
+    
+
 
     private void checkWin() {
         // Score and game reset logic

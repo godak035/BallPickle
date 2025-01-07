@@ -5,6 +5,8 @@ import javax.imageio.*;
 import javax.swing.*;
 
 
+
+
 public class GamePanel extends JPanel {
 
     final static int WINW = 1024, WINH = 768;
@@ -15,8 +17,9 @@ public class GamePanel extends JPanel {
     ArrayList<Ball> balls;
     boolean timeSlowed;
     int playerScore, enemyScore;
-
+    Main m;
     String type;
+    ImageIcon risoHitAnim, risoIdleLeftAnim, risoIdleRightAnim;
 
     BufferedImage
         logo,
@@ -28,9 +31,11 @@ public class GamePanel extends JPanel {
         characterSelectBg,
         select,
         court;
+        
 
-    GamePanel(String t) {
+    GamePanel(String t, Main m) {
         type = t;
+        this.m = m;
         try {
             logo = ImageIO.read(this.getClass().getResource("sprites/logo.png"));
 			characterSelectBg = ImageIO.read(this.getClass().getResource("sprites/characterSelect.png"));
@@ -41,6 +46,8 @@ public class GamePanel extends JPanel {
             titleStart = ImageIO.read(this.getClass().getResource("sprites/titleStart.png"));
             titleCharSelect = ImageIO.read(this.getClass().getResource("sprites/titleCharSelect.png"));
             titleHelp = ImageIO.read(this.getClass().getResource("sprites/titleHelp.png"));
+           
+
         } catch (Exception e) {
 			System.out.println("Failed to load image.");
 		}
@@ -66,6 +73,9 @@ public class GamePanel extends JPanel {
                 if (timeSlowed) drawTimeSlowVignette(g2);
                 drawCooldown(g2, 70, 500, 50, Color.BLUE);
                 drawEntity(g2, player, Color.BLACK);
+
+                animateCharacters(g2);
+                
                 for (Enemy e: enemies) {
                     if (e.isActive) {
                         drawEntity(g2, e, Color.BLACK);
@@ -81,6 +91,7 @@ public class GamePanel extends JPanel {
                         drawEntity(g2, b, Color.BLUE);
                     }
                 }
+
                 //drawDebugStuff(g2);
                 g2.drawString("Enemy: " + enemyScore, 150, 60);
                 g2.drawString("Player: " + playerScore, 800, 720);
@@ -183,7 +194,31 @@ public class GamePanel extends JPanel {
 
         }
     }
-
+    private void animateCharacters(Graphics2D g2) {
+        switch (player.currentState) {
+            case PlayerStates.idle_right:
+                player.risoIdleRightAnim.paintIcon(this, g2, player.x, player.y);
+                break;
+            case PlayerStates.move_right:
+                player.risoMoveRightAnim.paintIcon(this, g2, player.x, player.y);
+                break;
+            case PlayerStates.move_down:
+                player.risoMoveDownAnim.paintIcon(this, g2, player.x, player.y);
+                break;
+            case PlayerStates.move_left:
+                player.risoMoveLeftAnim.paintIcon(this, g2, player.x, player.y);
+                break;
+            case PlayerStates.move_up:
+                player.risoMoveUpAnim.paintIcon(this, g2, player.x, player.y);
+                break;
+            case PlayerStates.hit:
+                player.risoHitAnim.paintIcon(this, g2, player.x, player.y);
+                break;
+          
+        }
+     }
+    
+    
     private void drawDebugStuff(Graphics2D g2) {
         g2.setStroke(new BasicStroke(10));
         for (BallShadow b: ballShadows) {
@@ -194,3 +229,4 @@ public class GamePanel extends JPanel {
         }
     }
 }
+   

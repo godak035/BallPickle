@@ -11,6 +11,7 @@ public class KeyHandler implements KeyListener{
     //booleans of whether a key (up, down, left, right, enter) is currently being pressed
     public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, dashPressed, abilityPressed;
     
+    
     /**
      * Updates the corresponding variable when a key gets pressed
      * @param e: The KeyEvent that caused the method to be called
