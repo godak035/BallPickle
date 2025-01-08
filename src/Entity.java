@@ -17,7 +17,7 @@ public abstract class Entity {
     Entity(double xx, double yy, double v, int s) {
         this.xx = xx;
         this.yy = yy;
-        this.velocity = v;
+        this.velocity = v / 1024.0 * GamePanel.WINW;
         this.size = s;
         this.x = (int)xx;
         this.y = (int)yy;

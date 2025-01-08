@@ -29,17 +29,17 @@ public class Enemy extends Entity {
         this.enemyType = e;
         switch (e) {
             case AverageJoe, StrongHercules, TwoBallWalter, TeleportSicilia -> {                
-                this.idleX = 512;
-                this.idleY = 250;
-                }
+                this.idleX = (int)(GamePanel.WINW / 2.0);
+                this.idleY = (int)(250.0 / 768.0 * GamePanel.WINH);
+            }
             case GradyTwin1 -> {
-                this.idleX = 412;
-                this.idleY = 250;
-                }
+                this.idleX = (int)(412 * 1024 / GamePanel.WINW);
+                this.idleY = (int)(250.0 / 768.0 * GamePanel.WINH);
+            }
             case GradyTwin2 -> {
-                this.idleX = 612;
-                this.idleY = 250;
-                }
+                this.idleX = (int)(612 * 1024 / GamePanel.WINW);
+                this.idleY = (int)(250.0 / 768.0 * GamePanel.WINH);
+            }
             default -> {}
         }
         this.isActive = true;
@@ -121,7 +121,7 @@ public class Enemy extends Entity {
          * 90 = right
          * 180 = down
          * 270 = left
-         * -1 = no direction (ball is alreathis.destinationY at the right position)
+         * -1 = no direction (ball is already at the right position)
          */
         if (centerY < this.destinationY) {
             if (centerX < this.destinationX) {
@@ -201,7 +201,7 @@ public class Enemy extends Entity {
                     if (!timeSlowed) b.velocity = 6;
                     else b.velocity = 3;
                 }
-                b.setDestination((Math.random() * 400) + 312, 500);
+                b.setDestination((int)(((Math.random() * 400.0) + 312.0) / 1024.0 * GamePanel.WINW), (int)(500.0 / 768.0 * GamePanel.WINH));
                 //Set hitLast to true.
                 b.setPlayerHitLast(false);
                 //System.out.println("Enemy hit the ball!");

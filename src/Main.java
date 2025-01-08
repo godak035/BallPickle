@@ -17,7 +17,7 @@ public class Main implements Runnable {
     GamePanel title, inGame, help, characterSelect;
 
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
-    static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleCharSelect, titleHelp, inGame, helpExit };
+    static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, inGame, helpExit };
     static hovered currentHovered;
     static enum level {level1, level2, level3, level4, level5};
     static level currentLevel;
@@ -45,8 +45,8 @@ public class Main implements Runnable {
     boolean lookRightLast, timeSlowed, serve=true;
     
     final int 
-        playerXMax = 562,
-        playerYMax = 218;
+        playerXMax = (int)(450.0 / 1024.0 * GamePanel.WINW),
+        playerYMax = (int)(250.0 / 768.0 * GamePanel.WINH);
 
     static int frames = 0;
 
@@ -172,16 +172,16 @@ public class Main implements Runnable {
         playerScore = 0;
         enemyScore = 0;
 
-        player = new Player(282, 125, 5, 40);
+        player = new Player(282, 125, 4, 40);
 
-        ballShadow = new BallShadow(300, 500, 0, 10);
-        ballShadow.setDestination(300, 500);
-        ballShadow.setDeparture(100, 100);
+        ballShadow = new BallShadow((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(600.0 * 768.0 * GamePanel.WINH), 0, 10);
+        ballShadow.setDestination((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(500.0 * 768.0 * GamePanel.WINH));
+        ballShadow.setDeparture((int)(100.0 / 1024.0 * GamePanel.WINW), (int)(100.0 * 768.0 * GamePanel.WINH));
         ballShadow.setActive(true);
 
-        ballShadowWalter = new BallShadow(300, 500, 0, 10);
-        ballShadowWalter.setDestination(300, 500);
-        ballShadowWalter.setDeparture(100, 100);
+        ballShadowWalter = new BallShadow((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(600.0 * 768.0 * GamePanel.WINH), 0, 10);
+        ballShadowWalter.setDestination((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(500.0 * 768.0 * GamePanel.WINH));
+        ballShadowWalter.setDeparture((int)(100.0 / 1024.0 * GamePanel.WINW), (int)(100.0 * 768.0 * GamePanel.WINH));
         ballShadowWalter.setActive(false);
 
         ballShadows = new ArrayList<>();
@@ -230,18 +230,19 @@ public class Main implements Runnable {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.addKeyListener(KeyH);
+        frame.setUndecorated(true);
 
         title = new GamePanel("title", this);
-        title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
+        title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
 
         inGame = new GamePanel("game", this);
-        title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
+        title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
 
         help = new GamePanel("help", this);
-        title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
+        title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
 
         characterSelect = new GamePanel("character select", this);
-        title.setPreferredSize(new Dimension(GamePanel.WINW, GamePanel.WINH));
+        title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
         
         updateValues();
         
@@ -261,24 +262,7 @@ public class Main implements Runnable {
             case titleStart -> {
                 if (KeyH.downPressed && !downPressedThisTick) {
                     downPressedThisTick = true;
-                    currentHovered = hovered.titleCharSelect;
-                }
-                if (KeyH.enterPressed && !enterPressedThisTick) {
-                    enterPressedThisTick = true;
-                    frame.remove(title);
-                    frame.add(inGame);
-                    currentHovered = hovered.inGame;
-                    frame.revalidate();
-                }
-            }
-            case titleCharSelect -> {
-                if (KeyH.downPressed && !downPressedThisTick) {
-                    downPressedThisTick = true;
                     currentHovered = hovered.titleHelp;
-                }
-                if (KeyH.upPressed && !upPressedThisTick) {
-                    upPressedThisTick = true;
-                    currentHovered = hovered.titleStart;
                 }
                 if (KeyH.enterPressed && !enterPressedThisTick) {
                     enterPressedThisTick = true;
@@ -289,16 +273,29 @@ public class Main implements Runnable {
                 }
             }
             case titleHelp -> {
+                if (KeyH.downPressed && !downPressedThisTick) {
+                    downPressedThisTick = true;
+                    currentHovered = hovered.titleExit;
+                }
                 if (KeyH.upPressed && !upPressedThisTick) {
                     upPressedThisTick = true;
-                    currentHovered = hovered.titleCharSelect;
+                    currentHovered = hovered.titleStart;
                 }
                 if (KeyH.enterPressed && !enterPressedThisTick) {
                     enterPressedThisTick = true;
-                    frame.add(help);
                     frame.remove(title);
+                    frame.add(help);
                     currentHovered = hovered.helpExit;
                     frame.revalidate();
+                }
+            }
+            case titleExit -> {
+                if (KeyH.upPressed && !upPressedThisTick) {
+                    upPressedThisTick = true;
+                    currentHovered = hovered.titleHelp;
+                }
+                if (KeyH.enterPressed && !enterPressedThisTick) {
+                    //emnd the program, idk how
                 }
             }
             case charSelect1 -> {
@@ -311,8 +308,8 @@ public class Main implements Runnable {
                     player.changeAbility(Player.abilityChoices.riso);
                     characterModel = 1;
                     frame.remove(characterSelect);
-                    frame.add(title);
-                    currentHovered = hovered.titleStart;
+                    frame.add(inGame);
+                    currentHovered = hovered.inGame;
                     frame.revalidate();
                 }
             }
@@ -330,8 +327,8 @@ public class Main implements Runnable {
                     player.changeAbility(Player.abilityChoices.adonis);
                     characterModel = 2;
                     frame.remove(characterSelect);
-                    frame.add(title);
-                    currentHovered = hovered.titleStart;
+                    frame.add(inGame);
+                    currentHovered = hovered.inGame;
                     frame.revalidate();
                 }
             }
@@ -345,8 +342,8 @@ public class Main implements Runnable {
                     player.changeAbility(Player.abilityChoices.tasha);
                     characterModel = 3;
                     frame.remove(characterSelect);
-                    frame.add(title);
-                    currentHovered = hovered.titleStart;
+                    frame.add(inGame);
+                    currentHovered = hovered.inGame;
                     frame.revalidate();
                 }
             }
@@ -372,26 +369,19 @@ public class Main implements Runnable {
                 } else {
                     if (KeyH.rightPressed) {
                         lookRightLast=true;
-                        
-                      
-                            
-                        
                         player.xx += player.velocity;
                         if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
                     }
                     if (KeyH.leftPressed) {
                         lookRightLast=false;
-                       
                         player.xx -= player.velocity;
                         if (player.xx < 0) player.xx = 0;
                     }
                     if (KeyH.upPressed) { 
-                        
                         player.yy -= player.velocity;
                         if (player.yy < 0) player.yy = 0;
                     }
-                    if (KeyH.downPressed) { 
-                              
+                    if (KeyH.downPressed) {    
                         player.yy += player.velocity;
                         if (player.yy + player.size > playerYMax) player.yy = playerYMax - player.size;
                     }
@@ -405,22 +395,23 @@ public class Main implements Runnable {
                                     * left: (312, 150)
                                     * centre: (512, 100)
                                     * right: (712, 150)
+                                    * based on a 1024 x 768 resolution
                                     */
                                    
                                     Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
                                     Rectangle ballRect = new Rectangle((int)balls.get(i).xx, (int)balls.get(i).yy, balls.get(i).size, balls.get(i).size);
                                     if (playerRect.intersects(ballRect)) {
                                         if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
-                                            ballShadows.get(i).velocity = 10;
+                                            ballShadows.get(i).velocity = 8;
                                         } else {
                                             if (!timeSlowed) ballShadows.get(i).velocity = 4;
                                             else ballShadows.get(i).velocity = 2;
                                         }
                                         
-                                        if (serve) ballShadows.get(i).setDestination(712, 150);
-                                        else if (KeyH.leftPressed) ballShadows.get(i).setDestination(312, 150);
-                                        else if (KeyH.rightPressed) ballShadows.get(i).setDestination(712, 150);
-                                        else ballShadows.get(i).setDestination(512, 100);
+                                        if (serve) ballShadows.get(i).setDestination((int)(712.0 / 1024.0 * GamePanel.WINW), (int)(150.0 / 768.0 * GamePanel.WINH));
+                                        else if (KeyH.leftPressed) ballShadows.get(i).setDestination((int)(312.0 / 1024.0 * GamePanel.WINW), (int)(150.0 / 768.0 * GamePanel.WINH));
+                                        else if (KeyH.rightPressed) ballShadows.get(i).setDestination((int)(712.0 / 1024.0 * GamePanel.WINW), (int)(150.0 / 768.0 * GamePanel.WINH));
+                                        else ballShadows.get(i).setDestination((int)(512.0 / 1024.0 * GamePanel.WINW), (int)(100.0 / 768.0 * GamePanel.WINH));
                                         
                                         serve = false;
                                         ballShadows.get(i).setPlayerHitLast(true);
@@ -440,48 +431,31 @@ public class Main implements Runnable {
             }
             default -> {}
         }
-        if (!KeyH.upPressed) 
-            upPressedThisTick = false;
-            
-          
-
-        if (!KeyH.downPressed) 
-            downPressedThisTick = false;
-           
-            
-
-        if (!KeyH.leftPressed) 
-            leftPressedThisTick = false;
-            
-            
-
-        if (!KeyH.rightPressed) 
-            rightPressedThisTick = false;
-        
-            
-
-        if (!KeyH.enterPressed) 
-            enterPressedThisTick = false;
-            
-           
-
+        if (!KeyH.upPressed) upPressedThisTick = false;
+        if (!KeyH.downPressed) downPressedThisTick = false;
+        if (!KeyH.leftPressed) leftPressedThisTick = false;
+        if (!KeyH.rightPressed) rightPressedThisTick = false;
+        if (!KeyH.enterPressed) enterPressedThisTick = false;
     }//end getInputs
 
     public void resetGame() {
         player.xx = 282;
         player.yy = 125;
+        player.abilityON = false;
+        player.abilityTime = 0;
+        player.resetCooldown();
         player.updatePosition();
         for (Enemy e: enemies) {
-            e.xx = 495;
-            e.yy = 100;
+            e.xx = GamePanel.WINW / 2.0;
+            e.yy = 100.0 / 768.0 * GamePanel.WINH;
             e.updatePosition();
         }
         for (BallShadow b: ballShadows) {
-            b.xx = 300;
-            b.yy = 500;
+            b.xx = (int)(350.0 / 1024.0 * GamePanel.WINW);
+            b.yy = (int)(650.0 / 768.0 * GamePanel.WINH);
             b.velocity = 0;
-            b.setDestination(300, 500);
-            b.setDeparture(100, 100);
+            b.setDestination((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(500.0 * 768.0 * GamePanel.WINH));
+            b.setDeparture((int)(100.0 / 1024.0 * GamePanel.WINW), (int)(100.0 * 768.0 * GamePanel.WINH));
             b.updatePosition();
             setHitLast(false);
         }
@@ -598,7 +572,6 @@ public class Main implements Runnable {
     public void startPlayerHitAnim() {
         player.currentState = PlayerStates.hit;
     
-            
         animTimer = new Timer(1000, e -> {
                 
         player.currentState = PlayerStates.idle_right;
@@ -608,13 +581,11 @@ public class Main implements Runnable {
         animTimer.start(); //Start the timer
     }
 
-    
-
-
     private void checkWin() {
         // Score and game reset logic
         for (BallShadow b: ballShadows) {
-            if (b.y <= 0 || b.y >= GamePanel.WINH) {
+            //checks if the ball is outside the screen
+            if (b.yy <= 0 || b.yy >= (int)GamePanel.WINH || b.xx <= 0 || b.xx >= (int)GamePanel.WINW) {
                 if (b.getPlayerHitLast()) {
                     playerScore++;
                     if (playerScore == 5) {

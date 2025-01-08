@@ -127,7 +127,7 @@ public class BallShadow extends Entity {
 
     public void move() {
         if (this.yy > this.destinationY && this.yy > this.departureY && doSpin) {
-            if (this.theta < 180) {
+            if (this.xx > GamePanel.WINW / 2) {
                 this.theta += (Math.random() * 60) + 30;
             } else {
                 this.theta -= (Math.random() * 60) + 30;

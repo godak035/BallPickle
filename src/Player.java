@@ -12,8 +12,8 @@ public class Player extends Entity {
         dashCooldown = 3000,  //Time duration in milliseconds of dash ability
         timeSlowCooldown = 3000,  //Time duration in milliseconds of time slowdown ability
         strongHitCooldown = 3000,  //Time duration in milliseconds of strong hit ability
-        positionXRelativeTo = 230,
-        positionYRelativeTo = 475;
+        positionXRelativeTo = (int)(280.0 / 1024.0 * GamePanel.WINW),
+        positionYRelativeTo = (int)(430.0 / 768.0 * GamePanel.WINH);
 
     public Player(double xx, double yy, double v, int s) {
         super(xx, yy, v, s);
@@ -30,6 +30,8 @@ public class Player extends Entity {
         this.x = (int)xx + positionXRelativeTo;
         this.y = (int)yy + positionYRelativeTo;
     }
+
+    public void resetCooldown() { this.lastAbilityTime = 0; }
     
     public void useAbility(boolean rightPressed) {
         switch (ability) {
@@ -67,10 +69,8 @@ public class Player extends Entity {
     public int getTimeSlowCooldown() { return this.timeSlowCooldown; }
     public long getLastAbilityTime() { return this.lastAbilityTime; }
 
-    
     public int currentState = PlayerStates.idle_right;
     
-
     //animations for different states for Riso
     public ImageIcon risoIdleRightAnim = new ImageIcon(this.getClass().getResource("sprites/char1_idle_anim_left.gif")); //named it left but actually meant right.
     // public ImageIcon risoMoveRightAnim = new ImageIcon(this.getClass().getResource("sprites/char1_move_right.gif"));

@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel {
 
-    final static int WINW = 1024, WINH = 768;
+    final static double WINW = Toolkit.getDefaultToolkit().getScreenSize().getWidth(), WINH = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
     Player player;
     ArrayList<Enemy> enemies;
@@ -25,8 +25,8 @@ public class GamePanel extends JPanel {
         logo,
         titleScreen,
         titleStart,
-        titleCharSelect,
         titleHelp,
+        titleExit,
         helpBg,
         characterSelectBg,
         select,
@@ -44,8 +44,8 @@ public class GamePanel extends JPanel {
             court = ImageIO.read(this.getClass().getResource("sprites/court.png"));
             titleScreen = ImageIO.read(this.getClass().getResource("sprites/title.png"));
             titleStart = ImageIO.read(this.getClass().getResource("sprites/titleStart.png"));
-            titleCharSelect = ImageIO.read(this.getClass().getResource("sprites/titleCharSelect.png"));
             titleHelp = ImageIO.read(this.getClass().getResource("sprites/titleHelp.png"));
+            titleExit = ImageIO.read(this.getClass().getResource("sprites/titleExit.png"));
            
 
         } catch (Exception e) {
@@ -69,10 +69,9 @@ public class GamePanel extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         switch (type) {
             case "game" -> {
-                g2.drawImage(court, 0, 0, WINW, WINH, null);
+                g2.drawImage(court, 0, 0, (int)(int)WINW, (int)(int)WINH, null);
                 if (timeSlowed) drawTimeSlowVignette(g2);
                 drawCooldown(g2, 70, 500, 50, Color.BLUE);
-                drawEntity(g2, player, Color.BLACK);
 
                 animateCharacters(g2);
                 
@@ -96,43 +95,40 @@ public class GamePanel extends JPanel {
                 g2.drawString("Enemy: " + enemyScore, 150, 60);
                 g2.drawString("Player: " + playerScore, 800, 720);
             }
-            case "help" -> g2.drawImage(helpBg, 0, 0, null);
+            case "help" -> g2.drawImage(helpBg, 0, 0, (int)WINW, (int)WINH, null);
             case "character select" -> {
-                g2.drawImage(characterSelectBg, 0, 0, null);
-                g2.drawImage(select, 32, 615, null);
-                g2.drawImage(select, 384, 615, null);
-                g2.drawImage(select, 720, 615, null);
+                g2.drawImage(characterSelectBg, 0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH, null);
 
                 //Inflates the size of the button that the user is hovering
                 switch (Main.currentHovered) {
-                    case charSelect1 -> g2.drawImage(select, 12, 605, select.getWidth() + 40, select.getHeight() + 20, null);
-                    case charSelect2 -> g2.drawImage(select, 364, 605, select.getWidth() + 40, select.getHeight() + 20, null);
-                    case charSelect3 -> g2.drawImage(select, 700, 605, select.getWidth() + 40, select.getHeight() + 20, null);
+                    case charSelect1 -> g2.drawImage(select, (int)(GamePanel.WINW * 0.055), (int)(GamePanel.WINH * 0.82), (int)(GamePanel.WINW * 0.27), (int)(GamePanel.WINH * 0.1), null);
+                    case charSelect2 -> g2.drawImage(select, (int)((GamePanel.WINW / 2) - (GamePanel.WINW * 0.135)), (int)(GamePanel.WINH * 0.82), (int)(GamePanel.WINW * 0.27), (int)(GamePanel.WINH * 0.1), null);
+                    case charSelect3 -> g2.drawImage(select, (int)(GamePanel.WINW - (GamePanel.WINW * 0.055) - (GamePanel.WINW * 0.27)), (int)(GamePanel.WINH * 0.82), (int)(GamePanel.WINW * 0.27), (int)(GamePanel.WINH * 0.1), null);
                     default -> {}
                 }
             }
             case "title" -> {
                 if (Main.frames < 127) {
-                    g2.drawImage(logo, 0, 0, WINW, WINH,  null);
+                    g2.drawImage(logo, 0, 0, (int)WINW, (int)WINH,  null);
                     g2.setColor(new Color(0, 0, 0, 255 - (Main.frames * 2)));
-                    g2.fillRect(0, 0, WINW, WINH);
+                    g2.fillRect(0, 0, (int)(int)WINW, (int)WINH);
                 } else if (Main.frames < 254) {
-                    g2.drawImage(logo, 0, 0, WINW, WINH,  null);
+                    g2.drawImage(logo, 0, 0, (int)WINW, (int)WINH,  null);
                     g2.setColor(new Color(0, 0, 0, (Main.frames - 127) * 2));
-                    g2.fillRect(0, 0, WINW, WINH);
+                    g2.fillRect(0, 0, (int)WINW, (int)WINH);
                 } else if (Main.frames < 300) {
                     g2.setColor(new Color(0, 0, 0));
-                    g2.fillRect(0, 0, WINW, WINH);
+                    g2.fillRect(0, 0, (int)WINW, (int)WINH);
                 } else if (Main.frames < 363) {
-                    g2.drawImage(titleScreen, 0, 0, WINW, WINH,  null);
+                    g2.drawImage(titleScreen, 0, 0, (int)WINW, (int)WINH,  null);
                     g2.setColor(new Color(0, 0, 0, 255 - ((Main.frames - 300) * 4)));
-                    g2.fillRect(0, 0, WINW, WINH);
+                    g2.fillRect(0, 0, (int)WINW, (int)WINH);
                 } else {
-                    g2.drawImage(titleScreen, 0, 0, WINW, WINH,  null);
+                    g2.drawImage(titleScreen, 0, 0, (int)WINW, (int)WINH,  null);
                     switch (Main.currentHovered) {
-                        case titleStart -> g2.drawImage(titleStart, 0, 0, WINW, WINH,  null);
-                        case titleCharSelect -> g2.drawImage(titleCharSelect, 0, 0, WINW, WINH, null);
-                        case titleHelp -> g2.drawImage(titleHelp, 0, 0, WINW, WINH, null);
+                        case titleStart -> g2.drawImage(titleStart, 0, 0, (int)WINW, (int)WINH,  null);
+                        case titleExit -> g2.drawImage(titleExit, 0, 0, (int)WINW, (int)WINH, null);
+                        case titleHelp -> g2.drawImage(titleHelp, 0, 0, (int)WINW, (int)WINH, null);
                         default -> {}
                     }
                 }
@@ -152,10 +148,10 @@ public class GamePanel extends JPanel {
         }
         for (int i = 0; i < 64; i++) {
             g2.setColor(new Color(0, 0, 0, (int)(4.0 * (double)i * opacity)));
-            g2.fillRect(0, 252 - (i * 4), WINW, 4);
-            g2.fillRect(0, WINH - 252 + (i * 4), WINW, 4);
-            g2.fillRect(252 - (i * 4), 0, 4, WINH);
-            g2.fillRect(WINW - 252 + (i * 4), 0, 4, WINH);
+            g2.fillRect(0, 252 - (i * 4), (int)WINW, 4);
+            g2.fillRect(0, (int)WINH - 252 + (i * 4), (int)WINW, 4);
+            g2.fillRect(252 - (i * 4), 0, 4, (int)WINH);
+            g2.fillRect((int)WINW - 252 + (i * 4), 0, 4, (int)WINH);
         }
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
