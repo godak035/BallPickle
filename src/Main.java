@@ -575,15 +575,18 @@ public class Main implements Runnable {
 
 
     public void startPlayerHitAnim() {
-        player.currentState = PlayerStates.hit;
+        if (KeyH.enterPressed) {
+            player.currentState = PlayerStates.hit;
+           
     
-        animTimer = new Timer(1000, e -> {
-                
-        player.currentState = PlayerStates.idle_right;
-        animTimer.stop(); //Stop the timer
-    });
-        animTimer.setRepeats(false);
-        animTimer.start(); //Start the timer
+            animTimer = new Timer(400, e -> {
+                    
+            player.currentState = PlayerStates.idle_right;
+            animTimer.stop(); //Stop the timer
+        });
+            animTimer.setRepeats(false);
+            animTimer.start(); //Start the timer
+        }
     }
 
     private void checkWin() {

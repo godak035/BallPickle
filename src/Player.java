@@ -77,7 +77,7 @@ public class Player extends Entity {
     // public ImageIcon risoMoveDownAnim = new ImageIcon(this.getClass().getResource("sprites/char1_move_down.gif"));
     // public ImageIcon risoMoveLeftAnim = new ImageIcon(this.getClass().getResource("sprites/char1_move_left.gif"));
     // public ImageIcon risoMoveUpAnim = new ImageIcon(this.getClass().getResource("sprites/char1_move_up.gif"));
-    public ImageIcon risoHitAnim = new ImageIcon(this.getClass().getResource("sprites/char1_strike_anim2.gif"));
+    public ImageIcon risoHitAnim = new ImageIcon(this.getClass().getResource("sprites/char1_strike_anim3.gif"));
 
    
 }

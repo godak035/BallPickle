@@ -184,29 +184,32 @@ public class GamePanel extends JPanel {
         }
     }
     private void animateCharacters(Graphics2D g2) {
-        switch (main.player.currentState) {
-            case PlayerStates.idle_right:
-                main.player.risoIdleRightAnim.paintIcon(this, g2, main.player.x, main.player.y);
-                break;
-            case PlayerStates.move_right:
-                //player.risoMoveRightAnim.paintIcon(this, g2, player.x, player.y);
-                break;
-            case PlayerStates.move_down:
-                //player.risoMoveDownAnim.paintIcon(this, g2, player.x, player.y);
-                break;
-            case PlayerStates.move_left:
-                //player.risoMoveLeftAnim.paintIcon(this, g2, player.x, player.y);
-                break;
-            case PlayerStates.move_up:
-                //player.risoMoveUpAnim.paintIcon(this, g2, player.x, player.y);
-                break;
-            case PlayerStates.hit:
-                main.player.risoHitAnim.paintIcon(this, g2, main.player.x, main.player.y);
-                break;
-          
+        if (main.characterModel == 1) {
+            switch (main.player.currentState) {
+                case PlayerStates.idle_right:
+                    main.player.risoIdleRightAnim.paintIcon(this, g2, main.player.x, main.player.y);
+                    break;
+                case PlayerStates.move_right:
+                    //player.risoMoveRightAnim.paintIcon(this, g2, player.x, player.y);
+                    break;
+                case PlayerStates.move_down:
+                    //player.risoMoveDownAnim.paintIcon(this, g2, player.x, player.y);
+                    break;
+                case PlayerStates.move_left:
+                    //player.risoMoveLeftAnim.paintIcon(this, g2, player.x, player.y);
+                    break;
+                case PlayerStates.move_up:
+                    //player.risoMoveUpAnim.paintIcon(this, g2, player.x, player.y);
+                    break;
+                case PlayerStates.hit:
+                    main.player.risoHitAnim.paintIcon(this, g2, main.player.x, main.player.y);
+                    break;
+                
+            }
         }
-     }
-    
+        
+        }
+
     
     private void drawDebugStuff(Graphics2D g2) {
         g2.setStroke(new BasicStroke(10));
