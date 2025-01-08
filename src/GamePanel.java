@@ -1,23 +1,13 @@
 import java.awt.*;
 import java.awt.image.*;
-import java.util.*;
 import javax.imageio.*;
 import javax.swing.*;
-
-
-
 
 public class GamePanel extends JPanel {
 
     final static double WINW = Toolkit.getDefaultToolkit().getScreenSize().getWidth(), WINH = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
-    Player player;
-    ArrayList<Enemy> enemies;
-    ArrayList<BallShadow> ballShadows;
-    ArrayList<Ball> balls;
-    boolean timeSlowed;
-    int playerScore, enemyScore;
-    Main m;
+    Main main;
     String type;
     ImageIcon risoHitAnim, risoIdleLeftAnim, risoIdleRightAnim;
 
@@ -33,9 +23,8 @@ public class GamePanel extends JPanel {
         court;
         
 
-    GamePanel(String t, Main m) {
+    GamePanel(String t) {
         type = t;
-        this.m = m;
         try {
             logo = ImageIO.read(this.getClass().getResource("sprites/logo.png"));
 			characterSelectBg = ImageIO.read(this.getClass().getResource("sprites/characterSelect.png"));
@@ -53,14 +42,8 @@ public class GamePanel extends JPanel {
 		}
     }
 
-    public void updateValues(Player p, ArrayList<BallShadow> bs, ArrayList<Ball> b, ArrayList<Enemy> e, boolean ts, int playerScore, int enemyScore) {
-        this.player = p;
-        this.ballShadows = bs;
-        this.balls = b;
-        this.enemies = e;
-        this.timeSlowed = ts;
-        this.playerScore = playerScore;
-        this.enemyScore = enemyScore;
+    public void updateValues(Main m) {
+        this.main = m;
     }
 
     @Override
@@ -70,30 +53,30 @@ public class GamePanel extends JPanel {
         switch (type) {
             case "game" -> {
                 g2.drawImage(court, 0, 0, (int)(int)WINW, (int)(int)WINH, null);
-                if (timeSlowed) drawTimeSlowVignette(g2);
+                if (main.timeSlowed) drawTimeSlowVignette(g2);
                 drawCooldown(g2, 70, 500, 50, Color.BLUE);
 
                 animateCharacters(g2);
                 
-                for (Enemy e: enemies) {
+                for (Enemy e: main.enemies) {
                     if (e.isActive) {
                         drawEntity(g2, e, Color.BLACK);
                     }
                 }
-                for (BallShadow b: ballShadows) {
+                for (BallShadow b: main.ballShadows) {
                     if (b.getActive()) {
                         drawEntity(g2, b, Color.BLACK);
                     }
                 }
-                for (Ball b: balls) {
+                for (Ball b: main.balls) {
                     if (b.getShadow().getActive()) {
                         drawEntity(g2, b, Color.BLUE);
                     }
                 }
 
                 //drawDebugStuff(g2);
-                g2.drawString("Enemy: " + enemyScore, 150, 60);
-                g2.drawString("Player: " + playerScore, 800, 720);
+                g2.drawString("Enemy: " + main.enemyScore, 150, 60);
+                g2.drawString("Player: " + main.playerScore, 800, 720);
             }
             case "help" -> g2.drawImage(helpBg, 0, 0, (int)WINW, (int)WINH, null);
             case "character select" -> {
@@ -139,12 +122,12 @@ public class GamePanel extends JPanel {
     private void drawTimeSlowVignette(Graphics2D g2) {
         double opacity;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-        if (player.abilityTime < 20) {
-            opacity = player.abilityTime * 0.05;
-        } else if (player.abilityTime < 80) {
+        if (main.player.abilityTime < 20) {
+            opacity = main.player.abilityTime * 0.05;
+        } else if (main.player.abilityTime < 80) {
             opacity = 1;
         } else {
-            opacity = (100 - player.abilityTime) * 0.05;
+            opacity = (100 - main.player.abilityTime) * 0.05;
         }
         for (int i = 0; i < 64; i++) {
             g2.setColor(new Color(0, 0, 0, (int)(4.0 * (double)i * opacity)));
@@ -163,11 +146,11 @@ public class GamePanel extends JPanel {
 
     private void drawCooldown(Graphics2D g2, int x, int y, double radius, Color c) {
         double totalCooldown;
-        int cooldownLeft = (int)System.currentTimeMillis() - (int)player.getLastAbilityTime();
-        totalCooldown = switch (player.ability) {
-            case riso -> player.getDashCooldown();
-            case adonis -> player.getStrongHitCooldown();
-            case tasha -> player.getTimeSlowCooldown();
+        int cooldownLeft = (int)System.currentTimeMillis() - (int)main.player.getLastAbilityTime();
+        totalCooldown = switch (main.player.ability) {
+            case riso -> main.player.getDashCooldown();
+            case adonis -> main.player.getStrongHitCooldown();
+            case tasha -> main.player.getTimeSlowCooldown();
             default -> 0;
         };
         
@@ -191,9 +174,9 @@ public class GamePanel extends JPanel {
         }
     }
     private void animateCharacters(Graphics2D g2) {
-        switch (player.currentState) {
+        switch (main.player.currentState) {
             case PlayerStates.idle_right:
-                player.risoIdleRightAnim.paintIcon(this, g2, player.x, player.y);
+                main.player.risoIdleRightAnim.paintIcon(this, g2, main.player.x, main.player.y);
                 break;
             case PlayerStates.move_right:
                 //player.risoMoveRightAnim.paintIcon(this, g2, player.x, player.y);
@@ -208,7 +191,7 @@ public class GamePanel extends JPanel {
                 //player.risoMoveUpAnim.paintIcon(this, g2, player.x, player.y);
                 break;
             case PlayerStates.hit:
-                player.risoHitAnim.paintIcon(this, g2, player.x, player.y);
+                main.player.risoHitAnim.paintIcon(this, g2, main.player.x, main.player.y);
                 break;
           
         }
@@ -217,7 +200,7 @@ public class GamePanel extends JPanel {
     
     private void drawDebugStuff(Graphics2D g2) {
         g2.setStroke(new BasicStroke(10));
-        for (BallShadow b: ballShadows) {
+        for (BallShadow b: main.ballShadows) {
             g2.setColor(Color.RED);
             g2.drawLine((int)b.destinationX, (int)b.destinationY, (int)b.destinationX, (int)b.destinationY);
             g2.setColor(Color.GREEN);

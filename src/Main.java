@@ -232,16 +232,16 @@ public class Main implements Runnable {
         frame.addKeyListener(KeyH);
         frame.setUndecorated(true);
 
-        title = new GamePanel("title", this);
+        title = new GamePanel("title");
         title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
 
-        inGame = new GamePanel("game", this);
+        inGame = new GamePanel("game");
         title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
 
-        help = new GamePanel("help", this);
+        help = new GamePanel("help");
         title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
 
-        characterSelect = new GamePanel("character select", this);
+        characterSelect = new GamePanel("character select");
         title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
         
         updateValues();
@@ -507,10 +507,10 @@ public class Main implements Runnable {
     }
     
     public void updateValues() {
-        title.updateValues(player, ballShadows, balls, enemies, timeSlowed, playerScore, enemyScore);
-        inGame.updateValues(player, ballShadows, balls, enemies, timeSlowed, playerScore, enemyScore);
-        help.updateValues(player, ballShadows, balls, enemies, timeSlowed, playerScore, enemyScore);
-        characterSelect.updateValues(player, ballShadows, balls, enemies, timeSlowed, playerScore, enemyScore);
+        title.updateValues(this);
+        inGame.updateValues(this);
+        help.updateValues(this);
+        characterSelect.updateValues(this);
         for (Enemy e: enemies) e.updateValues(ballShadows);
     }
 
