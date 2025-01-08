@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.image.*;
 import javax.imageio.*;
 import javax.swing.*;
+import javax.swing.Timer;
 
 public class GamePanel extends JPanel {
 
@@ -10,6 +11,7 @@ public class GamePanel extends JPanel {
     Main main;
     String type;
     ImageIcon risoHitAnim, risoIdleLeftAnim, risoIdleRightAnim;
+    Timer animTimer;
 
     BufferedImage
         logo,
@@ -190,7 +192,7 @@ public class GamePanel extends JPanel {
                     main.player.risoIdleRightAnim.paintIcon(this, g2, main.player.x, main.player.y);
                     break;
                 case PlayerStates.move_right:
-                    //player.risoMoveRightAnim.paintIcon(this, g2, player.x, player.y);
+                    main.player.risoMoveRightAnim.paintIcon(this, g2, main.player.x, main.player.y);
                     break;
                 case PlayerStates.move_down:
                     //player.risoMoveDownAnim.paintIcon(this, g2, player.x, player.y);
@@ -203,12 +205,13 @@ public class GamePanel extends JPanel {
                     break;
                 case PlayerStates.hit:
                     main.player.risoHitAnim.paintIcon(this, g2, main.player.x, main.player.y);
+                    
                     break;
-                
             }
         }
+    }
         
-        }
+        
 
     
     private void drawDebugStuff(Graphics2D g2) {

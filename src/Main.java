@@ -172,7 +172,7 @@ public class Main implements Runnable {
         playerScore = 0;
         enemyScore = 0;
 
-        player = new Player(282, 125, 4, 40);
+        player = new Player(282, 125, 4, 100);
 
         ballShadow = new BallShadow((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(600.0 * 768.0 * GamePanel.WINH), 0, 10);
         ballShadow.setDestination((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(500.0 * 768.0 * GamePanel.WINH));
@@ -553,40 +553,43 @@ public class Main implements Runnable {
     }
 
     public void updatePlayerState() {
-        if (player.velocity == 0) {
-            // If player is not moving, set to idle
+        if (!KeyH.upPressed && !KeyH.downPressed && !KeyH.rightPressed && !KeyH.leftPressed && !KeyH.enterPressed) {
+            
             
                 player.currentState = PlayerStates.idle_right;
+
+        } else if (KeyH.enterPressed) {
+                player.currentState = PlayerStates.hit;
             
         } else {
             // If player is moving, determine direction
-            //if (player.x + player.velocity > 0) {
-                //player.currentState = PlayerStates.move_right;
+            if (KeyH.rightPressed) {
+                player.currentState = PlayerStates.move_right;
             //} else if (player.x + player.velocity < 0) {
                 //player.currentState = PlayerStates.move_left;
            // } else if (player.y + player.velocity > 0) {
                 //player.currentState = PlayerStates.move_down;
            // } else if (player.y + player.velocity < 0) {
                 //player.currentState = PlayerStates.move_up;
-           // }
+           }
         }
     }
     
 
 
     public void startPlayerHitAnim() {
-        if (KeyH.enterPressed) {
-            player.currentState = PlayerStates.hit;
+        // if (KeyH.enterPressed) {
+        //     player.currentState = PlayerStates.hit;
            
     
-            animTimer = new Timer(400, e -> {
+        //     animTimer = new Timer(400, e -> {
                     
-            player.currentState = PlayerStates.idle_right;
-            animTimer.stop(); //Stop the timer
-        });
-            animTimer.setRepeats(false);
-            animTimer.start(); //Start the timer
-        }
+        //     player.currentState = PlayerStates.idle_right;
+        //     animTimer.stop(); //Stop the timer
+        // });
+        //     animTimer.setRepeats(false);
+        //     animTimer.start(); //Start the timer
+        // }
     }
 
     private void checkWin() {
