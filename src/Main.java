@@ -295,7 +295,7 @@ public class Main implements Runnable {
                     currentHovered = hovered.titleHelp;
                 }
                 if (KeyH.enterPressed && !enterPressedThisTick) {
-                    //emnd the program, idk how
+                    System.exit(0);
                 }
             }
             case charSelect1 -> {
