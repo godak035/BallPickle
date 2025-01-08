@@ -20,7 +20,8 @@ public class GamePanel extends JPanel {
         helpBg,
         characterSelectBg,
         select,
-        court;
+        court,
+        gameOver;
         
 
     GamePanel(String t) {
@@ -35,6 +36,7 @@ public class GamePanel extends JPanel {
             titleStart = ImageIO.read(this.getClass().getResource("sprites/titleStart.png"));
             titleHelp = ImageIO.read(this.getClass().getResource("sprites/titleHelp.png"));
             titleExit = ImageIO.read(this.getClass().getResource("sprites/titleExit.png"));
+            gameOver = ImageIO.read(this.getClass().getResource("sprites/gameOver.png"));
            
 
         } catch (Exception e) {
@@ -51,6 +53,14 @@ public class GamePanel extends JPanel {
         Graphics2D g2 = (Graphics2D)g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         switch (type) {
+
+            case "win" -> {
+
+            }
+
+            case "gameOver" -> {
+                g2.drawImage(gameOver, 0, 0, (int)WINW, (int)WINH, null);
+            }
             case "game" -> {
                 g2.drawImage(court, 0, 0, (int)(int)WINW, (int)(int)WINH, null);
                 if (main.timeSlowed) drawTimeSlowVignette(g2);

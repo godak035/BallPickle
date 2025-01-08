@@ -14,7 +14,7 @@ public class Main implements Runnable {
     
     JFrame frame;
     //Different panels that are drawn on for the title screen, game screen, help screen and character select screen
-    GamePanel title, inGame, help, characterSelect;
+    GamePanel title, inGame, help, characterSelect, win, gameOver;
 
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
     static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, inGame, helpExit };
@@ -236,13 +236,16 @@ public class Main implements Runnable {
         title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
 
         inGame = new GamePanel("game");
-        title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
+        inGame.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
 
         help = new GamePanel("help");
-        title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
+        help.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
 
         characterSelect = new GamePanel("character select");
-        title.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
+        characterSelect.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
+
+        gameOver = new GamePanel("gameOver");
+        gameOver.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
         
         updateValues();
         
@@ -350,7 +353,9 @@ public class Main implements Runnable {
             case helpExit -> {
                 if (KeyH.enterPressed && !enterPressedThisTick) {
                     enterPressedThisTick = true;
-                    frame.remove(help);
+                    // frame.remove(help);
+                    if (frame.getContentPane() == help) frame.remove(help);
+                    else if (frame.getContentPane() == gameOver) frame.remove(gameOver);
                     frame.add(title);
                     currentHovered = hovered.titleStart;
                     frame.revalidate();
@@ -600,6 +605,10 @@ public class Main implements Runnable {
                         resetGame();
                         enemyScore = 0;
                         playerScore = 0;
+                        frame.remove(inGame);
+                        frame.add(gameOver);
+                        frame.revalidate();
+                        currentHovered = hovered.helpExit;
                     }
                     resetGame();
                 }
