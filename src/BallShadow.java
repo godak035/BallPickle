@@ -1,3 +1,5 @@
+
+
 /***
  * Ball.java
  * The ball of the BallPickle game. It moves around in linear directions and bounces off of the enemy and the player.
@@ -52,40 +54,43 @@ public class BallShadow extends Entity {
         double progress = Math.sqrt(Math.pow(Math.abs(this.departureX - this.xx), 2) + Math.pow(Math.abs(this.departureY - this.yy), 2));
         //the distance traveled by the ball, expressed as a percentage
         double progressPercent = progress / distance * 100;
-        
-        if (progress < distance) {
-            if (dX < this.xx) {
-                this.departureX = this.xx + ((this.xx - dX) / progressPercent);
-            } else if (dX > this.xx) {
-                this.departureX = this.xx - ((dX - this.xx) / progressPercent);
-            } else {
-                this.departureX = this.xx;
-            }
-    
-            if (dY < this.yy) {
-                this.departureY = this.yy + ((this.yy - dY) / progressPercent);
-            } else if (dY > this.yy) {
-                this.departureY = this.yy - ((dY - this.yy) / progressPercent);
-            } else {
-                this.departureY = this.yy;
-            }
+        if (progressPercent > 98) {
+            this.departureX = this.xx;
+            this.departureY = this.yy;
         } else {
-            if (dX < this.xx) {
-                this.departureX = this.xx + ((this.xx - dX) / (progressPercent / 100));
-            } else if (dX > this.xx) {
-                this.departureX = this.xx - ((dX - this.xx) / (progressPercent / 100));
+            if (progress < distance) {
+                if (dX < this.xx) {
+                    this.departureX = this.xx + ((this.xx - dX) / progressPercent);
+                } else if (dX > this.xx) {
+                    this.departureX = this.xx - ((dX - this.xx) / progressPercent);
+                } else {
+                    this.departureX = this.xx;
+                }
+                if (dY < this.yy) {
+                    this.departureY = this.yy + ((this.yy - dY) / progressPercent);
+                } else if (dY > this.yy) {
+                    this.departureY = this.yy - ((dY - this.yy) / progressPercent);
+                } else {
+                    this.departureY = this.yy;
+                }
             } else {
-                this.departureX = this.xx;
-            }
-    
-            if (dY < this.yy) {
-                this.departureY = this.yy + ((this.yy - dY) / (progressPercent / 100));
-            } else if (dY > this.yy) {
-                this.departureY = this.yy - ((dY - this.yy) / (progressPercent / 100));
-            } else {
-                this.departureY = this.yy;
+                if (dX < this.xx) {
+                    this.departureX = this.xx + ((this.xx - dX) / (progressPercent / 100));
+                } else if (dX > this.xx) {
+                    this.departureX = this.xx - ((dX - this.xx) / (progressPercent / 100));
+                } else {
+                    this.departureX = this.xx;
+                }
+                if (dY < this.yy) {
+                    this.departureY = this.yy + ((this.yy - dY) / (progressPercent / 100));
+                } else if (dY > this.yy) {
+                    this.departureY = this.yy - ((dY - this.yy) / (progressPercent / 100));
+                } else {
+                    this.departureY = this.yy;
+                }
             }
         }
+        
         
         this.destinationX = dX;
         this.destinationY = dY;
