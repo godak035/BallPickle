@@ -170,7 +170,7 @@ public class Main implements Runnable {
         currentLevel = level.level5;
         timeSlowed = false;
 
-        playerScore = 4;
+        playerScore = 0;
         enemyScore = 0;
 
         player = new Player(282, 125, 4, 100);
