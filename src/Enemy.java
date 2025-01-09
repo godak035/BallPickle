@@ -201,7 +201,7 @@ public class Enemy extends Entity {
                     if (!timeSlowed) b.velocity = 6;
                     else b.velocity = 3;
                 }
-                b.setDestination((int)(((Math.random() * 400.0) + 312.0) / 1024.0 * GamePanel.WINW), (int)(500.0 / 768.0 * GamePanel.WINH));
+                b.setDestination((int)(((Math.random() * 400.0) + 312.0) / 1024.0 * GamePanel.WINW), (int)(GamePanel.WINH * 0.73));
                 //Set hitLast to true.
                 b.setPlayerHitLast(false);
                 //System.out.println("Enemy hit the ball!");
