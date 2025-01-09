@@ -32,7 +32,7 @@ public class Main implements Runnable {
     ArrayList<BallShadow> ballShadows;
     Ball ball, ballWalter;
     ArrayList<Ball> balls;
-    Enemy averageJoe, strongHercules, gradyTwin1, gradyTwin2, twoBallWalter, teleportSicilia;
+   static Enemy averageJoe, strongHercules, gradyTwin1, gradyTwin2, twoBallWalter, teleportSicilia;
     ArrayList<Enemy> enemies;
 
     // timer for the animations.
@@ -167,7 +167,7 @@ public class Main implements Runnable {
      */
     Main() {
         currentHovered = hovered.titleStart;
-        currentLevel = level.level1;
+        currentLevel = level.level5;
         timeSlowed = false;
 
         playerScore = 4;
@@ -478,6 +478,53 @@ public class Main implements Runnable {
         ballShadowWalter.setActive(false);
         
         serve=true;
+        
+        switch (Main.currentLevel) {
+                    
+            case level1 -> {
+                averageJoe.setActive(true);
+                strongHercules.setActive(false);
+                gradyTwin1.setActive(false);
+                gradyTwin2.setActive(false);
+                twoBallWalter.setActive(false);
+                teleportSicilia.setActive(false);
+            }
+
+            case level2 -> {
+                averageJoe.setActive(false);
+                strongHercules.setActive(true);
+                gradyTwin1.setActive(false);
+                gradyTwin2.setActive(false);
+                twoBallWalter.setActive(false);
+                teleportSicilia.setActive(false);
+            }
+
+            case level3 -> {
+                averageJoe.setActive(false);
+                strongHercules.setActive(false);
+                gradyTwin1.setActive(true);
+                gradyTwin2.setActive(true);
+                twoBallWalter.setActive(false);
+                teleportSicilia.setActive(false);}
+
+            case level4 -> {
+                averageJoe.setActive(false);
+                strongHercules.setActive(false);
+                gradyTwin1.setActive(false);
+                gradyTwin2.setActive(false);
+                twoBallWalter.setActive(true);
+                teleportSicilia.setActive(false);}
+
+            case level5 -> {
+                averageJoe.setActive(false);
+                strongHercules.setActive(false);
+                gradyTwin1.setActive(false);
+                gradyTwin2.setActive(false);
+                twoBallWalter.setActive(false);
+                teleportSicilia.setActive(true);}
+            default -> {}
+            
+        }
     }
 
     public void tickAbilities() {
@@ -607,19 +654,47 @@ public class Main implements Runnable {
 
       if (currentLevel==level.level1){
         currentLevel=level.level2;
+        
+        averageJoe.setActive(false);
+        strongHercules.setActive(true);
+        gradyTwin1.setActive(false);
+        gradyTwin2.setActive(false);
+        twoBallWalter.setActive(false);
+        teleportSicilia.setActive(false);
 
       }
 
-      else if  (currentLevel==level.level2){
+      else if (currentLevel==level.level2){
         currentLevel=level.level3;
+
+        averageJoe.setActive(false);
+        strongHercules.setActive(false);
+        gradyTwin1.setActive(true);
+        gradyTwin2.setActive(true);
+        twoBallWalter.setActive(false);
+        teleportSicilia.setActive(false);
       }
 
       else if (currentLevel==level.level3){
         currentLevel=level.level4;
+ 
+        averageJoe.setActive(false);
+        strongHercules.setActive(false);
+        gradyTwin1.setActive(false);
+        gradyTwin2.setActive(false);
+        twoBallWalter.setActive(true);
+        teleportSicilia.setActive(false);
       }
 
       else if (currentLevel==level.level4){
         currentLevel=level.level5;
+
+        averageJoe.setActive(false);
+        strongHercules.setActive(false);
+        gradyTwin1.setActive(false);
+        gradyTwin2.setActive(false);
+        twoBallWalter.setActive(false);
+        teleportSicilia.setActive(true);
       }
 
       else if (currentLevel==level.level5){
