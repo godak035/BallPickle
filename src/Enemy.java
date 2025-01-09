@@ -33,11 +33,11 @@ public class Enemy extends Entity {
                 this.idleY = (int)(250.0 / 768.0 * GamePanel.WINH);
             }
             case GradyTwin1 -> {
-                this.idleX = (int)(412 * 1024 / GamePanel.WINW);
+                this.idleX = (int)(412.0 / 1024.0 * GamePanel.WINW);
                 this.idleY = (int)(250.0 / 768.0 * GamePanel.WINH);
             }
             case GradyTwin2 -> {
-                this.idleX = (int)(612 * 1024 / GamePanel.WINW);
+                this.idleX = (int)(612.0 / 1024.0 * GamePanel.WINW);
                 this.idleY = (int)(250.0 / 768.0 * GamePanel.WINH);
             }
             default -> {}
