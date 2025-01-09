@@ -17,7 +17,7 @@ public class Main implements Runnable {
     GamePanel title, inGame, help, characterSelect, win, gameOver;
 
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
-    static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, inGame, helpExit,nextLevel };
+    static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, inGame, helpExit,gameOverExit, nextLevel };
     static hovered currentHovered;
     static enum level {level1, level2, level3, level4, level5};
     static level currentLevel;
@@ -170,8 +170,8 @@ public class Main implements Runnable {
         currentLevel = level.level1;
         timeSlowed = false;
 
-        playerScore = 0;
-        enemyScore = 0;
+        playerScore = 4;
+        enemyScore = -1;
 
         player = new Player(282, 125, 4, 100);
 
@@ -358,12 +358,24 @@ public class Main implements Runnable {
                 if (KeyH.enterPressed && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     // frame.remove(help);
-                    if (frame.getContentPane() == help) frame.remove(help);
-                    else if (frame.getContentPane() == gameOver) frame.remove(gameOver);
+                    frame.remove(help);
                     frame.add(title);
                     currentHovered = hovered.titleStart;
                     frame.revalidate();
-                }               
+                }    
+                
+                
+            }
+            case gameOverExit -> {
+                if (KeyH.enterPressed && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    // frame.remove(help);
+                    frame.remove(gameOver);
+                    frame.add(title);
+                    currentHovered = hovered.titleStart;
+                    frame.revalidate();
+                }    
+
             }
             case nextLevel -> {
                 if (KeyH.enterPressed && !enterPressedThisTick) {
