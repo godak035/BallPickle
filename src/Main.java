@@ -654,47 +654,18 @@ public class Main implements Runnable {
 
       if (currentLevel==level.level1){
         currentLevel=level.level2;
-        
-        averageJoe.setActive(false);
-        strongHercules.setActive(true);
-        gradyTwin1.setActive(false);
-        gradyTwin2.setActive(false);
-        twoBallWalter.setActive(false);
-        teleportSicilia.setActive(false);
-
       }
 
       else if (currentLevel==level.level2){
         currentLevel=level.level3;
-
-        averageJoe.setActive(false);
-        strongHercules.setActive(false);
-        gradyTwin1.setActive(true);
-        gradyTwin2.setActive(true);
-        twoBallWalter.setActive(false);
-        teleportSicilia.setActive(false);
       }
 
       else if (currentLevel==level.level3){
         currentLevel=level.level4;
- 
-        averageJoe.setActive(false);
-        strongHercules.setActive(false);
-        gradyTwin1.setActive(false);
-        gradyTwin2.setActive(false);
-        twoBallWalter.setActive(true);
-        teleportSicilia.setActive(false);
       }
 
       else if (currentLevel==level.level4){
         currentLevel=level.level5;
-
-        averageJoe.setActive(false);
-        strongHercules.setActive(false);
-        gradyTwin1.setActive(false);
-        gradyTwin2.setActive(false);
-        twoBallWalter.setActive(false);
-        teleportSicilia.setActive(true);
       }
 
       else if (currentLevel==level.level5){
