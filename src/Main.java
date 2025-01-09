@@ -17,7 +17,7 @@ public class Main implements Runnable {
     GamePanel title, inGame, help, characterSelect, win, gameOver;
 
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
-    static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, inGame, helpExit };
+    static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, inGame, helpExit,nextLevel };
     static hovered currentHovered;
     static enum level {level1, level2, level3, level4, level5};
     static level currentLevel;
@@ -167,9 +167,10 @@ public class Main implements Runnable {
      */
     Main() {
         currentHovered = hovered.titleStart;
+        currentLevel = level.level1;
         timeSlowed = false;
 
-        playerScore = 0;
+        playerScore = 4;
         enemyScore = 0;
 
         player = new Player(282, 125, 4, 100);
@@ -202,12 +203,12 @@ public class Main implements Runnable {
         twoBallWalter = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.TwoBallWalter);
         teleportSicilia = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.TeleportSicilia);
 
-        averageJoe.setActive(false);
+        averageJoe.setActive(true);
         strongHercules.setActive(false);
         gradyTwin1.setActive(false);
         gradyTwin2.setActive(false);
         twoBallWalter.setActive(false);
-        teleportSicilia.setActive(true);
+        teleportSicilia.setActive(false);
 
         enemies = new ArrayList<>();
         enemies.add(averageJoe);
@@ -246,6 +247,9 @@ public class Main implements Runnable {
 
         gameOver = new GamePanel("gameOver");
         gameOver.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
+
+        win = new GamePanel("win");
+        win.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
         
         updateValues();
         
@@ -359,9 +363,16 @@ public class Main implements Runnable {
                     frame.add(title);
                     currentHovered = hovered.titleStart;
                     frame.revalidate();
-                }
-               
+                }               
             }
+            case nextLevel -> {
+                if (KeyH.enterPressed && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(win);
+                    frame.add(inGame);
+                    currentHovered = hovered.inGame;
+                    frame.revalidate();
+                }            }
             case inGame -> {
                 if (player.abilityON && player.ability == Player.abilityChoices.riso) {
                     if (lookRightLast) {
@@ -592,6 +603,35 @@ public class Main implements Runnable {
         // }
     }
 
+    public static void next() {
+
+      if (currentLevel==level.level1){
+        currentLevel=level.level2;
+
+      }
+
+      else if  (currentLevel==level.level2){
+        currentLevel=level.level3;
+      }
+
+      else if (currentLevel==level.level3){
+        currentLevel=level.level4;
+      }
+
+      else if (currentLevel==level.level4){
+        currentLevel=level.level5;
+      }
+
+      else if (currentLevel==level.level5){
+       // END SCREEN
+      }
+
+  
+
+
+
+    }
+
     private void checkWin() {
         // Score and game reset logic
         for (BallShadow b: ballShadows) {
@@ -603,6 +643,11 @@ public class Main implements Runnable {
                         resetGame();
                         enemyScore = 0;
                         playerScore = 0;
+                        frame.remove(inGame);
+                        frame.add(win);
+                        frame.revalidate();
+                        next();
+                        currentHovered=hovered.nextLevel;
                     }
                     resetGame();
                 } else {

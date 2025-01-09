@@ -23,7 +23,13 @@ public class GamePanel extends JPanel {
         characterSelectBg,
         select,
         court,
-        gameOver;
+        gameOver,
+        win,
+        level1,
+        level2,
+        level3,
+        level4,
+        level5;
         
 
     GamePanel(String t) {
@@ -33,12 +39,18 @@ public class GamePanel extends JPanel {
 			characterSelectBg = ImageIO.read(this.getClass().getResource("sprites/characterSelect.png"));
 			select = ImageIO.read(this.getClass().getResource("sprites/select.png"));
 			helpBg = ImageIO.read(this.getClass().getResource("sprites/help.png"));
-            court = ImageIO.read(this.getClass().getResource("sprites/court.png"));
             titleScreen = ImageIO.read(this.getClass().getResource("sprites/title.png"));
             titleStart = ImageIO.read(this.getClass().getResource("sprites/titleStart.png"));
             titleHelp = ImageIO.read(this.getClass().getResource("sprites/titleHelp.png"));
             titleExit = ImageIO.read(this.getClass().getResource("sprites/titleExit.png"));
             gameOver = ImageIO.read(this.getClass().getResource("sprites/gameOver.png"));
+            win = ImageIO.read(this.getClass().getResource("sprites/win.png"));
+            level1 = ImageIO.read(this.getClass().getResource("sprites/level1.png"));
+            level2 = ImageIO.read(this.getClass().getResource("sprites/level2.png"));
+            level3 = ImageIO.read(this.getClass().getResource("sprites/level3.png"));
+            level4 = ImageIO.read(this.getClass().getResource("sprites/level4.png"));
+            level5 = ImageIO.read(this.getClass().getResource("sprites/level5.png"));
+
            
 
         } catch (Exception e) {
@@ -57,13 +69,27 @@ public class GamePanel extends JPanel {
         switch (type) {
 
             case "win" -> {
-
+                g2.drawImage(win, 0, 0, (int)WINW, (int)WINH, null);
             }
 
             case "gameOver" -> {
                 g2.drawImage(gameOver, 0, 0, (int)WINW, (int)WINH, null);
             }
             case "game" -> {
+                switch (Main.currentLevel) {
+                    
+                    case level1 -> g2.drawImage(level1, 0, 0, (int)WINW, (int)WINH, null);
+
+                    case level2 -> g2.drawImage(level2, 0, 0, (int)WINW, (int)WINH, null);
+
+                    case level3 -> g2.drawImage(level3, 0, 0, (int)WINW, (int)WINH, null);
+
+                    case level4 -> g2.drawImage(level4, 0, 0, (int)WINW, (int)WINH, null);
+
+                    case level5 -> g2.drawImage(level5, 0, 0, (int)WINW, (int)WINH, null);
+                    default -> {}
+                    
+                }
                 g2.drawImage(court, 0, 0, (int)(int)WINW, (int)(int)WINH, null);
                 if (main.timeSlowed) drawTimeSlowVignette(g2);
                 drawCooldown(g2, 70, 500, 50, Color.BLUE);
