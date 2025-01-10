@@ -69,7 +69,7 @@ public class Enemy extends Entity {
                     this.destinationX = bs.get(0).destinationX;
                     this.destinationY = bs.get(0).destinationY;
                 } else if (this.enemyType == enemyTypes.GradyTwin1) {
-                    if (bs.get(0).destinationX < 512) {
+                    if (bs.get(0).destinationX < (GamePanel.WINW / 2.0)) {
                         this.destinationX = bs.get(0).destinationX;
                         this.destinationY = bs.get(0).destinationY;
                     } else {
@@ -77,7 +77,7 @@ public class Enemy extends Entity {
                         this.destinationY = this.idleY;
                     }  
                 } else if (this.enemyType == enemyTypes.GradyTwin2) {
-                    if (bs.get(0).destinationX >= 512) {
+                    if (bs.get(0).destinationX >= (GamePanel.WINW / 2.0)) {
                         this.destinationX = bs.get(0).destinationX;
                         this.destinationY = bs.get(0).destinationY;
                     } else {
