@@ -14,10 +14,10 @@ public class Main implements Runnable {
     
     JFrame frame;
     //Different panels that are drawn on for the title screen, game screen, help screen and character select screen
-    GamePanel title, inGame, help, characterSelect, win, gameOver;
+    GamePanel title, inGame, help, characterSelect, win, gameOver, intramuralChampion;
 
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
-    static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, inGame, helpExit,gameOverExit, nextLevel };
+    static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, inGame, helpExit,gameOverExit,victoryExit , nextLevel };
     static hovered currentHovered;
     static enum level {level1, level2, level3, level4, level5};
     static level currentLevel;
@@ -32,7 +32,7 @@ public class Main implements Runnable {
     ArrayList<BallShadow> ballShadows;
     Ball ball, ballWalter;
     ArrayList<Ball> balls;
-   static Enemy averageJoe, strongHercules, gradyTwin1, gradyTwin2, twoBallWalter, teleportSicilia;
+    static Enemy averageJoe, strongHercules, gradyTwin1, gradyTwin2, twoBallWalter, teleportSicilia;
     ArrayList<Enemy> enemies;
 
     // timer for the animations.
@@ -99,7 +99,6 @@ public class Main implements Runnable {
                 frameCount = 0;
             }
         }
-        
     }
 
     private void updateGame() {
@@ -138,8 +137,6 @@ public class Main implements Runnable {
         moveEnemies();
     }
 
-        
-
     private void repaintPanels() {
         // Repaint all panels
         SwingUtilities.invokeLater(() -> {
@@ -170,7 +167,7 @@ public class Main implements Runnable {
         currentLevel = level.level1;
         timeSlowed = false;
 
-        playerScore = 4;
+        playerScore = 0;
         enemyScore = -1;
 
         player = new Player(282, 125, 4, 100);
@@ -250,6 +247,9 @@ public class Main implements Runnable {
 
         win = new GamePanel("win");
         win.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
+
+        intramuralChampion = new GamePanel("Intramural Champion");
+        intramuralChampion.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
         
         updateValues();
         
@@ -363,13 +363,21 @@ public class Main implements Runnable {
                     currentHovered = hovered.titleStart;
                     frame.revalidate();
                 }    
-                
-                
             }
             case gameOverExit -> {
                 if (KeyH.enterPressed && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     frame.remove(gameOver);
+                    frame.add(title);
+                    currentHovered = hovered.titleStart;
+                    frame.revalidate();
+                }    
+
+            }
+            case victoryExit -> {
+                if (KeyH.enterPressed && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(intramuralChampion);
                     frame.add(title);
                     currentHovered = hovered.titleStart;
                     frame.revalidate();
@@ -427,7 +435,6 @@ public class Main implements Runnable {
                                     * right: (712, 150)
                                     * based on a 1024 x 768 resolution
                                     */
-                                   
                                     Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
                                     Rectangle ballRect = new Rectangle((int)balls.get(i).xx, (int)balls.get(i).yy, balls.get(i).size, balls.get(i).size);
                                     if (playerRect.intersects(ballRect)) {
@@ -490,11 +497,9 @@ public class Main implements Runnable {
             setHitLast(false);
         }
         ballShadowWalter.setActive(false);
-        
         serve=true;
         
-        switch (Main.currentLevel) {
-                    
+        switch (Main.currentLevel) {   
             case level1 -> {
                 averageJoe.setActive(true);
                 strongHercules.setActive(false);
@@ -503,7 +508,6 @@ public class Main implements Runnable {
                 twoBallWalter.setActive(false);
                 teleportSicilia.setActive(false);
             }
-
             case level2 -> {
                 averageJoe.setActive(false);
                 strongHercules.setActive(true);
@@ -512,23 +516,22 @@ public class Main implements Runnable {
                 twoBallWalter.setActive(false);
                 teleportSicilia.setActive(false);
             }
-
             case level3 -> {
                 averageJoe.setActive(false);
                 strongHercules.setActive(false);
                 gradyTwin1.setActive(true);
                 gradyTwin2.setActive(true);
                 twoBallWalter.setActive(false);
-                teleportSicilia.setActive(false);}
-
+                teleportSicilia.setActive(false);
+            }
             case level4 -> {
                 averageJoe.setActive(false);
                 strongHercules.setActive(false);
                 gradyTwin1.setActive(false);
                 gradyTwin2.setActive(false);
                 twoBallWalter.setActive(true);
-                teleportSicilia.setActive(false);}
-
+                teleportSicilia.setActive(false);
+            }
             case level5 -> {
                 averageJoe.setActive(false);
                 strongHercules.setActive(false);
@@ -537,7 +540,6 @@ public class Main implements Runnable {
                 twoBallWalter.setActive(false);
                 teleportSicilia.setActive(true);}
             default -> {}
-            
         }
     }
 
@@ -626,13 +628,9 @@ public class Main implements Runnable {
 
     public void updatePlayerState() {
         if (!KeyH.upPressed && !KeyH.downPressed && !KeyH.rightPressed && !KeyH.leftPressed && !KeyH.enterPressed) {
-            
-            
-                player.currentState = PlayerStates.idle_right;
-
+            player.currentState = PlayerStates.idle_right;
         } else if (KeyH.enterPressed) {
-                player.currentState = PlayerStates.hit;
-            
+            player.currentState = PlayerStates.hit;
         } else {
             // If player is moving, determine direction
             if (KeyH.rightPressed) {
@@ -646,8 +644,6 @@ public class Main implements Runnable {
            }
         }
     }
-    
-
 
     public void startPlayerHitAnim() {
         // if (KeyH.enterPressed) {
@@ -664,14 +660,19 @@ public class Main implements Runnable {
         // }
     }
 
-    public static void next() {
+    public void next() {
 
         if (currentLevel==level.level1) currentLevel=level.level2;
         else if (currentLevel==level.level2) currentLevel=level.level3;
         else if (currentLevel==level.level3) currentLevel=level.level4;
         else if (currentLevel==level.level4) currentLevel=level.level5;
         else if (currentLevel==level.level5) {
-            //end screen stuff
+            frame.remove(inGame);
+            frame.add(intramuralChampion);
+            frame.revalidate();
+            frame.pack();
+            frame.repaint();
+            currentHovered = hovered.victoryExit;
         }
     }
 
@@ -683,17 +684,21 @@ public class Main implements Runnable {
                 if (b.getPlayerHitLast()) {
                     playerScore++;
                     if (playerScore == 5) {
-                        resetGame();
-                        enemyScore = 0;
-                        playerScore = 4;
-                        frame.remove(inGame);
-                        frame.add(win);
-                        frame.revalidate();
-                        frame.pack();
-                        frame.repaint();
-                        next();
-                        currentHovered = hovered.nextLevel;
-                    }
+                        if (currentLevel != level.level5) {
+                            resetGame();
+                            enemyScore = 0;
+                            playerScore = 0;
+                            frame.remove(inGame);
+                            frame.add(win);
+                            frame.revalidate();
+                            frame.pack();
+                            frame.repaint();
+                            next();
+                            currentHovered = hovered.nextLevel;
+                        } else {
+                            next();
+                        }
+                    } 
                     resetGame();
                 } else {
                     enemyScore++;

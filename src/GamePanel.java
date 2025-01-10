@@ -29,7 +29,8 @@ public class GamePanel extends JPanel {
         level2,
         level3,
         level4,
-        level5;
+        level5,
+        intramuralChampion;
         
 
     GamePanel(String t) {
@@ -50,9 +51,7 @@ public class GamePanel extends JPanel {
             level3 = ImageIO.read(this.getClass().getResource("sprites/level3.png"));
             level4 = ImageIO.read(this.getClass().getResource("sprites/level4.png"));
             level5 = ImageIO.read(this.getClass().getResource("sprites/level5.png"));
-
-           
-
+            intramuralChampion = ImageIO.read(this.getClass().getResource("sprites/Intramural Champion.png"));
         } catch (Exception e) {
 			System.out.println("Failed to load image.");
 		}
@@ -74,6 +73,10 @@ public class GamePanel extends JPanel {
 
             case "gameOver" -> {
                 g2.drawImage(gameOver, 0, 0, (int)WINW, (int)WINH, null);
+            }
+
+            case "Intramural Champion" -> {
+                g2.drawImage(intramuralChampion, 0, 0, (int)WINW, (int)WINH, null);
             }
             case "game" -> {
                 switch (Main.currentLevel) {
