@@ -111,7 +111,6 @@ public class Enemy extends Entity {
             }
         }
         
-
         double vx, vy, theta;
         double centerX = this.xx + (this.size / 2);
         double centerY = this.yy + (this.size / 2);
@@ -213,8 +212,8 @@ public class Enemy extends Entity {
                     ballShadows.get(1).yy = this.yy;
                     if (!timeSlowed) ballShadows.get(1).velocity = 4;
                     else ballShadows.get(1).velocity = 2;
-                    ballShadows.get(1).setDestination((Math.random() * 400) + 312, 500);
-                    ballShadows.get(1).setDeparture(100, 500);
+                    ballShadows.get(1).setDestination((int)(((Math.random() * 400.0) + 312.0) / 1024.0 * GamePanel.WINW), (int)(GamePanel.WINH * 0.73));
+                    ballShadows.get(1).setDeparture(this.xx, this.yy);
                     ballShadows.get(1).setPlayerHitLast(false);
                 }
 

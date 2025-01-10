@@ -193,12 +193,12 @@ public class Main implements Runnable {
         balls.add(ball);
         balls.add(ballWalter);
 
-        averageJoe = new Enemy(495, 100, 1, 30, Enemy.enemyTypes.AverageJoe);
-        strongHercules = new Enemy(495, 100, 1, 40, Enemy.enemyTypes.StrongHercules);
-        gradyTwin1 = new Enemy(495, 100, 1, 20, Enemy.enemyTypes.GradyTwin1);
-        gradyTwin2 = new Enemy(495, 100, 1, 20, Enemy.enemyTypes.GradyTwin2);
-        twoBallWalter = new Enemy(495, 100, 1, 30, Enemy.enemyTypes.TwoBallWalter);
-        teleportSicilia = new Enemy(495, 100, 1, 30, Enemy.enemyTypes.TeleportSicilia);
+        averageJoe = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.AverageJoe);
+        strongHercules = new Enemy(495, 100, 2, 40, Enemy.enemyTypes.StrongHercules);
+        gradyTwin1 = new Enemy(495, 100, 2, 20, Enemy.enemyTypes.GradyTwin1);
+        gradyTwin2 = new Enemy(495, 100, 2, 20, Enemy.enemyTypes.GradyTwin2);
+        twoBallWalter = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.TwoBallWalter);
+        teleportSicilia = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.TeleportSicilia);
 
         averageJoe.setActive(true);
         strongHercules.setActive(false);
