@@ -25,7 +25,6 @@ public class GamePanel extends JPanel {
         court,
         gameOver,
         win,
-        level1,
         level2,
         level3,
         level4,
@@ -35,26 +34,72 @@ public class GamePanel extends JPanel {
 
     GamePanel(String t) {
         type = t;
-        try {
-            logo = ImageIO.read(this.getClass().getResource("sprites/logo.png"));
-			characterSelectBg = ImageIO.read(this.getClass().getResource("sprites/characterSelect.png"));
-			select = ImageIO.read(this.getClass().getResource("sprites/select.png"));
-			helpBg = ImageIO.read(this.getClass().getResource("sprites/help.png"));
-            titleScreen = ImageIO.read(this.getClass().getResource("sprites/title.png"));
-            titleStart = ImageIO.read(this.getClass().getResource("sprites/titleStart.png"));
-            titleHelp = ImageIO.read(this.getClass().getResource("sprites/titleHelp.png"));
-            titleExit = ImageIO.read(this.getClass().getResource("sprites/titleExit.png"));
-            gameOver = ImageIO.read(this.getClass().getResource("sprites/gameOver.png"));
-            win = ImageIO.read(this.getClass().getResource("sprites/win.png"));
-            level1 = ImageIO.read(this.getClass().getResource("sprites/level1.png"));
-            level2 = ImageIO.read(this.getClass().getResource("sprites/level2.png"));
-            level3 = ImageIO.read(this.getClass().getResource("sprites/level3.png"));
-            level4 = ImageIO.read(this.getClass().getResource("sprites/level4.png"));
-            level5 = ImageIO.read(this.getClass().getResource("sprites/level5.png"));
-            intramuralChampion = ImageIO.read(this.getClass().getResource("sprites/Intramural Champion.png"));
-        } catch (Exception e) {
-			System.out.println("Failed to load image.");
-		}
+        switch(t) {
+            case "win" -> {
+                try {
+                    win = ImageIO.read(this.getClass().getResource("sprites/win.png"));
+                } catch (Exception e) {
+                    System.out.println("Failed to load image 'win'");
+                }
+            }
+
+            case "gameOver" -> {
+                try {
+                    gameOver = ImageIO.read(this.getClass().getResource("sprites/gameOver.png"));
+                } catch (Exception e) {
+                    System.out.println("Failed to load image 'gameOver'");
+                }
+            }
+
+            case "Intramural Champion" -> {
+                try {
+                    intramuralChampion = ImageIO.read(this.getClass().getResource("sprites/Intramural Champion.png"));
+                } catch (Exception e) {
+                    System.out.println("Failed to load image 'intramuralChampion'");
+                }
+            }
+
+            case "game" -> {
+                try {
+                    court = ImageIO.read(this.getClass().getResource("sprites/court.png"));
+                    level2 = ImageIO.read(this.getClass().getResource("sprites/level2.png"));
+                    level3 = ImageIO.read(this.getClass().getResource("sprites/level3.png"));
+                    level4 = ImageIO.read(this.getClass().getResource("sprites/level4.png"));
+                    level5 = ImageIO.read(this.getClass().getResource("sprites/level5.png"));
+                } catch (Exception e) {
+                    System.out.println("Failed to load image in game");
+                }
+            }
+
+            case "help" -> {
+                try {
+                    helpBg = ImageIO.read(this.getClass().getResource("sprites/help.png"));
+                } catch (Exception e) {
+                    System.out.println("Failed to load image 'helpBg'");
+                }
+            }
+
+            case "character select" -> {
+                try {
+                    characterSelectBg = ImageIO.read(this.getClass().getResource("sprites/characterSelect.png"));
+                    select = ImageIO.read(this.getClass().getResource("sprites/select.png"));
+                } catch (Exception e) {
+                    System.out.println("Failed to load image in character select");
+                }
+            }
+
+            case "title" -> {
+                try {
+                    logo = ImageIO.read(this.getClass().getResource("sprites/logo.png"));
+                    titleScreen = ImageIO.read(this.getClass().getResource("sprites/title.png"));
+                    titleStart = ImageIO.read(this.getClass().getResource("sprites/titleStart.png"));
+                    titleHelp = ImageIO.read(this.getClass().getResource("sprites/titleHelp.png"));
+                    titleExit = ImageIO.read(this.getClass().getResource("sprites/titleExit.png"));
+                } catch (Exception e) {
+                    System.out.println("Failed to load image in title");
+                }
+            }
+        }
     }
 
     public void updateValues(Main m) {
@@ -80,16 +125,49 @@ public class GamePanel extends JPanel {
             }
             case "game" -> {
                 switch (Main.currentLevel) {
-                    
-                    case level1 -> g2.drawImage(level1, 0, 0, (int)WINW, (int)WINH, null);
+                    case level1 -> {
+                        g2.setColor(new Color(100, 100, 100));
+                        g2.fillRect(0, 0, (int)this.WINW, (int)this.WINH);
+                        g2.drawImage(court, 0, 0, (int)this.WINW, (int)this.WINH, null);
+                    }
 
-                    case level2 -> g2.drawImage(level2, 0, 0, (int)WINW, (int)WINH, null);
+                    case level2 -> {
+                        for (int i = 0; i < GamePanel.WINW; i += 64) {
+                            for (int j = 0; j < GamePanel.WINH; j += 64) {
+                                g2.drawImage(level2, i, j, 64, 64, null);
+                            }
+                        }
+                        g2.drawImage(court, 0, 0, (int)this.WINW, (int)this.WINH, null);
 
-                    case level3 -> g2.drawImage(level3, 0, 0, (int)WINW, (int)WINH, null);
+                    }
 
-                    case level4 -> g2.drawImage(level4, 0, 0, (int)WINW, (int)WINH, null);
+                    case level3 -> {
+                        for (int i = 0; i < GamePanel.WINW; i += 64) {
+                            for (int j = 0; j < GamePanel.WINH; j += 64) {
+                                g2.drawImage(level3, i, j, 64, 64, null);
+                            }
+                        }
+                        g2.drawImage(court, 0, 0, (int)this.WINW, (int)this.WINH, null);
+                    }
 
-                    case level5 -> g2.drawImage(level5, 0, 0, (int)WINW, (int)WINH, null);
+                    case level4 -> {
+                        for (int i = 0; i < GamePanel.WINW; i += 64) {
+                            for (int j = 0; j < GamePanel.WINH; j += 64) {
+                                g2.drawImage(level4, i, j, 64, 64, null);
+                            }
+                        }
+                        g2.drawImage(court, 0, 0, (int)this.WINW, (int)this.WINH, null);
+                    }
+
+                    case level5 -> {
+                        for (int i = 0; i < GamePanel.WINW; i += 64) {
+                            for (int j = 0; j < GamePanel.WINH; j += 64) {
+                                g2.drawImage(level5, i, j, 64, 64, null);
+                            }
+                        }
+                        g2.drawImage(court, 0, 0, (int)this.WINW, (int)this.WINH, null);
+                    }
+
                     default -> {}
                     
                 }
@@ -119,7 +197,9 @@ public class GamePanel extends JPanel {
                 g2.drawString("Enemy: " + main.enemyScore, 150, 60);
                 g2.drawString("Player: " + main.playerScore, 800, 720);
             }
+
             case "help" -> g2.drawImage(helpBg, 0, 0, (int)WINW, (int)WINH, null);
+
             case "character select" -> {
                 g2.drawImage(characterSelectBg, 0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH, null);
 
