@@ -70,16 +70,110 @@ public class Enemy extends Entity {
                     this.destinationY = bs.get(0).destinationY;
                 } else if (this.enemyType == enemyTypes.GradyTwin1) {
                     if (bs.get(0).destinationX < (GamePanel.WINW / 2.0)) {
-                        this.destinationX = bs.get(0).destinationX;
-                        this.destinationY = bs.get(0).destinationY;
+                        if (Main.frames % 1000 < 25) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY - (GamePanel.WINH * 0.1);
+                        } else if (Main.frames % 1000 < 125) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames % 1000 < 150) {
+                            this.destinationX = bs.get(0).destinationX + (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY + (GamePanel.WINH * 0.1); 
+                        } else if (Main.frames % 1000 < 250) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames % 1000 < 275) {
+                            this.destinationX = bs.get(0).destinationX - (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames % 1000 < 375) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames % 1000 < 400) {
+                            this.destinationX = bs.get(0).destinationX + (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY - (GamePanel.WINH * 0.1);
+                        } else if (Main.frames %  1000 < 500) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames %  1000 < 525) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY + (GamePanel.WINH * 0.1);
+                        } else if (Main.frames %  1000 < 625) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames %  1000 < 650) {
+                            this.destinationX = bs.get(0).destinationX - (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY + (GamePanel.WINH * 0.1);
+                        } else if (Main.frames %  1000 < 750) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames %  1000 < 775) {
+                            this.destinationX = bs.get(0).destinationX - (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY - (GamePanel.WINH * 0.1);
+                        } else if (Main.frames %  1000 < 875) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames %  1000 < 900) {
+                            this.destinationX = bs.get(0).destinationX + (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY;
+                        } else {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        }
                     } else {
                         this.destinationX = this.idleX;
                         this.destinationY = this.idleY;
                     }  
                 } else if (this.enemyType == enemyTypes.GradyTwin2) {
                     if (bs.get(0).destinationX >= (GamePanel.WINW / 2.0)) {
-                        this.destinationX = bs.get(0).destinationX;
-                        this.destinationY = bs.get(0).destinationY;
+                        if (Main.frames % 1000 < 25) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY - (GamePanel.WINH * 0.1);
+                        } else if (Main.frames % 1000 < 125) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames % 1000 < 150) {
+                            this.destinationX = bs.get(0).destinationX + (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY + (GamePanel.WINH * 0.1); 
+                        } else if (Main.frames % 1000 < 250) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames % 1000 < 275) {
+                            this.destinationX = bs.get(0).destinationX - (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames % 1000 < 375) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames % 1000 < 400) {
+                            this.destinationX = bs.get(0).destinationX + (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY - (GamePanel.WINH * 0.1);
+                        } else if (Main.frames %  1000 < 500) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames %  1000 < 525) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY + (GamePanel.WINH * 0.1);
+                        } else if (Main.frames %  1000 < 625) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames %  1000 < 650) {
+                            this.destinationX = bs.get(0).destinationX - (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY + (GamePanel.WINH * 0.1);
+                        } else if (Main.frames %  1000 < 750) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames %  1000 < 775) {
+                            this.destinationX = bs.get(0).destinationX - (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY - (GamePanel.WINH * 0.1);
+                        } else if (Main.frames %  1000 < 875) {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        } else if (Main.frames %  1000 < 900) {
+                            this.destinationX = bs.get(0).destinationX + (GamePanel.WINW * 0.1);
+                            this.destinationY = bs.get(0).destinationY;
+                        } else {
+                            this.destinationX = bs.get(0).destinationX;
+                            this.destinationY = bs.get(0).destinationY;
+                        }
                     } else {
                         this.destinationX = this.idleX;
                         this.destinationY = this.idleY;

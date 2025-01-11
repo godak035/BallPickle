@@ -164,7 +164,7 @@ public class Main implements Runnable {
      */
     Main() {
         currentHovered = hovered.titleStart;
-        currentLevel = level.level1;
+        currentLevel = level.level3;
         timeSlowed = false;
 
         playerScore = 0;
