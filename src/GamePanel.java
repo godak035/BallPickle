@@ -194,8 +194,13 @@ public class GamePanel extends JPanel {
                 }
 
                 //drawDebugStuff(g2);
-                g2.drawString("Enemy: " + main.enemyScore, 150, 60);
-                g2.drawString("Player: " + main.playerScore, 800, 720);
+                g2.setFont(new Font("Calibri", Font.PLAIN, (int)(this.WINW*0.035)));
+                g2.setColor(Color.BLACK);
+                g2.drawString("Enemy: " + main.enemyScore,(int)(this.WINW*0.0653), (int)(this.WINH*0.153));
+                g2.drawString("Player: " + main.playerScore,(int)(this.WINW*0.802), (int)(this.WINH*0.902));
+                g2.setColor(new Color(255,69,169));
+                g2.drawString("Enemy: " + main.enemyScore,(int)(this.WINW*0.065), (int)(this.WINH*0.15));
+                g2.drawString("Player: " + main.playerScore,(int)(this.WINW*0.80), (int)(this.WINH*0.90));
             }
 
             case "help" -> g2.drawImage(helpBg, 0, 0, (int)WINW, (int)WINH, null);
