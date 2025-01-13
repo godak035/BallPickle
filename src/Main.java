@@ -47,6 +47,9 @@ public class Main implements Runnable {
     final int 
         playerXMax = (int)(450.0 / 1024.0 * GamePanel.WINW),
         playerYMax = (int)(250.0 / 768.0 * GamePanel.WINH);
+    final static double 
+        ballSpeed = 4.0 / 768.0 * GamePanel.WINH,
+        enemySpeed = 2.0 / 768.0 * GamePanel.WINH;
 
     static int frames = 0;
 
@@ -193,12 +196,12 @@ public class Main implements Runnable {
         balls.add(ball);
         balls.add(ballWalter);
 
-        averageJoe = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.AverageJoe);
-        strongHercules = new Enemy(495, 100, 2, 40, Enemy.enemyTypes.StrongHercules);
-        gradyTwin1 = new Enemy(495, 100, 2, 20, Enemy.enemyTypes.GradyTwin1);
-        gradyTwin2 = new Enemy(495, 100, 2, 20, Enemy.enemyTypes.GradyTwin2);
-        twoBallWalter = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.TwoBallWalter);
-        teleportSicilia = new Enemy(495, 100, 2, 30, Enemy.enemyTypes.TeleportSicilia);
+        averageJoe = new Enemy(495, 100, enemySpeed, 30, Enemy.enemyTypes.AverageJoe);
+        strongHercules = new Enemy(495, 100, enemySpeed, 40, Enemy.enemyTypes.StrongHercules);
+        gradyTwin1 = new Enemy(495, 100, enemySpeed, 20, Enemy.enemyTypes.GradyTwin1);
+        gradyTwin2 = new Enemy(495, 100, enemySpeed, 20, Enemy.enemyTypes.GradyTwin2);
+        twoBallWalter = new Enemy(495, 100, enemySpeed, 30, Enemy.enemyTypes.TwoBallWalter);
+        teleportSicilia = new Enemy(495, 100, enemySpeed, 30, Enemy.enemyTypes.TeleportSicilia);
 
         averageJoe.setActive(true);
         strongHercules.setActive(false);
@@ -439,10 +442,10 @@ public class Main implements Runnable {
                                     Rectangle ballRect = new Rectangle((int)balls.get(i).xx, (int)balls.get(i).yy, balls.get(i).size, balls.get(i).size);
                                     if (playerRect.intersects(ballRect)) {
                                         if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
-                                            ballShadows.get(i).velocity = 200;
+                                            ballShadows.get(i).velocity = this.ballSpeed * 2;
                                         } else {
-                                            if (!timeSlowed) ballShadows.get(i).velocity = 4;
-                                            else ballShadows.get(i).velocity = 2;
+                                            if (!timeSlowed) ballShadows.get(i).velocity = this.ballSpeed;
+                                            else ballShadows.get(i).velocity = this.ballSpeed / 2;
                                         }
                                         
                                         if (serve) ballShadows.get(i).setDestination((int)(712.0 / 1024.0 * GamePanel.WINW), (int)(150.0 / 768.0 * GamePanel.WINH));

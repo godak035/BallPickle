@@ -288,11 +288,11 @@ public class Enemy extends Entity {
             if (b.getPlayerHitLast() && enemy.intersects(ball)) {
                 //Updated the velocity for the ball to be returned.
                 if (this.enemyType != enemyTypes.StrongHercules) {
-                    if (!timeSlowed) b.velocity = 4;
-                    else b.velocity = 2;
+                    if (!timeSlowed) b.velocity = Main.ballSpeed;
+                    else b.velocity = Main.ballSpeed / 2;
                 } else {
-                    if (!timeSlowed) b.velocity = 6;
-                    else b.velocity = 3;
+                    if (!timeSlowed) b.velocity = Main.ballSpeed * 1.5;
+                    else b.velocity = Main.ballSpeed * 0.75;
                 }
                 b.setDestination((int)(((Math.random() * 400.0) + 312.0) / 1024.0 * GamePanel.WINW), (int)(GamePanel.WINH * 0.73));
                 //Set hitLast to true.
@@ -304,8 +304,8 @@ public class Enemy extends Entity {
                     ballShadows.get(1).setActive(true);
                     ballShadows.get(1).xx = this.xx;
                     ballShadows.get(1).yy = this.yy;
-                    if (!timeSlowed) ballShadows.get(1).velocity = 4;
-                    else ballShadows.get(1).velocity = 2;
+                    if (!timeSlowed) ballShadows.get(1).velocity = Main.ballSpeed;
+                    else ballShadows.get(1).velocity = Main.ballSpeed / 2;
                     ballShadows.get(1).setDestination((int)(((Math.random() * 400.0) + 312.0) / 1024.0 * GamePanel.WINW), (int)(GamePanel.WINH * 0.73));
                     ballShadows.get(1).setDeparture(this.xx, this.yy);
                     ballShadows.get(1).setPlayerHitLast(false);
