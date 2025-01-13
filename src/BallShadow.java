@@ -6,7 +6,7 @@
  */
 public class BallShadow extends Entity {
 
-    double destinationX, destinationY, departureX, departureY, theta;
+    private double destinationX, destinationY, departureX, departureY, theta;
     private boolean isActive, playerHitLast, doSpin;
 
    /**
@@ -37,6 +37,10 @@ public class BallShadow extends Entity {
     public boolean getActive() { return this.isActive; }
     public boolean getPlayerHitLast() { return this.playerHitLast; }
     public boolean getSpin() { return this.doSpin; }
+    public double getDepartureX() { return this.departureX; }
+    public double getDepartureY() { return this.departureY; }
+    public double getDestinationX() { return this.destinationX; }
+    public double getDestinationY() { return this.destinationY; }
     
     //setter methods
     public void setActive(boolean active) { this.isActive = active; }

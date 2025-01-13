@@ -16,10 +16,10 @@ public class GamePanel extends JPanel {
         WINW = Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 
         WINH = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
-    Main main;
-    String type;
-    ImageIcon risoHitAnim, risoIdleLeftAnim, risoIdleRightAnim;
-    Timer animTimer;
+    private Main main;
+    private String type;
+    private ImageIcon risoHitAnim, risoIdleLeftAnim, risoIdleRightAnim;
+    private Timer animTimer;
 
     BufferedImage
         logo,
@@ -191,22 +191,22 @@ public class GamePanel extends JPanel {
                     
                 }
                 g2.drawImage(court, 0, 0, (int)(int)WINW, (int)(int)WINH, null);
-                if (main.timeSlowed) drawTimeSlowVignette(g2);
+                if (main.getTimeSlowed()) drawTimeSlowVignette(g2);
                 drawCooldown(g2, 70, 500, 50, Color.BLUE);
 
                 animateCharacters(g2);
                 
-                for (Enemy e: main.enemies) {
-                    if (e.isActive) {
+                for (Enemy e: main.getEnemies()) {
+                    if (e.getActive()) {
                         drawEntity(g2, e, Color.BLACK);
                     }
                 }
-                for (BallShadow b: main.ballShadows) {
+                for (BallShadow b: main.getBallShadows()) {
                     if (b.getActive()) {
                         drawEntity(g2, b, Color.BLACK);
                     }
                 }
-                for (Ball b: main.balls) {
+                for (Ball b: main.getBalls()) {
                     if (b.getShadow().getActive()) {
                         drawEntity(g2, b, Color.BLUE);
                     }
@@ -271,12 +271,12 @@ public class GamePanel extends JPanel {
     private void drawTimeSlowVignette(Graphics2D g2) {
         double opacity;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-        if (main.player.abilityTime < 20) {
-            opacity = main.player.abilityTime * 0.05;
-        } else if (main.player.abilityTime < 80) {
+        if (main.getPlayer().getAbilityTime() < 20) {
+            opacity = main.getPlayer().getAbilityTime() * 0.05;
+        } else if (main.getPlayer().getAbilityTime() < 80) {
             opacity = 1;
         } else {
-            opacity = (100 - main.player.abilityTime) * 0.05;
+            opacity = (100 - main.getPlayer().getAbilityTime()) * 0.05;
         }
         for (int i = 0; i < 64; i++) {
             g2.setColor(new Color(0, 0, 0, (int)(4.0 * (double)i * opacity)));
@@ -309,11 +309,11 @@ public class GamePanel extends JPanel {
      */
     private void drawCooldown(Graphics2D g2, int x, int y, double radius, Color c) {
         double totalCooldown;
-        int cooldownLeft = (int)System.currentTimeMillis() - (int)main.player.getLastAbilityTime();
-        totalCooldown = switch (main.player.ability) {
-            case riso -> main.player.getDashCooldown();
-            case adonis -> main.player.getStrongHitCooldown();
-            case tasha -> main.player.getTimeSlowCooldown();
+        int cooldownLeft = (int)System.currentTimeMillis() - (int)main.getPlayer().getLastAbilityTime();
+        totalCooldown = switch (main.getPlayer().getAbility()) {
+            case riso -> main.getPlayer().getDashCooldown();
+            case adonis -> main.getPlayer().getStrongHitCooldown();
+            case tasha -> main.getPlayer().getTimeSlowCooldown();
             default -> 0;
         };
         
@@ -342,25 +342,25 @@ public class GamePanel extends JPanel {
      * @param g2  The Graphics2D object to be manipulated
      */
     private void animateCharacters(Graphics2D g2) {
-        if (main.characterModel == 1) {
-            switch (main.player.currentState) {
-                case PlayerStates.idle_right:
-                    main.player.risoIdleRightAnim.paintIcon(this, g2, main.player.x, main.player.y);
+        if (main.getCharacterModel() == 1) {
+            switch (main.getPlayer().currentState) {
+                case idle_right:
+                    main.getPlayer().risoIdleRightAnim.paintIcon(this, g2, main.getPlayer().x, main.getPlayer().y);
                     break;
-                case PlayerStates.move_right:
-                    main.player.risoMoveRightAnim.paintIcon(this, g2, main.player.x, main.player.y);
+                case move_right:
+                    main.getPlayer().risoMoveRightAnim.paintIcon(this, g2, main.getPlayer().x, main.getPlayer().y);
                     break;
-                case PlayerStates.move_down:
+                case move_down:
                     //player.risoMoveDownAnim.paintIcon(this, g2, player.x, player.y);
                     break;
-                case PlayerStates.move_left:
+                case move_left:
                     //player.risoMoveLeftAnim.paintIcon(this, g2, player.x, player.y);
                     break;
-                case PlayerStates.move_up:
+                case move_up:
                     //player.risoMoveUpAnim.paintIcon(this, g2, player.x, player.y);
                     break;
-                case PlayerStates.hit:
-                    main.player.risoHitAnim.paintIcon(this, g2, main.player.x, main.player.y);
+                case hit:
+                    main.getPlayer().risoHitAnim.paintIcon(this, g2, main.getPlayer().x, main.getPlayer().y);
                     
                     break;
             }
@@ -373,11 +373,11 @@ public class GamePanel extends JPanel {
      */
     private void drawDebugStuff(Graphics2D g2) {
         g2.setStroke(new BasicStroke(10));
-        for (BallShadow b: main.ballShadows) {
+        for (BallShadow b: main.getBallShadows()) {
             g2.setColor(Color.RED);
-            g2.drawLine((int)b.destinationX, (int)b.destinationY, (int)b.destinationX, (int)b.destinationY);
+            g2.drawLine((int)b.getDestinationX(), (int)b.getDestinationY(), (int)b.getDestinationX(), (int)b.getDestinationY());
             g2.setColor(Color.GREEN);
-            g2.drawLine((int)b.departureX, (int)b.departureY, (int)b.departureX, (int)b.departureY);
+            g2.drawLine((int)b.getDepartureX(), (int)b.getDepartureY(), (int)b.getDepartureX(), (int)b.getDepartureY());
         }
     }
 }

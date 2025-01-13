@@ -9,7 +9,7 @@ public class Ball extends Entity {
     private final BallShadow shadow;
 
     /**
-     * COnstructor
+     * Constructor
      * @param b  the BallShadow to be followed
      */
     public Ball(BallShadow b) {
@@ -34,9 +34,9 @@ public class Ball extends Entity {
      */
     public void syncLocation() {
         //the distance from the BallShadow's departure to it's destination
-        double distance = Math.sqrt(Math.pow(Math.abs(shadow.departureX - shadow.destinationX), 2) + Math.pow(Math.abs(shadow.departureY - shadow.destinationY), 2));
+        double distance = Math.sqrt(Math.pow(Math.abs(shadow.getDepartureX() - shadow.getDestinationX()), 2) + Math.pow(Math.abs(shadow.getDepartureY() - shadow.getDestinationY()), 2));
         //the distante between the BallShadow's current position and it's departure point
-        double progress = Math.sqrt(Math.pow(Math.abs(shadow.departureX - shadow.xx), 2) + Math.pow(Math.abs(shadow.departureY - shadow.yy), 2));
+        double progress = Math.sqrt(Math.pow(Math.abs(shadow.getDepartureX() - shadow.xx), 2) + Math.pow(Math.abs(shadow.getDepartureY() - shadow.yy), 2));
         //the percent of it's journey the ball has traveled will determine its height
         double h = (progress / distance) * 100;
         if (h > 50) h = 100 - h;

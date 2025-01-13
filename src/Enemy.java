@@ -11,11 +11,14 @@ import java.util.ArrayList;
 public class Enemy extends Entity {
     
     public static enum enemyTypes { AverageJoe, StrongHercules, GradyTwin1, GradyTwin2, TwoBallWalter, TeleportSicilia }
-    enemyTypes enemyType;
-    double destinationX, destinationY;
-    double idleX, idleY;
-    boolean isActive;
-    ArrayList<BallShadow> ballShadows;
+    private enemyTypes enemyType;
+    private double 
+        destinationX, //x coordinate of the destination
+        destinationY, //y coordinate of the destination
+        idleX, //x coordinate of the idle position
+        idleY; //y coordinate of the idle position
+    private boolean isActive;
+    private ArrayList<BallShadow> ballShadows;
 
    /**
     * Constructor
@@ -61,12 +64,17 @@ public class Enemy extends Entity {
      */
     public void updateValues(ArrayList<BallShadow> bs) { this.ballShadows = bs; }
 
+    //getter methods
+    public boolean getActive() { return this.isActive; }
+    public ArrayList<BallShadow> getBallShadows() { return this.ballShadows; }
+
     /**
      * Sets if the enemy is currently playing or not
      * @param activity  If the enemy is currently playing
      */
     public void setActive(boolean activity) { this.isActive = activity; }
 
+    
     /**
      * Sets a new destination that tne enemy will move towards in the future
      * @param dX  the x component of the new destination
@@ -82,115 +90,115 @@ public class Enemy extends Entity {
      */
     public void move() {
         if (!ballShadows.get(1).getActive()) { //only one ball in play
-            if (ballShadows.get(0).destinationY < 300) { //ball is moving towards enemy, enemy must move towards ball's destination
+            if (ballShadows.get(0).getDestinationY() < 300) { //ball is moving towards enemy, enemy must move towards ball's destination
                 if (this.enemyType != enemyTypes.GradyTwin1 && this.enemyType != enemyTypes.GradyTwin2) {
-                    this.destinationX = ballShadows.get(0).destinationX;
-                    this.destinationY = ballShadows.get(0).destinationY;
+                    this.destinationX = ballShadows.get(0).getDestinationX();
+                    this.destinationY = ballShadows.get(0).getDestinationY();
                 } else if (this.enemyType == enemyTypes.GradyTwin1) {
-                    if (ballShadows.get(0).destinationX < (GamePanel.WINW / 2.0)) {
+                    if (ballShadows.get(0).getDestinationX() < (GamePanel.WINW / 2.0)) {
                         if (Main.frames % 1000 < 25) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY - (GamePanel.WINH * 0.1);
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY() - (GamePanel.WINH * 0.1);
                         } else if (Main.frames % 1000 < 125) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames % 1000 < 150) {
-                            this.destinationX = ballShadows.get(0).destinationX + (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY + (GamePanel.WINH * 0.1); 
+                            this.destinationX = ballShadows.get(0).getDestinationX() + (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY() + (GamePanel.WINH * 0.1); 
                         } else if (Main.frames % 1000 < 250) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames % 1000 < 275) {
-                            this.destinationX = ballShadows.get(0).destinationX - (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX() - (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames % 1000 < 375) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames % 1000 < 400) {
-                            this.destinationX = ballShadows.get(0).destinationX + (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY - (GamePanel.WINH * 0.1);
+                            this.destinationX = ballShadows.get(0).getDestinationX() + (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY() - (GamePanel.WINH * 0.1);
                         } else if (Main.frames %  1000 < 500) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames %  1000 < 525) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY + (GamePanel.WINH * 0.1);
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY() + (GamePanel.WINH * 0.1);
                         } else if (Main.frames %  1000 < 625) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames %  1000 < 650) {
-                            this.destinationX = ballShadows.get(0).destinationX - (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY + (GamePanel.WINH * 0.1);
+                            this.destinationX = ballShadows.get(0).getDestinationX() - (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY() + (GamePanel.WINH * 0.1);
                         } else if (Main.frames %  1000 < 750) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames %  1000 < 775) {
-                            this.destinationX = ballShadows.get(0).destinationX - (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY - (GamePanel.WINH * 0.1);
+                            this.destinationX = ballShadows.get(0).getDestinationX() - (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY() - (GamePanel.WINH * 0.1);
                         } else if (Main.frames %  1000 < 875) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames %  1000 < 900) {
-                            this.destinationX = ballShadows.get(0).destinationX + (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX() + (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         }
                     } else {
                         this.destinationX = this.idleX;
                         this.destinationY = this.idleY;
                     }  
                 } else if (this.enemyType == enemyTypes.GradyTwin2) {
-                    if (ballShadows.get(0).destinationX >= (GamePanel.WINW / 2.0)) {
+                    if (ballShadows.get(0).getDestinationX() >= (GamePanel.WINW / 2.0)) {
                         if (Main.frames % 1000 < 25) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY - (GamePanel.WINH * 0.1);
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY() - (GamePanel.WINH * 0.1);
                         } else if (Main.frames % 1000 < 125) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames % 1000 < 150) {
-                            this.destinationX = ballShadows.get(0).destinationX + (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY + (GamePanel.WINH * 0.1); 
+                            this.destinationX = ballShadows.get(0).getDestinationX() + (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY() + (GamePanel.WINH * 0.1); 
                         } else if (Main.frames % 1000 < 250) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames % 1000 < 275) {
-                            this.destinationX = ballShadows.get(0).destinationX - (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX() - (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames % 1000 < 375) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames % 1000 < 400) {
-                            this.destinationX = ballShadows.get(0).destinationX + (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY - (GamePanel.WINH * 0.1);
+                            this.destinationX = ballShadows.get(0).getDestinationX() + (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY() - (GamePanel.WINH * 0.1);
                         } else if (Main.frames %  1000 < 500) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames %  1000 < 525) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY + (GamePanel.WINH * 0.1);
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY() + (GamePanel.WINH * 0.1);
                         } else if (Main.frames %  1000 < 625) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames %  1000 < 650) {
-                            this.destinationX = ballShadows.get(0).destinationX - (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY + (GamePanel.WINH * 0.1);
+                            this.destinationX = ballShadows.get(0).getDestinationX() - (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY() + (GamePanel.WINH * 0.1);
                         } else if (Main.frames %  1000 < 750) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames %  1000 < 775) {
-                            this.destinationX = ballShadows.get(0).destinationX - (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY - (GamePanel.WINH * 0.1);
+                            this.destinationX = ballShadows.get(0).getDestinationX() - (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY() - (GamePanel.WINH * 0.1);
                         } else if (Main.frames %  1000 < 875) {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else if (Main.frames %  1000 < 900) {
-                            this.destinationX = ballShadows.get(0).destinationX + (GamePanel.WINW * 0.1);
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX() + (GamePanel.WINW * 0.1);
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         } else {
-                            this.destinationX = ballShadows.get(0).destinationX;
-                            this.destinationY = ballShadows.get(0).destinationY;
+                            this.destinationX = ballShadows.get(0).getDestinationX();
+                            this.destinationY = ballShadows.get(0).getDestinationY();
                         }
                     } else {
                         this.destinationX = this.idleX;
@@ -202,22 +210,22 @@ public class Enemy extends Entity {
                 this.destinationY = this.idleY;
             }
         } else { //multiple balls in play, must decide which to go for
-            if (ballShadows.get(0).destinationY > 300 && ballShadows.get(1).destinationY > 300) { //both balls are moving away from Walter
+            if (ballShadows.get(0).getDestinationY() > 300 && ballShadows.get(1).getDestinationY() > 300) { //both balls are moving away from Walter
                 this.destinationX = this.idleX;
                 this.destinationY = this.idleY;
-            } else if (ballShadows.get(0).destinationY < 300 && ballShadows.get(1).destinationY < 300) { //both balls are moving towards enemy, must choose one to go for
+            } else if (ballShadows.get(0).getDestinationY() < 300 && ballShadows.get(1).getDestinationY() < 300) { //both balls are moving towards enemy, must choose one to go for
                 if (ballShadows.get(0).yy < ballShadows.get(1).yy) { //ballShadows.get(0) is closer to leaking
-                    this.destinationX = ballShadows.get(0).destinationX;
-                    this.destinationY = ballShadows.get(0).destinationY;
+                    this.destinationX = ballShadows.get(0).getDestinationX();
+                    this.destinationY = ballShadows.get(0).getDestinationY();
                 } else { //ballShadows.get(1) must be closer to leaking then
-                    this.destinationX = ballShadows.get(1).destinationX;
-                    this.destinationY = ballShadows.get(1).destinationY;
+                    this.destinationX = ballShadows.get(1).getDestinationX();
+                    this.destinationY = ballShadows.get(1).getDestinationY();
                 }
             } else { //only one ball is moving towardds enemy
                 for (BallShadow b: ballShadows) {
-                    if (b.destinationY < 300) {
-                        this.destinationX = b.destinationX;
-                        this.destinationY = b.destinationY;
+                    if (b.getDestinationY() < 300) {
+                        this.destinationX = b.getDestinationX();
+                        this.destinationY = b.getDestinationY();
                     }
                 }
             }

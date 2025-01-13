@@ -9,10 +9,10 @@ import javax.swing.ImageIcon;
 
 public class Player extends Entity {
 
-    int abilityTime = 0;
-    boolean abilityON = false;
+    private int abilityTime = 0;
+    private boolean abilityON = false;
     public static enum abilityChoices { riso, adonis, tasha }
-    abilityChoices ability;
+    private abilityChoices ability;
     private long lastAbilityTime; 
 
     private final int 
@@ -96,8 +96,15 @@ public class Player extends Entity {
     public int getStrongHitCooldown() { return this.strongHitCooldown; }
     public int getTimeSlowCooldown() { return this.timeSlowCooldown; }
     public long getLastAbilityTime() { return this.lastAbilityTime; }
+    public int getAbilityTime() { return this.abilityTime; }
+    public boolean getAbilityON() { return this.abilityON; }
+    public abilityChoices getAbility() { return this.ability; }
+    
+    //setter methods
+    public void setAbilityON(boolean on) { this.abilityON = on; }
+    public void setAbilityTime(int time) { this.abilityTime = time; }
 
-    public int currentState = PlayerStates.idle_right;
+    public Main.playerStates currentState = Main.playerStates.idle_right;
     
     //animations for different states for Riso
     public ImageIcon risoIdleRightAnim = new ImageIcon(this.getClass().getResource("sprites/char1_idle_anim_right.gif")); 

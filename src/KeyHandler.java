@@ -10,7 +10,7 @@ import java.awt.event.*;
 public class KeyHandler implements KeyListener{
 
     //booleans of whether a key (up, down, left, right, enter) is currently being pressed
-    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, abilityPressed;
+    private boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, abilityPressed;
     
     /**
      * Updates the corresponding variable when a key gets pressed
@@ -47,4 +47,13 @@ public class KeyHandler implements KeyListener{
     //Method from KeyListener that is not used
     @Override
     public void keyTyped(KeyEvent e) {}
+
+    //getter methods
+    public boolean getAbilityPressed() { return this.abilityPressed; }
+    public boolean getEnterPressed() { return this.enterPressed; }
+    public boolean getLeftPressed() { return this.leftPressed; }
+    public boolean getRightPressed() { return this.rightPressed; }
+    public boolean getUpPressed() { return this.upPressed; }
+    public boolean getDownPressed() { return this.downPressed; }
+
 }
