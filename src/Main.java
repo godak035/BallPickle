@@ -49,7 +49,7 @@ public class Main implements Runnable {
         playerYMax = (int)(250.0 / 768.0 * GamePanel.WINH);
     final static double 
         ballSpeed = 4.0 / 768.0 * GamePanel.WINH,
-        enemySpeed = 2.0 / 768.0 * GamePanel.WINH;
+        enemySpeed = 1.5 / 768.0 * GamePanel.WINH;
 
     static int frames = 0;
 
@@ -167,7 +167,7 @@ public class Main implements Runnable {
      */
     Main() {
         currentHovered = hovered.titleStart;
-        currentLevel = level.level2;
+        currentLevel = level.level1;
         timeSlowed = false;
 
         playerScore = 0;
