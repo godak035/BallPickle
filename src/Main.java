@@ -49,7 +49,8 @@ public class Main implements Runnable {
         playerYMax = (int)(250.0 / 768.0 * GamePanel.WINH);
     final static double 
         ballSpeed = 4.0 / 768.0 * GamePanel.WINH,
-        enemySpeed = 1.5 / 768.0 * GamePanel.WINH;
+        enemySpeed = 1.5 / 768.0 * GamePanel.WINH,
+        playerSpeed = 4.0 / 768.0 * GamePanel.WINH;
 
     static int frames = 0;
 
@@ -173,7 +174,7 @@ public class Main implements Runnable {
         playerScore = 0;
         enemyScore = -1;
 
-        player = new Player(282, 125, 4, 100);
+        player = new Player(282, 125, playerSpeed, 100);
 
         ballShadow = new BallShadow((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(600.0 * 768.0 * GamePanel.WINH), 0, 10);
         ballShadow.setDestination((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(500.0 * 768.0 * GamePanel.WINH));
@@ -401,10 +402,10 @@ public class Main implements Runnable {
             case inGame -> {
                 if (player.abilityON && player.ability == Player.abilityChoices.riso) {
                     if (lookRightLast) {
-                        player.xx += 20;
+                        player.xx += player.velocity * 4;
                         if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
                     } else {
-                        player.xx -= 20;
+                        player.xx -= player.velocity * 4;
                         if (player.xx < 0) player.xx = 0;
                     }
                 } else {
