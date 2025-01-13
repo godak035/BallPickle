@@ -2,7 +2,7 @@
  * Main.java
  * The main gameloop of the BallPickle game.
  * by: David Sue, Vadim Mironov, Avishan Ketheswaran and Owen McCarthy
- * December 2, 2024
+ * January 14, 2025
  */
 
 import java.awt.*;
@@ -25,8 +25,10 @@ public class Main implements Runnable {
     //Whether or not the user has released the keys since they have pressed them (used in the menus, to ensure that you don't move down 2 options if you press the down key for 2 frames)
     boolean upPressedThisTick, downPressedThisTick, leftPressedThisTick, rightPressedThisTick, enterPressedThisTick;
     
+    //The KeyHandler will hadle all key presses
     KeyHandler KeyH;
 
+    //All entities
     Player player;
     BallShadow ballShadow, ballShadowWalter;
     ArrayList<BallShadow> ballShadows;
@@ -40,17 +42,20 @@ public class Main implements Runnable {
     // default charactermodel selection. This is to determine which character model is used for animations, based on your character selections.
     int characterModel = 1;
 
+    //score
     static int playerScore, enemyScore;
 
+    //miscellaneous other booleans
     boolean lookRightLast, timeSlowed, serve=true;
     
+    //The players movement area
     final int 
         playerXMax = (int)(450.0 / 1024.0 * GamePanel.WINW),
         playerYMax = (int)(250.0 / 768.0 * GamePanel.WINH);
     final static double 
-        ballSpeed = 4.0 / 768.0 * GamePanel.WINH,
-        enemySpeed = 1.5 / 768.0 * GamePanel.WINH,
-        playerSpeed = 4.0 / 768.0 * GamePanel.WINH;
+        BALL_SPEED = 4.0 / 768.0 * GamePanel.WINH,
+        ENEMY_SPEED = 1.5 / 768.0 * GamePanel.WINH,
+        PLAYER_SPEED = 4.0 / 768.0 * GamePanel.WINH;
 
     static int frames = 0;
 
@@ -174,7 +179,7 @@ public class Main implements Runnable {
         playerScore = 0;
         enemyScore = -1;
 
-        player = new Player(282, 125, playerSpeed, 100);
+        player = new Player(282, 125, PLAYER_SPEED, 100);
 
         ballShadow = new BallShadow((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(600.0 * 768.0 * GamePanel.WINH), 0, 10);
         ballShadow.setDestination((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(500.0 * 768.0 * GamePanel.WINH));
@@ -197,12 +202,12 @@ public class Main implements Runnable {
         balls.add(ball);
         balls.add(ballWalter);
 
-        averageJoe = new Enemy(495, 100, enemySpeed, 30, Enemy.enemyTypes.AverageJoe);
-        strongHercules = new Enemy(495, 100, enemySpeed, 40, Enemy.enemyTypes.StrongHercules);
-        gradyTwin1 = new Enemy(495, 100, enemySpeed, 20, Enemy.enemyTypes.GradyTwin1);
-        gradyTwin2 = new Enemy(495, 100, enemySpeed, 20, Enemy.enemyTypes.GradyTwin2);
-        twoBallWalter = new Enemy(495, 100, enemySpeed, 30, Enemy.enemyTypes.TwoBallWalter);
-        teleportSicilia = new Enemy(495, 100, enemySpeed, 30, Enemy.enemyTypes.TeleportSicilia);
+        averageJoe = new Enemy(495, 100, ENEMY_SPEED, 30, Enemy.enemyTypes.AverageJoe);
+        strongHercules = new Enemy(495, 100, ENEMY_SPEED, 40, Enemy.enemyTypes.StrongHercules);
+        gradyTwin1 = new Enemy(495, 100, ENEMY_SPEED, 20, Enemy.enemyTypes.GradyTwin1);
+        gradyTwin2 = new Enemy(495, 100, ENEMY_SPEED, 20, Enemy.enemyTypes.GradyTwin2);
+        twoBallWalter = new Enemy(495, 100, ENEMY_SPEED, 30, Enemy.enemyTypes.TwoBallWalter);
+        teleportSicilia = new Enemy(495, 100, ENEMY_SPEED, 30, Enemy.enemyTypes.TeleportSicilia);
 
         averageJoe.setActive(true);
         strongHercules.setActive(false);
@@ -443,10 +448,10 @@ public class Main implements Runnable {
                                     Rectangle ballRect = new Rectangle((int)balls.get(i).xx, (int)balls.get(i).yy, balls.get(i).size, balls.get(i).size);
                                     if (playerRect.intersects(ballRect)) {
                                         if (player.abilityON && player.ability == Player.abilityChoices.adonis) {
-                                            ballShadows.get(i).velocity = this.ballSpeed * 2;
+                                            ballShadows.get(i).velocity = this.BALL_SPEED * 2;
                                         } else {
-                                            if (!timeSlowed) ballShadows.get(i).velocity = this.ballSpeed;
-                                            else ballShadows.get(i).velocity = this.ballSpeed / 2;
+                                            if (!timeSlowed) ballShadows.get(i).velocity = this.BALL_SPEED;
+                                            else ballShadows.get(i).velocity = this.BALL_SPEED / 2;
                                         }
                                         
                                         if (serve) ballShadows.get(i).setDestination((int)(712.0 / 1024.0 * GamePanel.WINW), (int)(150.0 / 768.0 * GamePanel.WINH));
@@ -479,6 +484,9 @@ public class Main implements Runnable {
         if (!KeyH.enterPressed) enterPressedThisTick = false;
     }//end getInputs
 
+    /**
+     * Resets the game
+     */
     public void resetGame() {
         player.xx = 282;
         player.yy = 125;
@@ -486,11 +494,15 @@ public class Main implements Runnable {
         player.abilityTime = 0;
         player.resetCooldown();
         player.updatePosition();
+
+        //resets the position of all enemies
         for (Enemy e: enemies) {
             e.xx = GamePanel.WINW / 2.0;
             e.yy = 100.0 / 768.0 * GamePanel.WINH;
             e.updatePosition();
         }
+        
+        //resets the position of all balls
         for (BallShadow b: ballShadows) {
             b.xx = (int)(350.0 / 1024.0 * GamePanel.WINW);
             b.yy = (int)(650.0 / 768.0 * GamePanel.WINH);
@@ -503,50 +515,29 @@ public class Main implements Runnable {
         ballShadowWalter.setActive(false);
         serve=true;
         
+        //sets the enemies to active or not depending on the level
+        averageJoe.setActive(false);
+        strongHercules.setActive(false);
+        gradyTwin1.setActive(false);
+        gradyTwin2.setActive(false);
+        twoBallWalter.setActive(false);
+        teleportSicilia.setActive(false);
         switch (Main.currentLevel) {   
-            case level1 -> {
-                averageJoe.setActive(true);
-                strongHercules.setActive(false);
-                gradyTwin1.setActive(false);
-                gradyTwin2.setActive(false);
-                twoBallWalter.setActive(false);
-                teleportSicilia.setActive(false);
-            }
-            case level2 -> {
-                averageJoe.setActive(false);
-                strongHercules.setActive(true);
-                gradyTwin1.setActive(false);
-                gradyTwin2.setActive(false);
-                twoBallWalter.setActive(false);
-                teleportSicilia.setActive(false);
-            }
+            case level1 -> averageJoe.setActive(true);
+            case level2 -> strongHercules.setActive(true);
             case level3 -> {
-                averageJoe.setActive(false);
-                strongHercules.setActive(false);
                 gradyTwin1.setActive(true);
                 gradyTwin2.setActive(true);
-                twoBallWalter.setActive(false);
-                teleportSicilia.setActive(false);
             }
-            case level4 -> {
-                averageJoe.setActive(false);
-                strongHercules.setActive(false);
-                gradyTwin1.setActive(false);
-                gradyTwin2.setActive(false);
-                twoBallWalter.setActive(true);
-                teleportSicilia.setActive(false);
-            }
-            case level5 -> {
-                averageJoe.setActive(false);
-                strongHercules.setActive(false);
-                gradyTwin1.setActive(false);
-                gradyTwin2.setActive(false);
-                twoBallWalter.setActive(false);
-                teleportSicilia.setActive(true);}
+            case level4 -> twoBallWalter.setActive(true);
+            case level5 -> teleportSicilia.setActive(true);
             default -> {}
         }
     }
 
+    /**
+     * Ticks each ability cooldown
+     */
     public void tickAbilities() {
         if (player.abilityON) {
             player.abilityTime++;
@@ -576,6 +567,9 @@ public class Main implements Runnable {
         }
     }//end tickAbilities
 
+    /**
+     * Checks if Tasha's time slow ability has been activated
+     */
     public void checkTimeSlow() {
         if (!timeSlowed && player.abilityON && player.ability == Player.abilityChoices.tasha) {
             timeSlowed = true;
@@ -583,12 +577,10 @@ public class Main implements Runnable {
             for (Enemy e: enemies) e.velocity /= 2;
         }
     }
-
-    public void drawCooldown(Graphics2D g2, double radius, double percent) {
-        g2.setColor(Color.BLUE);
-        g2.fillRect(0, 0, 100, 100);
-    }
     
+    /**
+     * Calls all the updateValues methods for every GamePanel
+     */
     public void updateValues() {
         title.updateValues(this);
         inGame.updateValues(this);
@@ -597,12 +589,19 @@ public class Main implements Runnable {
         for (Enemy e: enemies) e.updateValues(ballShadows);
     }
 
+    /**
+     * Sets the playerHitLast variable of every ball to hitLast
+     * @param hitLast  What to set all balls playerHitLast variable to
+     */
     private void setHitLast(boolean hitLast) {
         for (BallShadow b: ballShadows) {
             b.setPlayerHitLast(hitLast);
         }
     }
 
+    /**
+     * Ensures that all enemies have accurate information regarding the ball's position and velocity
+     */
     private void syncBalls() {
         for (Enemy e: enemies) {
             for (int i = 0; i < ballShadows.size(); i++) {
@@ -619,10 +618,13 @@ public class Main implements Runnable {
         }
     }
 
+    /**
+     * Moves all actve enemies
+     */
     private void moveEnemies() {
         for (Enemy e: enemies) {
             if (e.isActive) {
-                e.move(ballShadows);
+                e.move();
                 e.updatePosition();
                 if (playerScore > enemyScore) e.hit(timeSlowed, true);
                 else e.hit(timeSlowed, false);
@@ -630,6 +632,9 @@ public class Main implements Runnable {
         }
     }
 
+    /**
+     * Updates the player's state
+     */
     public void updatePlayerState() {
         if (!KeyH.upPressed && !KeyH.downPressed && !KeyH.rightPressed && !KeyH.leftPressed && !KeyH.enterPressed) {
             player.currentState = PlayerStates.idle_right;
@@ -649,6 +654,9 @@ public class Main implements Runnable {
         }
     }
 
+    /**
+     * Starts the player's hit animation
+     */
     public void startPlayerHitAnim() {
         // if (KeyH.enterPressed) {
         //     player.currentState = PlayerStates.hit;
@@ -664,8 +672,10 @@ public class Main implements Runnable {
         // }
     }
 
+    /**
+     * Moves to the next level
+     */
     public void next() {
-
         if (currentLevel==level.level1) currentLevel=level.level2;
         else if (currentLevel==level.level2) currentLevel=level.level3;
         else if (currentLevel==level.level3) currentLevel=level.level4;
@@ -679,7 +689,10 @@ public class Main implements Runnable {
             currentHovered = hovered.victoryExit;
         }
     }
-
+    
+    /**
+     * Checks if the enemy or the player has won the game. If so, reset game
+     */
     private void checkWin() {
         // Score and game reset logic
         for (BallShadow b: ballShadows) {

@@ -1,21 +1,37 @@
+/***
+ * Ball.java
+ * A ball will follow a BallShadow and look like it has gravity
+ * By: David Sue, Vadim Mironov, Avishan Ketheswaran and Owen McCarthy
+ * January 14, 2025
+ */
 public class Ball extends Entity {
 
-    BallShadow shadow;
+    private final BallShadow shadow;
 
+    /**
+     * COnstructor
+     * @param b  the BallShadow to be followed
+     */
     public Ball(BallShadow b) {
         super(b.xx, b.yy, 0, b.size);
         this.shadow = b;
     }
     
+    /**
+     * Updates the x and y position to align with the xx and yy
+     */
     @Override
     public void updatePosition() {
         this.x = (int)this.xx;
         this.y = (int)this.yy;
     }
-
-    public void setShadow(BallShadow b) { this.shadow = b; }
+    
+    //getter methods
     public BallShadow getShadow() { return this.shadow; }
 
+    /**
+     * Syncs the location of the ball to the location of the BallShadow
+     */
     public void syncLocation() {
         //the distance from the BallShadow's departure to it's destination
         double distance = Math.sqrt(Math.pow(Math.abs(shadow.departureX - shadow.destinationX), 2) + Math.pow(Math.abs(shadow.departureY - shadow.destinationY), 2));

@@ -1,12 +1,20 @@
+/***
+ * GamePanel.java
+ * A panel that can display the BallPickle game
+ * By: David Sue, Vadim Mironov, Avishan Ketheswaran and Owen McCarthy
+ * January 14, 2025
+ */
+
 import java.awt.*;
 import java.awt.image.*;
 import javax.imageio.*;
 import javax.swing.*;
-import javax.swing.Timer;
 
 public class GamePanel extends JPanel {
 
-    final static double WINW = Toolkit.getDefaultToolkit().getScreenSize().getWidth(), WINH = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+    final static double 
+        WINW = Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 
+        WINH = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
     Main main;
     String type;
@@ -31,7 +39,10 @@ public class GamePanel extends JPanel {
         level5,
         intramuralChampion;
         
-
+    /**
+     * Constructor
+     * @param t  The type of GamePanel
+     */
     GamePanel(String t) {
         type = t;
         switch(t) {
@@ -101,11 +112,19 @@ public class GamePanel extends JPanel {
             }
         }
     }
-
+    
+    /**
+     * Updates the values that the GamePanel knows to align with those of the Main class
+     * @param m  The Main class object that it will take values from
+     */
     public void updateValues(Main m) {
         this.main = m;
     }
 
+    /**
+     * Paints the frame
+     * @param g  The graphics object to be painted
+     */
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
@@ -245,6 +264,10 @@ public class GamePanel extends JPanel {
         }
     }
 
+    /**
+     * Draws a time slow vignette around the sides of the screen
+     * @param g2  The Graphics2D objects to be manipulated
+     */
     private void drawTimeSlowVignette(Graphics2D g2) {
         double opacity;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
@@ -265,11 +288,25 @@ public class GamePanel extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
 
+    /**
+     * Draws the Entity e on the Graphics2D Object g2 as a square with the colour c
+     * @param g2  The Graphics2D object to be manipulated
+     * @param e   The entity to be drawn
+     * @param c   The colour to draw the Entity in
+     */
     private void drawEntity(Graphics2D g2, Entity e, Color c) {
         g2.setColor(c);
         g2.fillRect(e.x, e.y, e.size, e.size);
     }
 
+    /**
+     * Draws the ability cooldown of the main class as a circle with a certain progress, with the centre at (x, y), a radius of radius, and the color c on the Graphics2D object
+     * @param g2      The Graphics2D object to be manipulated
+     * @param x       The x coordinate of the centre
+     * @param y       The y coordinate of the centre
+     * @param radius  The radius of the cooldown circle
+     * @param c       The colour for the circle to be drawn in
+     */
     private void drawCooldown(Graphics2D g2, int x, int y, double radius, Color c) {
         double totalCooldown;
         int cooldownLeft = (int)System.currentTimeMillis() - (int)main.player.getLastAbilityTime();
@@ -299,6 +336,11 @@ public class GamePanel extends JPanel {
 
         }
     }
+
+    /**
+     * Animates the characters
+     * @param g2  The Graphics2D object to be manipulated
+     */
     private void animateCharacters(Graphics2D g2) {
         if (main.characterModel == 1) {
             switch (main.player.currentState) {
@@ -325,9 +367,10 @@ public class GamePanel extends JPanel {
         }
     }
         
-        
-
-    
+    /**
+     * draws the destination and departure point of the ball (for debugging)
+     * @param g2  The Graphics2D object to be manipulated
+     */
     private void drawDebugStuff(Graphics2D g2) {
         g2.setStroke(new BasicStroke(10));
         for (BallShadow b: main.ballShadows) {

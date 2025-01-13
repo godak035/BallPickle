@@ -1,3 +1,10 @@
+/***
+ * Player.java
+ * A Player will be either riso, adonis, or tasha and will have abilities that can be activated.
+ * By: David Sue, Vadim Mironov, Avishan Ketheswaran and Owen McCarthy
+ * January 14, 2025
+ */
+
 import javax.swing.ImageIcon;
 
 public class Player extends Entity {
@@ -6,8 +13,8 @@ public class Player extends Entity {
     boolean abilityON = false;
     public static enum abilityChoices { riso, adonis, tasha }
     abilityChoices ability;
-    
     private long lastAbilityTime; 
+
     private final int 
         dashCooldown = 3000,  //Time duration in milliseconds of dash ability
         timeSlowCooldown = 3000,  //Time duration in milliseconds of time slowdown ability
@@ -15,24 +22,45 @@ public class Player extends Entity {
         positionXRelativeTo = (int)(280.0 / 1024.0 * GamePanel.WINW),
         positionYRelativeTo = (int)(430.0 / 768.0 * GamePanel.WINH);
 
+    /**
+     * Constructor
+     * @param xx  the x position of the player
+     * @param yy  the y position of the player
+     * @param v   the velocity of the player
+     * @param s   the size of the player
+     */
     public Player(double xx, double yy, double v, int s) {
         super(xx, yy, v, s);
         this.ability = abilityChoices.riso;
         this.lastAbilityTime = System.currentTimeMillis();
     }
 
+    /**
+     * Changes the player's ability to a
+     * @param a  the new ability
+     */
     public void changeAbility(abilityChoices a) {
         ability = a;
     }
 
+    /**
+     * Updates the x and y position of the player to align with the xx and yy
+     */
     @Override
     public void updatePosition() {
         this.x = (int)xx + positionXRelativeTo;
         this.y = (int)yy + positionYRelativeTo;
     }
 
+    /**
+     * Resets the cooldown of the player's ability
+     */
     public void resetCooldown() { this.lastAbilityTime = 0; }
     
+    /**
+     * Uses the player's ability
+     * @param rightPressed  Whether right or left was the last direction to be pressed (true if right, false if left)
+     */
     public void useAbility(boolean rightPressed) {
         switch (ability) {
             case riso -> {
@@ -61,7 +89,7 @@ public class Player extends Entity {
         abilityON=true;
     }
 
-    //getter methods because encapsulation yes
+    //getter methods 
     public int getPositionXRelativeTo() { return this.positionXRelativeTo; }
     public int getPositionYRelativeTo() { return this.positionYRelativeTo; }
     public int getDashCooldown() { return this.dashCooldown; }

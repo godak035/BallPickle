@@ -1,10 +1,8 @@
-
-
 /***
- * Ball.java
- * The ball of the BallPickle game. It moves around in linear directions and bounces off of the enemy and the player.
+ * BallShadow.java
+ * The ball's shadow of the BallPickle game. It moves around in linear directions and can be hit by the enemy and the player.
  * by: David Sue, Vadim Mironov, Avishan Ketheswaran and Owen McCarthy
- * December 2, 2024
+ * January 14, 2025
  */
 public class BallShadow extends Entity {
 
@@ -35,26 +33,37 @@ public class BallShadow extends Entity {
         this.y = (int)yy;
     }
 
-    public void setActive(boolean active) { this.isActive = active; }
+    //getter methods
     public boolean getActive() { return this.isActive; }
-    public void setPlayerHitLast(boolean PlayerHitLast) { this.playerHitLast = PlayerHitLast; }
     public boolean getPlayerHitLast() { return this.playerHitLast; }
-    public void setSpin(boolean spin) { this.doSpin = spin; }
     public boolean getSpin() { return this.doSpin; }
-
+    
+    //setter methods
+    public void setActive(boolean active) { this.isActive = active; }
+    public void setPlayerHitLast(boolean PlayerHitLast) { this.playerHitLast = PlayerHitLast; }
+    public void setSpin(boolean spin) { this.doSpin = spin; }
     public void setDeparture(double dX, double dY) {
         this.departureX = dX;
         this.departureY = dY;
     }
     
+    /**
+     * Sets the destination of the BallShadow, and calculates the theta angle that the ball will have to travel, and the deprature point
+     * @param dX  The x component of the destination
+     * @param dY  The y component of the destination
+     */
     public void setDestination(double dX, double dY) {
         //the distance from the BallShadow's departure to it's destination
         double distance = Math.sqrt(Math.pow(Math.abs(this.departureX - this.destinationX), 2) + Math.pow(Math.abs(this.departureY - this.destinationY), 2));
+        
         //the distance between the BallShadow's current position and it's departure point
         double progress = Math.sqrt(Math.pow(Math.abs(this.departureX - this.xx), 2) + Math.pow(Math.abs(this.departureY - this.yy), 2));
+        
         //the distance traveled by the ball, expressed as a percentage
         double progressPercent = progress / distance * 100;
-        if (progressPercent > 98) {
+        
+        //sets the departure x and y
+        if (progressPercent > 98) { //if the BallShadow is pretty much at it's destination, the new destination will be at its current position. This was added to patch a bug that ocurred where the ball would teleport upwards when hit near its destination point
             this.departureX = this.xx;
             this.departureY = this.yy;
         } else {
@@ -90,7 +99,6 @@ public class BallShadow extends Entity {
                 }
             }
         }
-        
         
         this.destinationX = dX;
         this.destinationY = dY;
@@ -130,6 +138,9 @@ public class BallShadow extends Entity {
         }
     }
 
+    /**
+     * Moves the ball along the theta angle
+     */
     public void move() {
         if (this.yy > this.destinationY && this.yy > this.departureY && doSpin) {
             setDestination((int)((GamePanel.WINW * 0.2) + (GamePanel.WINW * 0.4)), (int)(GamePanel.WINH * 0.95));
