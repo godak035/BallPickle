@@ -369,6 +369,8 @@ public class Main implements Runnable {
                     frame.add(inGame);
                     currentHovered = hovered.inGame;
                     frame.revalidate();
+                    stopMusic();
+                    playMusic(1);
                 }
             }
             case charSelect3 -> {
@@ -383,6 +385,8 @@ public class Main implements Runnable {
                     frame.add(inGame);
                     currentHovered = hovered.inGame;
                     frame.revalidate();
+                    stopMusic();
+                    playMusic(1);
                 }
             }
             case helpExit -> {
