@@ -12,7 +12,7 @@ import javax.swing.Timer;
 
 public class Main implements Runnable {
 
-    Sound sound = new Sound();
+    static Sound sound = new Sound();
     public void playMusic(int i) {
         sound.setFile(i);
         sound.play();
@@ -24,7 +24,7 @@ public class Main implements Runnable {
         sound.stop();
     }
 
-    public void playSE(int i){
+    public static void playSE(int i){
         sound.setFile(i);
         sound.play();
     }
@@ -197,7 +197,7 @@ public class Main implements Runnable {
         timeSlowed = false;
         lastHit = 0;
 
-        playerScore = 0;
+        playerScore = 4;
         enemyScore = -1;
 
 
@@ -522,6 +522,7 @@ public class Main implements Runnable {
      * Resets the game
      */
     public void resetGame() {
+        
         player.xx = GamePanel.WINW * 0.2;
         player.yy = GamePanel.WINH * 0.1;
         player.setAbilityON(false);
@@ -557,7 +558,7 @@ public class Main implements Runnable {
         twoBallWalter.setActive(false);
         teleportSicilia.setActive(false);
         switch (Main.currentLevel) {   
-            case level1 -> averageJoe.setActive(true);
+            case level1 -> averageJoe.setActive(true); 
             case level2 -> strongHercules.setActive(true);
             case level3 -> {
                 gradyTwin1.setActive(true);
@@ -671,8 +672,9 @@ public class Main implements Runnable {
      */
     public void next() {
         if (currentLevel==level.level1) {
-            currentLevel=level.level2;
             stopMusic();
+            currentLevel=level.level2;
+           
             playMusic(2);
         }
         else if (currentLevel==level.level2) {
@@ -681,13 +683,15 @@ public class Main implements Runnable {
             playMusic(1);
         }
         else if (currentLevel==level.level3) {
-            currentLevel=level.level4;
             stopMusic();
+            currentLevel=level.level4;
+           
             playMusic(2);
         }
         else if (currentLevel==level.level4) {
-            currentLevel=level.level5;
             stopMusic();
+            currentLevel=level.level5;
+            
             playMusic(3);
         }
         else if (currentLevel==level.level5) {

@@ -317,6 +317,7 @@ public class Enemy extends Entity {
             Rectangle ball = new Rectangle((int)b.xx, (int)b.yy, b.size, b.size);
             Rectangle enemy = new Rectangle((int)this.xx, (int)this.yy, this.size, this.size);
             if (b.getPlayerHitLast() && enemy.intersects(ball)) {
+                Main.playSE(4);
                 //Updated the velocity for the ball to be returned.
                 if (this.enemyType != enemyTypes.StrongHercules) {
                     if (!timeSlowed) b.velocity = Main.BALL_SPEED;
