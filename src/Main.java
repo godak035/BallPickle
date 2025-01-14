@@ -199,7 +199,7 @@ public class Main implements Runnable {
 
         playerScore = 0;
         enemyScore = -1;
-        playMusic(0);
+
 
         player = new Player(282, 125, PLAYER_SPEED, (int)PLAYER_SIZE * 2);
 
@@ -303,8 +303,7 @@ public class Main implements Runnable {
                     currentHovered = hovered.titleHelp;
                 }
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
-                    stopMusic();
-                    playMusic(1);
+  
                     enterPressedThisTick = true;
                     frame.remove(title);
                     frame.add(characterSelect);
@@ -350,6 +349,8 @@ public class Main implements Runnable {
                     frame.add(inGame);
                     currentHovered = hovered.inGame;
                     frame.revalidate();
+                    stopMusic();
+                    playMusic(1);
                 }
             }
             case charSelect2 -> {
@@ -679,7 +680,7 @@ public class Main implements Runnable {
         else if (currentLevel==level.level4) {
             currentLevel=level.level5;
             stopMusic();
-            playMusic(1);
+            playMusic(3);
         }
         else if (currentLevel==level.level5) {
             frame.remove(inGame);
