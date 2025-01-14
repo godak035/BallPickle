@@ -21,6 +21,7 @@ public class Main implements Runnable {
 
     public void stopMusic(){
 
+        sound.stop();
     }
 
     public void playSE(int i){
