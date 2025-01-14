@@ -5,8 +5,6 @@
  * January 14, 2025
  */
 
-import javax.swing.ImageIcon;
-
 public class Player extends Entity {
 
     private int abilityTime = 0;
@@ -103,19 +101,4 @@ public class Player extends Entity {
     //setter methods
     public void setAbilityON(boolean on) { this.abilityON = on; }
     public void setAbilityTime(int time) { this.abilityTime = time; }
-
-    public Main.playerStates currentState = Main.playerStates.idle_right;
-    
-    //animations for different states for Riso
-    public ImageIcon risoIdleRightAnim = new ImageIcon(this.getClass().getResource("sprites/char1_idle_anim_right.gif")); 
-    public ImageIcon risoMoveRightAnim = new ImageIcon(this.getClass().getResource("sprites/char_1_move_right.gif"));
-    // public ImageIcon risoMoveDownAnim = new ImageIcon(this.getClass().getResource("sprites/char1_move_down.gif"));
-    // public ImageIcon risoMoveLeftAnim = new ImageIcon(this.getClass().getResource("sprites/char1_move_left.gif"));
-    // public ImageIcon risoMoveUpAnim = new ImageIcon(this.getClass().getResource("sprites/char1_move_up.gif"));
-    public ImageIcon risoHitAnim = new ImageIcon(this.getClass().getResource("sprites/char1_strike_anim4.gif"));
-
-   
 }
-
-
-

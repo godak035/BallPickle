@@ -23,21 +23,14 @@ public class GamePanel extends JPanel {
 
     BufferedImage
         logo,
-        titleScreen,
-        titleStart,
-        titleHelp,
-        titleExit,
+        titleScreen, titleStart, titleHelp, titleExit,
         helpBg,
-        characterSelectBg,
-        select,
-        court,
+        characterSelectBg, select,
+        court, level2, level3, level4, level5,
         gameOver,
         win,
-        level2,
-        level3,
-        level4,
-        level5,
-        intramuralChampion;
+        intramuralChampion,
+        riso_right, riso_left, riso_up, riso_down, riso_idle, riso_hit;
         
     /**
      * Constructor
@@ -48,7 +41,7 @@ public class GamePanel extends JPanel {
         switch(t) {
             case "win" -> {
                 try {
-                    win = ImageIO.read(this.getClass().getResource("sprites/win.png"));
+                    win = ImageIO.read(this.getClass().getResource("sprites/GUI/win.png"));
                 } catch (Exception e) {
                     System.out.println("Failed to load image 'win'");
                 }
@@ -56,7 +49,7 @@ public class GamePanel extends JPanel {
 
             case "gameOver" -> {
                 try {
-                    gameOver = ImageIO.read(this.getClass().getResource("sprites/gameOver.png"));
+                    gameOver = ImageIO.read(this.getClass().getResource("sprites/GUI/gameOver.png"));
                 } catch (Exception e) {
                     System.out.println("Failed to load image 'gameOver'");
                 }
@@ -64,7 +57,7 @@ public class GamePanel extends JPanel {
 
             case "Intramural Champion" -> {
                 try {
-                    intramuralChampion = ImageIO.read(this.getClass().getResource("sprites/Intramural Champion.png"));
+                    intramuralChampion = ImageIO.read(this.getClass().getResource("sprites/GUI/Intramural Champion.png"));
                 } catch (Exception e) {
                     System.out.println("Failed to load image 'intramuralChampion'");
                 }
@@ -72,11 +65,17 @@ public class GamePanel extends JPanel {
 
             case "game" -> {
                 try {
-                    court = ImageIO.read(this.getClass().getResource("sprites/court.png"));
-                    level2 = ImageIO.read(this.getClass().getResource("sprites/level2.png"));
-                    level3 = ImageIO.read(this.getClass().getResource("sprites/level3.png"));
-                    level4 = ImageIO.read(this.getClass().getResource("sprites/level4.png"));
-                    level5 = ImageIO.read(this.getClass().getResource("sprites/level5.png"));
+                    court = ImageIO.read(this.getClass().getResource("sprites/game/court.png"));
+                    level2 = ImageIO.read(this.getClass().getResource("sprites/game/level2.png"));
+                    level3 = ImageIO.read(this.getClass().getResource("sprites/game/level3.png"));
+                    level4 = ImageIO.read(this.getClass().getResource("sprites/game/level4.png"));
+                    level5 = ImageIO.read(this.getClass().getResource("sprites/game/level5.png"));
+                    riso_right = ImageIO.read(this.getClass().getResource("sprites/players/riso_move_right.png"));
+                    riso_left = ImageIO.read(this.getClass().getResource("sprites/players/riso_move_left.png"));
+                    riso_up = ImageIO.read(this.getClass().getResource("sprites/players/riso_move_up.png"));
+                    riso_down = ImageIO.read(this.getClass().getResource("sprites/players/riso_move_down.png"));
+                    riso_hit = ImageIO.read(this.getClass().getResource("sprites/players/riso_hit.png"));
+                    riso_idle = ImageIO.read(this.getClass().getResource("sprites/players/riso_idle.png"));
                 } catch (Exception e) {
                     System.out.println("Failed to load image in game");
                 }
@@ -84,7 +83,7 @@ public class GamePanel extends JPanel {
 
             case "help" -> {
                 try {
-                    helpBg = ImageIO.read(this.getClass().getResource("sprites/help.png"));
+                    helpBg = ImageIO.read(this.getClass().getResource("sprites/GUI/help.png"));
                 } catch (Exception e) {
                     System.out.println("Failed to load image 'helpBg'");
                 }
@@ -92,8 +91,8 @@ public class GamePanel extends JPanel {
 
             case "character select" -> {
                 try {
-                    characterSelectBg = ImageIO.read(this.getClass().getResource("sprites/characterSelect.png"));
-                    select = ImageIO.read(this.getClass().getResource("sprites/select.png"));
+                    characterSelectBg = ImageIO.read(this.getClass().getResource("sprites/GUI/characterSelect.png"));
+                    select = ImageIO.read(this.getClass().getResource("sprites/GUI/select.png"));
                 } catch (Exception e) {
                     System.out.println("Failed to load image in character select");
                 }
@@ -101,11 +100,11 @@ public class GamePanel extends JPanel {
 
             case "title" -> {
                 try {
-                    logo = ImageIO.read(this.getClass().getResource("sprites/logo.png"));
-                    titleScreen = ImageIO.read(this.getClass().getResource("sprites/title.png"));
-                    titleStart = ImageIO.read(this.getClass().getResource("sprites/titleStart.png"));
-                    titleHelp = ImageIO.read(this.getClass().getResource("sprites/titleHelp.png"));
-                    titleExit = ImageIO.read(this.getClass().getResource("sprites/titleExit.png"));
+                    logo = ImageIO.read(this.getClass().getResource("sprites/GUI/logo.png"));
+                    titleScreen = ImageIO.read(this.getClass().getResource("sprites/GUI/title.png"));
+                    titleStart = ImageIO.read(this.getClass().getResource("sprites/GUI/titleStart.png"));
+                    titleHelp = ImageIO.read(this.getClass().getResource("sprites/GUI/titleHelp.png"));
+                    titleExit = ImageIO.read(this.getClass().getResource("sprites/GUI/titleExit.png"));
                 } catch (Exception e) {
                     System.out.println("Failed to load image in title");
                 }
@@ -142,6 +141,7 @@ public class GamePanel extends JPanel {
             case "Intramural Champion" -> {
                 g2.drawImage(intramuralChampion, 0, 0, (int)WINW, (int)WINH, null);
             }
+
             case "game" -> {
                 switch (Main.currentLevel) {
                     case level1 -> {
@@ -188,13 +188,9 @@ public class GamePanel extends JPanel {
                     }
 
                     default -> {}
-                    
                 }
                 g2.drawImage(court, 0, 0, (int)(int)WINW, (int)(int)WINH, null);
-                if (main.getTimeSlowed()) drawTimeSlowVignette(g2);
                 drawCooldown(g2, 70, 500, 50, Color.BLUE);
-
-                animateCharacters(g2);
                 
                 for (Enemy e: main.getEnemies()) {
                     if (e.getActive()) {
@@ -211,6 +207,8 @@ public class GamePanel extends JPanel {
                         drawEntity(g2, b, Color.BLUE);
                     }
                 }
+                drawPlayer(g2);
+                if (main.getTimeSlowed()) drawTimeSlowVignette(g2);
 
                 //drawDebugStuff(g2);
                 g2.setFont(new Font("Calibri", Font.PLAIN, (int)(this.WINW*0.035)));
@@ -235,6 +233,7 @@ public class GamePanel extends JPanel {
                     default -> {}
                 }
             }
+
             case "title" -> {
                 if (Main.frames < 127) {
                     g2.drawImage(logo, 0, 0, (int)WINW, (int)WINH,  null);
@@ -337,34 +336,35 @@ public class GamePanel extends JPanel {
         }
     }
 
-    /**
-     * Animates the characters
-     * @param g2  The Graphics2D object to be manipulated
-     */
-    private void animateCharacters(Graphics2D g2) {
-        if (main.getCharacterModel() == 1) {
-            switch (main.getPlayer().currentState) {
-                case idle_right:
-                    main.getPlayer().risoIdleRightAnim.paintIcon(this, g2, main.getPlayer().x, main.getPlayer().y);
-                    break;
-                case move_right:
-                    main.getPlayer().risoMoveRightAnim.paintIcon(this, g2, main.getPlayer().x, main.getPlayer().y);
-                    break;
-                case move_down:
-                    //player.risoMoveDownAnim.paintIcon(this, g2, player.x, player.y);
-                    break;
-                case move_left:
-                    //player.risoMoveLeftAnim.paintIcon(this, g2, player.x, player.y);
-                    break;
-                case move_up:
-                    //player.risoMoveUpAnim.paintIcon(this, g2, player.x, player.y);
-                    break;
-                case hit:
-                    main.getPlayer().risoHitAnim.paintIcon(this, g2, main.getPlayer().x, main.getPlayer().y);
-                    
-                    break;
+    private void drawPlayer(Graphics2D g2) {
+        //The top left corner of the player, in pixels
+        int playerX = (int)(main.getPlayer().xx + main.getPlayer().getPositionXRelativeTo());
+        int playerY = (int)(main.getPlayer().yy + main.getPlayer().getPositionYRelativeTo());
+        //the bottom right corner of the player, in pixels
+        int playerX2 = (int)(main.getPlayer().xx + main.getPlayer().getPositionXRelativeTo() + main.getPlayer().size);
+        int playerY2 = (int)(main.getPlayer().yy + main.getPlayer().getPositionYRelativeTo() + main.getPlayer().size);
+
+        if (main.getPlayer().getAbility() == Player.abilityChoices.riso) {
+            if (Main.frames - main.getLastHit() < 25) {
+                int sprite = (Main.frames - main.getLastHit()) / 5;
+                g2.drawImage(riso_hit, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getRightPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(riso_right, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getLeftPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(riso_left, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getUpPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(riso_up, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getDownPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(riso_down, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else {
+                int sprite = (Main.frames % 20) / 5;
+                g2.drawImage(riso_idle, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
             }
-        }
+        } 
     }
         
     /**

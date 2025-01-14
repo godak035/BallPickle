@@ -9,6 +9,13 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
+            "projectName": "BallPickle-1_4803641e"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
             "projectName": "BallPickle-19_41c03c7"
         },
         {
