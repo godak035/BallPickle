@@ -28,7 +28,7 @@ public class GamePanel extends JPanel {
         gameOver,
         win,
         intramuralChampion,
-        riso_right, riso_left, riso_up, riso_down, riso_idle, riso_hit,
+        riso_right, riso_left, riso_up, riso_down, riso_idle, riso_hit, adonis_right, adonis_left, adonis_up, adonis_down, adonis_idle, adonis_hit, tasha_right, tasha_left, tasha_up, tasha_down, tasha_idle, tasha_hit,
         clock, dash, paddle;
         
     /**
@@ -69,12 +69,28 @@ public class GamePanel extends JPanel {
                     level3 = ImageIO.read(this.getClass().getResource("sprites/game/level3.png"));
                     level4 = ImageIO.read(this.getClass().getResource("sprites/game/level4.png"));
                     level5 = ImageIO.read(this.getClass().getResource("sprites/game/level5.png"));
+
                     riso_right = ImageIO.read(this.getClass().getResource("sprites/players/riso_move_right.png"));
                     riso_left = ImageIO.read(this.getClass().getResource("sprites/players/riso_move_left.png"));
                     riso_up = ImageIO.read(this.getClass().getResource("sprites/players/riso_move_up.png"));
                     riso_down = ImageIO.read(this.getClass().getResource("sprites/players/riso_move_down.png"));
                     riso_hit = ImageIO.read(this.getClass().getResource("sprites/players/riso_hit.png"));
                     riso_idle = ImageIO.read(this.getClass().getResource("sprites/players/riso_idle.png"));
+
+                    adonis_right = ImageIO.read(this.getClass().getResource("sprites/players/adonis_move_right.png"));
+                    adonis_left = ImageIO.read(this.getClass().getResource("sprites/players/adonis_move_left.png"));
+                    adonis_up = ImageIO.read(this.getClass().getResource("sprites/players/adonis_move_up.png"));
+                    adonis_down = ImageIO.read(this.getClass().getResource("sprites/players/adonis_move_down.png"));
+                    adonis_hit = ImageIO.read(this.getClass().getResource("sprites/players/adonis_hit.png"));
+                    adonis_idle = ImageIO.read(this.getClass().getResource("sprites/players/adonis_idle.png"));
+
+                    tasha_right = ImageIO.read(this.getClass().getResource("sprites/players/tasha_move_right.png"));
+                    tasha_left = ImageIO.read(this.getClass().getResource("sprites/players/tasha_move_left.png"));
+                    tasha_up = ImageIO.read(this.getClass().getResource("sprites/players/tasha_move_up.png"));
+                    tasha_down = ImageIO.read(this.getClass().getResource("sprites/players/tasha_move_down.png"));
+                    tasha_hit = ImageIO.read(this.getClass().getResource("sprites/players/tasha_hit.png"));
+                    tasha_idle = ImageIO.read(this.getClass().getResource("sprites/players/tasha_idle.png"));
+
                     clock = ImageIO.read(this.getClass().getResource("sprites/GUI/clock.png"));
                     dash = ImageIO.read(this.getClass().getResource("sprites/GUI/dash.png"));
                     paddle = ImageIO.read(this.getClass().getResource("sprites/GUI/paddle.png"));
@@ -391,7 +407,47 @@ public class GamePanel extends JPanel {
                 int sprite = (Main.frames % 20) / 5;
                 g2.drawImage(riso_idle, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
             }
-        } 
+        } else if (main.getPlayer().getAbility() == Player.abilityChoices.adonis) {
+            if (Main.frames - main.getLastHit() < 25) {
+                int sprite = (Main.frames - main.getLastHit()) / 5;
+                g2.drawImage(adonis_hit, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getRightPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(adonis_right, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getLeftPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(adonis_left, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getUpPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(adonis_up, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getDownPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(adonis_down, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else {
+                int sprite = (Main.frames % 20) / 5;
+                g2.drawImage(adonis_idle, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            }
+        } else if (main.getPlayer().getAbility() == Player.abilityChoices.tasha) {
+            if (Main.frames - main.getLastHit() < 25) {
+                int sprite = (Main.frames - main.getLastHit()) / 5;
+                g2.drawImage(tasha_hit, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getRightPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(tasha_right, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getLeftPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(tasha_left, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getUpPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(tasha_up, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (main.getDownPressedThisTick()) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(tasha_down, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else {
+                int sprite = (Main.frames % 20) / 5;
+                g2.drawImage(tasha_idle, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            }
+        }
     }
         
     /**
