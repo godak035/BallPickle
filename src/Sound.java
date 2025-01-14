@@ -26,7 +26,7 @@
          soundURL[1] = getClass().getResource("Sound/levelOdd.wav");
          soundURL[2] = getClass().getResource("Sound/levelEven.wav");
          soundURL[3] = getClass().getResource("Sound/lastLevel.wav");
-         soundURL[4] = getClass().getResource("Sound/something.wav");
+         soundURL[4] = getClass().getResource("Sound/soundEffect.wav");
      }
      
      /**

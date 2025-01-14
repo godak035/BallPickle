@@ -477,8 +477,10 @@ public class Main implements Runnable {
                                     Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
                                     Rectangle ballRect = new Rectangle((int)balls.get(i).xx, (int)balls.get(i).yy, balls.get(i).size, balls.get(i).size);
                                     if (playerRect.intersects(ballRect)) {
+                                        
                                         if (player.getAbilityON() && player.getAbility() == Player.abilityChoices.adonis) {
                                             ballShadows.get(i).velocity = this.BALL_SPEED * 2;
+                                            
                                         } else {
                                             if (!timeSlowed) ballShadows.get(i).velocity = this.BALL_SPEED;
                                             else ballShadows.get(i).velocity = this.BALL_SPEED / 2;
@@ -491,6 +493,8 @@ public class Main implements Runnable {
                                         
                                         serve = false;
                                         ballShadows.get(i).setPlayerHitLast(true);
+
+                                        playSE(4);
                                     }
                                 }
                             }
