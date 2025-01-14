@@ -28,7 +28,10 @@ public class GamePanel extends JPanel {
         gameOver,
         win,
         intramuralChampion,
-        riso_right, riso_left, riso_up, riso_down, riso_idle, riso_hit, adonis_right, adonis_left, adonis_up, adonis_down, adonis_idle, adonis_hit, tasha_right, tasha_left, tasha_up, tasha_down, tasha_idle, tasha_hit,
+        riso_right, riso_left, riso_up, riso_down, riso_idle, riso_hit, 
+        adonis_right, adonis_left, adonis_up, adonis_down, adonis_idle, adonis_hit, 
+        tasha_right, tasha_left, tasha_up, tasha_down, tasha_idle, tasha_hit,
+        ball_anim,
         clock, dash, paddle;
         
     /**
@@ -90,6 +93,8 @@ public class GamePanel extends JPanel {
                     tasha_down = ImageIO.read(this.getClass().getResource("sprites/players/tasha_move_down.png"));
                     tasha_hit = ImageIO.read(this.getClass().getResource("sprites/players/tasha_hit.png"));
                     tasha_idle = ImageIO.read(this.getClass().getResource("sprites/players/tasha_idle.png"));
+
+                    ball_anim = ImageIO.read(this.getClass().getResource("sprites/players/ball_sprite_sheet.png"));
 
                     clock = ImageIO.read(this.getClass().getResource("sprites/GUI/clock.png"));
                     dash = ImageIO.read(this.getClass().getResource("sprites/GUI/dash.png"));
@@ -373,6 +378,13 @@ public class GamePanel extends JPanel {
         } else {
             g2.fillOval(x - (int)radius + 1, y - (int)radius + 1, (int)(radius * 2) - 2, (int)(radius * 2) - 2);
         }
+    }
+    /**
+    * Draws the ball, with its animations.
+    * @param g2
+    */
+    private void drawBall(Graphics2D g2) {
+
     }
 
     /**
