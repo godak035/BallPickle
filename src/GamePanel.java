@@ -18,8 +18,6 @@ public class GamePanel extends JPanel {
 
     private Main main;
     private String type;
-    private ImageIcon risoHitAnim, risoIdleLeftAnim, risoIdleRightAnim;
-    private Timer animTimer;
 
     BufferedImage
         logo,
@@ -30,7 +28,8 @@ public class GamePanel extends JPanel {
         gameOver,
         win,
         intramuralChampion,
-        riso_right, riso_left, riso_up, riso_down, riso_idle, riso_hit;
+        riso_right, riso_left, riso_up, riso_down, riso_idle, riso_hit,
+        clock, dash, paddle;
         
     /**
      * Constructor
@@ -76,6 +75,9 @@ public class GamePanel extends JPanel {
                     riso_down = ImageIO.read(this.getClass().getResource("sprites/players/riso_move_down.png"));
                     riso_hit = ImageIO.read(this.getClass().getResource("sprites/players/riso_hit.png"));
                     riso_idle = ImageIO.read(this.getClass().getResource("sprites/players/riso_idle.png"));
+                    clock = ImageIO.read(this.getClass().getResource("sprites/GUI/clock.png"));
+                    dash = ImageIO.read(this.getClass().getResource("sprites/GUI/dash.png"));
+                    paddle = ImageIO.read(this.getClass().getResource("sprites/GUI/paddle.png"));
                 } catch (Exception e) {
                     System.out.println("Failed to load image in game");
                 }
@@ -146,8 +148,8 @@ public class GamePanel extends JPanel {
                 switch (Main.currentLevel) {
                     case level1 -> {
                         g2.setColor(new Color(100, 100, 100));
-                        g2.fillRect(0, 0, (int)this.WINW, (int)this.WINH);
-                        g2.drawImage(court, 0, 0, (int)this.WINW, (int)this.WINH, null);
+                        g2.fillRect(0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH);
+                        g2.drawImage(court, 0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH, null);
                     }
 
                     case level2 -> {
@@ -156,7 +158,7 @@ public class GamePanel extends JPanel {
                                 g2.drawImage(level2, i, j, 64, 64, null);
                             }
                         }
-                        g2.drawImage(court, 0, 0, (int)this.WINW, (int)this.WINH, null);
+                        g2.drawImage(court, 0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH, null);
 
                     }
 
@@ -166,7 +168,7 @@ public class GamePanel extends JPanel {
                                 g2.drawImage(level3, i, j, 64, 64, null);
                             }
                         }
-                        g2.drawImage(court, 0, 0, (int)this.WINW, (int)this.WINH, null);
+                        g2.drawImage(court, 0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH, null);
                     }
 
                     case level4 -> {
@@ -175,7 +177,7 @@ public class GamePanel extends JPanel {
                                 g2.drawImage(level4, i, j, 64, 64, null);
                             }
                         }
-                        g2.drawImage(court, 0, 0, (int)this.WINW, (int)this.WINH, null);
+                        g2.drawImage(court, 0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH, null);
                     }
 
                     case level5 -> {
@@ -184,14 +186,36 @@ public class GamePanel extends JPanel {
                                 g2.drawImage(level5, i, j, 64, 64, null);
                             }
                         }
-                        g2.drawImage(court, 0, 0, (int)this.WINW, (int)this.WINH, null);
+                        g2.drawImage(court, 0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH, null);
                     }
 
                     default -> {}
                 }
-                g2.drawImage(court, 0, 0, (int)(int)WINW, (int)(int)WINH, null);
-                drawCooldown(g2, 70, 500, 50, Color.BLUE);
+                g2.drawImage(court, 0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH, null);
+                drawCooldown(g2, (int)(GamePanel.WINH * 0.15) + 4, (int)(GamePanel.WINH * 0.85) + 4, (int)(GamePanel.WINH * 0.1), Color.BLACK);
+                drawCooldown(g2, (int)(GamePanel.WINH * 0.15), (int)(GamePanel.WINH * 0.85), (int)(GamePanel.WINH * 0.1), new Color(255,69,169));
                 
+                switch (main.getPlayer().getAbility()) {
+                    case riso -> g2.drawImage(dash, (int)(GamePanel.WINH * 0.06), (int)(GamePanel.WINH * 0.76), (int)(GamePanel.WINH * 0.18), (int)(GamePanel.WINH * 0.18), null);
+                    case adonis -> g2.drawImage(paddle, (int)(GamePanel.WINH * 0.05), (int)(GamePanel.WINH * 0.76), (int)(GamePanel.WINH * 0.19), (int)(GamePanel.WINH * 0.16), null);
+                    case tasha -> g2.drawImage(clock, (int)(GamePanel.WINH * 0.02), (int)(GamePanel.WINH * 0.715), (int)(GamePanel.WINH * 0.26), (int)(GamePanel.WINH * 0.26), null);
+                }
+
+                int cooldownLeft = (int)System.currentTimeMillis() - (int)main.getPlayer().getLastAbilityTime();
+                int totalCooldown = switch (main.getPlayer().getAbility()) {
+                    case riso -> main.getPlayer().getDashCooldown();
+                    case adonis -> main.getPlayer().getStrongHitCooldown();
+                    case tasha -> main.getPlayer().getTimeSlowCooldown();
+                    default -> 0;
+                };
+                if (cooldownLeft > totalCooldown) {
+                    g2.setFont(new Font("Calibri", Font.PLAIN, (int)(GamePanel.WINW*0.03)));
+                    g2.setColor(Color.BLACK);
+                    g2.drawString("Ability ready!", (int)(GamePanel.WINH * 0.023) + 4, (int)(GamePanel.WINH * 0.72) + 4);
+                    g2.setColor(new Color(255,69,169));
+                    g2.drawString("Ability ready!", (int)(GamePanel.WINH * 0.023), (int)(GamePanel.WINH * 0.72));
+                }
+
                 for (Enemy e: main.getEnemies()) {
                     if (e.getActive()) {
                         drawEntity(g2, e, Color.BLACK);
@@ -211,13 +235,13 @@ public class GamePanel extends JPanel {
                 if (main.getTimeSlowed()) drawTimeSlowVignette(g2);
 
                 //drawDebugStuff(g2);
-                g2.setFont(new Font("Calibri", Font.PLAIN, (int)(this.WINW*0.035)));
+                g2.setFont(new Font("Calibri", Font.PLAIN, (int)(GamePanel.WINW*0.035)));
                 g2.setColor(Color.BLACK);
-                g2.drawString("Enemy: " + main.enemyScore,(int)(this.WINW*0.0653), (int)(this.WINH*0.153));
-                g2.drawString("Player: " + main.playerScore,(int)(this.WINW*0.802), (int)(this.WINH*0.902));
+                g2.drawString("Enemy: " + Main.enemyScore,(int)(GamePanel.WINW*0.065) + 4, (int)(GamePanel.WINH*0.15) + 4);
+                g2.drawString("Player: " + Main.playerScore,(int)(GamePanel.WINW*0.80) + 4, (int)(GamePanel.WINH*0.90) + 4);
                 g2.setColor(new Color(255,69,169));
-                g2.drawString("Enemy: " + main.enemyScore,(int)(this.WINW*0.065), (int)(this.WINH*0.15));
-                g2.drawString("Player: " + main.playerScore,(int)(this.WINW*0.80), (int)(this.WINH*0.90));
+                g2.drawString("Enemy: " + Main.enemyScore,(int)(GamePanel.WINW*0.065), (int)(GamePanel.WINH*0.15));
+                g2.drawString("Player: " + Main.playerScore,(int)(GamePanel.WINW*0.80), (int)(GamePanel.WINH*0.90));
             }
 
             case "help" -> g2.drawImage(helpBg, 0, 0, (int)WINW, (int)WINH, null);
@@ -332,10 +356,13 @@ public class GamePanel extends JPanel {
             g2.fillPolygon(cooldown);
         } else {
             g2.fillOval(x - (int)radius + 1, y - (int)radius + 1, (int)(radius * 2) - 2, (int)(radius * 2) - 2);
-
         }
     }
 
+    /**
+     * Draws the player
+     * @param g2  The Graphics2D object to be manipulated
+     */
     private void drawPlayer(Graphics2D g2) {
         //The top left corner of the player, in pixels
         int playerX = (int)(main.getPlayer().xx + main.getPlayer().getPositionXRelativeTo());
@@ -381,4 +408,3 @@ public class GamePanel extends JPanel {
         }
     }
 }
-   

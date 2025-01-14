@@ -14,9 +14,9 @@ public class Player extends Entity {
     private long lastAbilityTime; 
 
     private final int 
-        dashCooldown = 3000,  //Time duration in milliseconds of dash ability
-        timeSlowCooldown = 3000,  //Time duration in milliseconds of time slowdown ability
-        strongHitCooldown = 3000,  //Time duration in milliseconds of strong hit ability
+        dashCooldown = 30000,  //Time duration in milliseconds of dash ability
+        timeSlowCooldown = 30000,  //Time duration in milliseconds of time slowdown ability
+        strongHitCooldown = 30000,  //Time duration in milliseconds of strong hit ability
         positionXRelativeTo = (int)(280.0 / 1024.0 * GamePanel.WINW),
         positionYRelativeTo = (int)(430.0 / 768.0 * GamePanel.WINH);
 
@@ -54,6 +54,11 @@ public class Player extends Entity {
      * Resets the cooldown of the player's ability
      */
     public void resetCooldown() { this.lastAbilityTime = 0; }
+
+    /**
+     * Sets the cooldown of the player's ability to the max, as if it was just used
+     */
+    public void setFullCooldown() { this.lastAbilityTime = System.currentTimeMillis(); }
     
     /**
      * Uses the player's ability

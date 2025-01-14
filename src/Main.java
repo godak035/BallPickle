@@ -489,11 +489,11 @@ public class Main implements Runnable {
      * Resets the game
      */
     public void resetGame() {
-        player.xx = 282;
-        player.yy = 125;
+        player.xx = GamePanel.WINW * 0.2;
+        player.yy = GamePanel.WINH * 0.1;
         player.setAbilityON(false);
         player.setAbilityTime(0);
-        player.resetCooldown();
+        player.setFullCooldown();
         player.updatePosition();
 
         //resets the position of all enemies
