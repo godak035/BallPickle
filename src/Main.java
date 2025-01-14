@@ -11,6 +11,22 @@ import java.util.*;
 import javax.swing.Timer;
 
 public class Main implements Runnable {
+
+    Sound sound = new Sound();
+    public void playMusic(int i) {
+        sound.setFile(i);
+        sound.play();
+        sound.loop();  
+     }
+
+    public void stopMusic(){
+
+    }
+
+    public void playSE(int i){
+        sound.setFile(i);
+        sound.play();
+    }
     
     private JFrame frame;
     //Different panels that are drawn on for the title screen, game screen, help screen and character select screen
@@ -48,6 +64,9 @@ public class Main implements Runnable {
     private final int 
         playerXMax = (int)(450.0 / 1024.0 * GamePanel.WINW),
         playerYMax = (int)(250.0 / 768.0 * GamePanel.WINH);
+
+    //Soething with sound
+
     
     //Entity speeds and sizes
     public final static double 
@@ -171,6 +190,7 @@ public class Main implements Runnable {
      * Constructor: where the variables are initialized. 
      */
     Main() {
+        playMusic(0);
         currentHovered = hovered.titleStart;
         currentLevel = level.level1;
         timeSlowed = false;
@@ -178,6 +198,7 @@ public class Main implements Runnable {
 
         playerScore = 0;
         enemyScore = -1;
+        playMusic(0);
 
         player = new Player(282, 125, PLAYER_SPEED, (int)PLAYER_SIZE * 2);
 
@@ -281,6 +302,8 @@ public class Main implements Runnable {
                     currentHovered = hovered.titleHelp;
                 }
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
+                    stopMusic();
+                    playMusic(1);
                     enterPressedThisTick = true;
                     frame.remove(title);
                     frame.add(characterSelect);
@@ -637,10 +660,26 @@ public class Main implements Runnable {
      * Moves to the next level
      */
     public void next() {
-        if (currentLevel==level.level1) currentLevel=level.level2;
-        else if (currentLevel==level.level2) currentLevel=level.level3;
-        else if (currentLevel==level.level3) currentLevel=level.level4;
-        else if (currentLevel==level.level4) currentLevel=level.level5;
+        if (currentLevel==level.level1) {
+            currentLevel=level.level2;
+            stopMusic();
+            playMusic(2);
+        }
+        else if (currentLevel==level.level2) {
+            currentLevel=level.level3;
+            stopMusic();
+            playMusic(1);
+        }
+        else if (currentLevel==level.level3) {
+            currentLevel=level.level4;
+            stopMusic();
+            playMusic(2);
+        }
+        else if (currentLevel==level.level4) {
+            currentLevel=level.level5;
+            stopMusic();
+            playMusic(1);
+        }
         else if (currentLevel==level.level5) {
             frame.remove(inGame);
             frame.add(intramuralChampion);
