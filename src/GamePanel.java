@@ -252,6 +252,7 @@ public class GamePanel extends JPanel {
                         drawEntity(g2, b, Color.BLUE);
                     }
                 }
+                drawBall(g2);
                 drawPlayer(g2);
                 if (main.getTimeSlowed()) drawTimeSlowVignette(g2);
 
@@ -384,7 +385,15 @@ public class GamePanel extends JPanel {
     * @param g2
     */
     private void drawBall(Graphics2D g2) {
+        int ballX = (int)(main.getBall().xx);
+        int ballY = (int)(main.getBall().yy);
+        int ballX2 = (int)(main.getBall().xx + main.getBall().size);
+        int ballY2 = (int)(main.getBall().yy + main.getBall().size);
 
+        if (main.getBallShadow().getActive()) {
+            int sprite = (Main.frames % 25) / 5;
+            g2.drawImage(ball_anim, ballX, ballY, ballX2, ballY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+        }
     }
 
     /**

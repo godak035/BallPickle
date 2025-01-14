@@ -749,6 +749,8 @@ public class Main implements Runnable {
     public ArrayList<Ball> getBalls() { return this.balls; }
     public ArrayList<BallShadow> getBallShadows() { return this.ballShadows; }
     public boolean getTimeSlowed() { return this.timeSlowed; }
+    public Ball getBall() { return this.ball; }
+    public BallShadow getBallShadow() { return this.ballShadow; }
     public Player getPlayer() { return this.player; }
     public int getLastHit() { return this.lastHit; }
     public KeyHandler getKeyH() { return this.KeyH; }
