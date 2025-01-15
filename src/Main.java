@@ -19,7 +19,6 @@ public class Main implements Runnable {
      }
 
     public void stopMusic(){
-
         sound.stop();
     }
 
@@ -430,6 +429,7 @@ public class Main implements Runnable {
             case nextLevel -> {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
+                    player.setFullCooldown();
                     frame.remove(win);
                     frame.add(inGame);
                     frame.pack();
@@ -535,7 +535,6 @@ public class Main implements Runnable {
         player.yy = GamePanel.WINH * 0.1;
         player.setAbilityON(false);
         player.setAbilityTime(0);
-        player.setFullCooldown();
         player.updatePosition();
 
         //resets the position of all enemies
