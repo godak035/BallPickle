@@ -51,11 +51,17 @@ public class Main implements Runnable {
     private ArrayList<BallShadow> ballShadows;
     private Ball ball, ballWalter;
     private ArrayList<Ball> balls;
-    private Enemy averageJoe, strongHercules, gradyTwin1, gradyTwin2, twoBallWalter, teleportSicilia;
+    Enemy averageJoe;
+    private Enemy strongHercules;
+    private Enemy gradyTwin1;
+    private Enemy gradyTwin2;
+    private Enemy twoBallWalter;
+    private Enemy teleportSicilia;
     private ArrayList<Enemy> enemies;
 
     //score
     static int playerScore, enemyScore;
+    static int checkLevel;
 
     //miscellaneous other booleans
     private boolean lookRightLast, timeSlowed, serve=true;
@@ -71,7 +77,7 @@ public class Main implements Runnable {
     //Entity speeds and sizes
     public final static double 
         BALL_SPEED = 4.0 / 768.0 * GamePanel.WINH,
-        ENEMY_SPEED = 1.5 / 768.0 * GamePanel.WINH,
+        ENEMY_SPEED = 1 / 768.0 * GamePanel.WINH,
         PLAYER_SPEED = 4.0 / 768.0 * GamePanel.WINH,
         PLAYER_SIZE = 35.0 / 768.0 * GamePanel.WINH;
 
@@ -192,7 +198,7 @@ public class Main implements Runnable {
     Main() {
         playMusic(0);
         currentHovered = hovered.titleStart;
-        currentLevel = level.level2;
+        currentLevel = level.level1;
         timeSlowed = false;
         lastHit = 0;
 
@@ -560,14 +566,27 @@ public class Main implements Runnable {
         twoBallWalter.setActive(false);
         teleportSicilia.setActive(false);
         switch (Main.currentLevel) {   
-            case level1 -> averageJoe.setActive(true); 
-            case level2 -> strongHercules.setActive(true);
+            case level1 -> {
+                averageJoe.setActive(true); 
+                checkLevel = 1;
+            }
+            case level2 -> {
+                strongHercules.setActive(true);
+                checkLevel = 2;
+            }
             case level3 -> {
                 gradyTwin1.setActive(true);
                 gradyTwin2.setActive(true);
+                checkLevel = 3;
             }
-            case level4 -> twoBallWalter.setActive(true);
-            case level5 -> teleportSicilia.setActive(true);
+            case level4 -> {
+                twoBallWalter.setActive(true);
+                checkLevel = 4;
+            }
+            case level5 -> {
+                teleportSicilia.setActive(true); 
+                checkLevel = 5;
+            }
             default -> {}
         }
     }

@@ -10,6 +10,7 @@ import java.awt.image.*;
 import javax.imageio.*;
 import javax.swing.*;
 
+
 public class GamePanel extends JPanel {
 
     final static double 
@@ -32,6 +33,7 @@ public class GamePanel extends JPanel {
         adonis_right, adonis_left, adonis_up, adonis_down, adonis_idle, adonis_hit, 
         tasha_right, tasha_left, tasha_up, tasha_down, tasha_idle, tasha_hit,
         hercules_right, hercules_left, hercules_up, hercules_down, hercules_idle, hercules_hit_right, hercules_hit_left,
+        joe_right, joe_left, joe_up, joe_down, joe_idle, joe_hit_right, joe_hit_left,
         ball_anim,
         clock, dash, paddle;
         
@@ -102,6 +104,14 @@ public class GamePanel extends JPanel {
                     hercules_hit_left = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_hit_left.png"));
                     hercules_hit_right = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_hit_right.png"));
                     hercules_idle = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_idle.png"));
+
+                    joe_right = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_move_right.png"));
+                    joe_left = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_move_left.png"));
+                    joe_up = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_move_up.png"));
+                    joe_down = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_move_down.png"));
+                    joe_hit_left = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_hit_left.png"));
+                    joe_hit_right = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_hit_right.png"));
+                    joe_idle = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_idle.png"));
 
                     ball_anim = ImageIO.read(this.getClass().getResource("sprites/players/ball_sprite_sheet.png"));
 
@@ -504,11 +514,45 @@ public class GamePanel extends JPanel {
         //next, check where the enemy is in relation to it's destination to see where it's moving
         //need to subtract (e.size / 2) drom the destination for both the x and y since the destination is to the centre of the enemy
         //for idle you can just check if e.xx == e.getDestinationX() && e.yy == e.getDestinationY() since i made the enemy snap to its destination if it gets close
-        if (e.xx < e.getDestinationX() - (e.size / 2)) {
-            int sprite = (Main.frames % 15) / 5;
-            g2.drawImage(hercules_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-        }
-    }
+        
+
+        if (Main.checkLevel == 1) {
+            if (e.xx < e.getDestinationX() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(joe_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.xx > e.getDestinationX() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(joe_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.yy < e.getDestinationY() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(joe_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.yy > e.getDestinationY() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(joe_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else {
+                int sprite = (Main.frames % 20) / 5;
+                g2.drawImage(joe_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            }
+        } else if (Main.checkLevel == 2) {
+            if (e.xx < e.getDestinationX() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(hercules_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.xx > e.getDestinationX() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(hercules_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.yy < e.getDestinationY() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(hercules_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.yy > e.getDestinationY() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(hercules_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else {
+                int sprite = (Main.frames % 20) / 5;
+                g2.drawImage(hercules_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            }
+        }    
+     }
+        
         
     /**
      * draws the destination and departure point of the ball (for debugging)
