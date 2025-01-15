@@ -8,7 +8,6 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.*;
-import javax.swing.Timer;
 
 public class Main implements Runnable {
 
@@ -193,7 +192,7 @@ public class Main implements Runnable {
     Main() {
         playMusic(0);
         currentHovered = hovered.titleStart;
-        currentLevel = level.level1;
+        currentLevel = level.level2;
         timeSlowed = false;
         lastHit = 0;
 
@@ -345,6 +344,7 @@ public class Main implements Runnable {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     player.changeAbility(Player.abilityChoices.riso);
+                    player.setFullCooldown();
                     frame.remove(characterSelect);
                     frame.add(inGame);
                     currentHovered = hovered.inGame;
@@ -365,6 +365,7 @@ public class Main implements Runnable {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     player.changeAbility(Player.abilityChoices.adonis);
+                    player.setFullCooldown();
                     frame.remove(characterSelect);
                     frame.add(inGame);
                     currentHovered = hovered.inGame;
@@ -381,6 +382,7 @@ public class Main implements Runnable {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     player.changeAbility(Player.abilityChoices.tasha);
+                    player.setFullCooldown();
                     frame.remove(characterSelect);
                     frame.add(inGame);
                     currentHovered = hovered.inGame;

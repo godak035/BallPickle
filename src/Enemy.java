@@ -67,6 +67,8 @@ public class Enemy extends Entity {
     //getter methods
     public boolean getActive() { return this.isActive; }
     public ArrayList<BallShadow> getBallShadows() { return this.ballShadows; }
+    public double getDestinationX() { return this.destinationX; }
+    public double getDestinationY() { return this.destinationY; }
 
     /**
      * Sets if the enemy is currently playing or not

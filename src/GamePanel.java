@@ -31,6 +31,7 @@ public class GamePanel extends JPanel {
         riso_right, riso_left, riso_up, riso_down, riso_idle, riso_hit, 
         adonis_right, adonis_left, adonis_up, adonis_down, adonis_idle, adonis_hit, 
         tasha_right, tasha_left, tasha_up, tasha_down, tasha_idle, tasha_hit,
+        hercules_right, hercules_left, hercules_up, hercules_down, hercules_idle, hercules_hit_right, hercules_hit_left,
         ball_anim,
         clock, dash, paddle;
         
@@ -93,6 +94,14 @@ public class GamePanel extends JPanel {
                     tasha_down = ImageIO.read(this.getClass().getResource("sprites/players/tasha_move_down.png"));
                     tasha_hit = ImageIO.read(this.getClass().getResource("sprites/players/tasha_hit.png"));
                     tasha_idle = ImageIO.read(this.getClass().getResource("sprites/players/tasha_idle.png"));
+
+                    hercules_right = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_move_right.png"));
+                    hercules_left = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_move_left.png"));
+                    hercules_up = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_move_up.png"));
+                    hercules_down = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_move_down.png"));
+                    hercules_hit_left = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_hit_left.png"));
+                    hercules_hit_right = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_hit_right.png"));
+                    hercules_idle = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_idle.png"));
 
                     ball_anim = ImageIO.read(this.getClass().getResource("sprites/players/ball_sprite_sheet.png"));
 
@@ -242,6 +251,11 @@ public class GamePanel extends JPanel {
                         drawEntity(g2, e, Color.BLACK);
                     }
                 }
+                for (Enemy e: main.getEnemies()) {
+                    if (e.getActive()) {
+                        drawEnemy(g2, e);
+                    }
+                }
                 for (BallShadow b: main.getBallShadows()) {
                     if (b.getActive()) {
                         drawEntity(g2, b, Color.BLACK);
@@ -382,7 +396,7 @@ public class GamePanel extends JPanel {
     }
     /**
     * Draws the ball, with its animations.
-    * @param g2
+    * @param g2  The Graphics2D object to be manipulated
     */
     private void drawBall(Graphics2D g2) {
         int ballX = (int)(main.getBall().xx);
@@ -468,6 +482,31 @@ public class GamePanel extends JPanel {
                 int sprite = (Main.frames % 20) / 5;
                 g2.drawImage(tasha_idle, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
             }
+        }
+    }
+
+    /**
+     * Draws the enemy
+     * @param g2  The Graphics2D object to be manipilated
+     * @param e   Tne enemy to be drawn
+     */
+    private void drawEnemy(Graphics2D g2, Enemy e) {
+        //the top left corner of the enemy, in pixels
+        int enemyX = (int)e.xx;
+        int enemyY = (int)e.yy;
+        //the bottom right corner of the enemy, in pixels
+        int enemyX2 = (int)e.xx + e.size;
+        int enemyY2 = (int)e.yy + e.size;
+
+        //first, check hit stuff
+        //im not gonna do it in this example, but lmk if you struggle with it, i can always help out
+
+        //next, check where the enemy is in relation to it's destination to see where it's moving
+        //need to subtract (e.size / 2) drom the destination for both the x and y since the destination is to the centre of the enemy
+        //for idle you can just check if e.xx == e.getDestinationX() && e.yy == e.getDestinationY() since i made the enemy snap to its destination if it gets close
+        if (e.xx < e.getDestinationX() - (e.size / 2)) {
+            int sprite = (Main.frames % 15) / 5;
+            g2.drawImage(hercules_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
         }
     }
         
