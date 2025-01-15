@@ -13,18 +13,18 @@ public class Main implements Runnable {
 
     static Sound sound = new Sound();
     public void playMusic(int i) {
-        sound.setFile(i);
+        sound.setFileM(i);
         sound.play();
         sound.loop();  
-     }
+    }
 
     public void stopMusic(){
         sound.stop();
     }
 
     public static void playSE(int i){
-        sound.setFile(i);
-        sound.play();
+        sound.setFileS(i);
+        sound.playSoundEffect();
     }
     
     private JFrame frame;
@@ -694,7 +694,6 @@ public class Main implements Runnable {
         if (currentLevel==level.level1) {
             stopMusic();
             currentLevel=level.level2;
-           
             playMusic(2);
         }
         else if (currentLevel==level.level2) {
@@ -705,13 +704,11 @@ public class Main implements Runnable {
         else if (currentLevel==level.level3) {
             stopMusic();
             currentLevel=level.level4;
-           
             playMusic(2);
         }
         else if (currentLevel==level.level4) {
             stopMusic();
             currentLevel=level.level5;
-            
             playMusic(3);
         }
         else if (currentLevel==level.level5) {
