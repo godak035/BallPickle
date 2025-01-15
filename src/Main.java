@@ -6,8 +6,8 @@
  */
 
 import java.awt.*;
-import javax.swing.*;
 import java.util.*;
+import javax.swing.*;
 
 public class Main implements Runnable {
 
@@ -16,7 +16,7 @@ public class Main implements Runnable {
         sound.setFile(i);
         sound.play();
         sound.loop();  
-     }
+    }
 
     public void stopMusic(){
 
@@ -30,10 +30,10 @@ public class Main implements Runnable {
     
     private JFrame frame;
     //Different panels that are drawn on for the title screen, game screen, help screen and character select screen
-    private GamePanel title, inGame, help, characterSelect, win, gameOver, intramuralChampion;
+    private GamePanel title, inGame, help, characterSelect, win, gameOver, intramuralChampion, extras, expandedLoreAndFacts, pastChampions;
 
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
-    public static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, inGame, helpExit,gameOverExit,victoryExit , nextLevel };
+    public static enum hovered {charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, inGame, helpExit, gameOverExit, victoryExit, nextLevel, titleExtras, extrasMenuExpandedLoreAndFacts, extrasMenuExit, extrasMenuPastChampions, extrasMenuPastChampionsProceed, extrasMenuPastChampionsExit, expandedLoreAndFacts};
     public static hovered currentHovered;
     public static enum level {level1, level2, level3, level4, level5};
     public static level currentLevel;
@@ -51,17 +51,11 @@ public class Main implements Runnable {
     private ArrayList<BallShadow> ballShadows;
     private Ball ball, ballWalter;
     private ArrayList<Ball> balls;
-    Enemy averageJoe;
-    private Enemy strongHercules;
-    private Enemy gradyTwin1;
-    private Enemy gradyTwin2;
-    private Enemy twoBallWalter;
-    private Enemy teleportSicilia;
+    private Enemy averageJoe, strongHercules, gradyTwin1, gradyTwin2, twoBallWalter, teleportSicilia, mikhail, aila, v1, campbell, bob;
     private ArrayList<Enemy> enemies;
 
     //score
     static int playerScore, enemyScore;
-    static int checkLevel;
 
     //miscellaneous other booleans
     private boolean lookRightLast, timeSlowed, serve=true;
@@ -77,7 +71,8 @@ public class Main implements Runnable {
     //Entity speeds and sizes
     public final static double 
         BALL_SPEED = 4.0 / 768.0 * GamePanel.WINH,
-        ENEMY_SPEED = 1 / 768.0 * GamePanel.WINH,
+        ENEMY_SPEED = 1.5 / 768.0 * GamePanel.WINH,
+        CAMPBELL_SPEED = GamePanel.WINH,
         PLAYER_SPEED = 4.0 / 768.0 * GamePanel.WINH,
         PLAYER_SIZE = 35.0 / 768.0 * GamePanel.WINH;
 
@@ -118,7 +113,7 @@ public class Main implements Runnable {
 
             // Optional: Sleep to prevent CPU overuse
             try {
-               long sleepTime = (lastTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
+            long sleepTime = (lastTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
                 if (sleepTime > 0) {
                     Thread.sleep(sleepTime);
                 }
@@ -177,6 +172,9 @@ public class Main implements Runnable {
             help.repaint();
             characterSelect.repaint();
             inGame.repaint();
+            extras.repaint();
+            expandedLoreAndFacts.repaint();
+            pastChampions.repaint();
         });
     }
 
@@ -229,12 +227,20 @@ public class Main implements Runnable {
         balls.add(ball);
         balls.add(ballWalter);
 
+        // normal enemies
         averageJoe = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.AverageJoe);
         strongHercules = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.StrongHercules);
         gradyTwin1 = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.GradyTwin1);
         gradyTwin2 = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.GradyTwin2);
         twoBallWalter = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.TwoBallWalter);
         teleportSicilia = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.TeleportSicilia);
+        
+        // extra/joke enemies
+        //mikhail = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.StrongHercules);
+        //aila = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.StrongHercules);
+        //v1 = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.StrongHercules);
+        //bob = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.GradyTwin1);
+        //campbell = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.GradyTwin1);
 
         averageJoe.setActive(true);
         strongHercules.setActive(false);
@@ -250,6 +256,11 @@ public class Main implements Runnable {
         enemies.add(gradyTwin2);
         enemies.add(twoBallWalter);
         enemies.add(teleportSicilia);
+        //enemies.add(mikhail);
+        //enemies.add(aila);
+        //enemies.add(v1);
+        //enemies.add(bob);
+        //enemies.add(campbell);
 
         upPressedThisTick = false;
         leftPressedThisTick = false;
@@ -286,6 +297,15 @@ public class Main implements Runnable {
 
         intramuralChampion = new GamePanel("Intramural Champion");
         intramuralChampion.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
+
+        extras = new GamePanel("extras");
+        extras.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
+
+        expandedLoreAndFacts = new GamePanel("expandedLoreAndFacts");
+        expandedLoreAndFacts.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
+
+        pastChampions = new GamePanel("pastChampions");
+        pastChampions.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
         
         updateValues();
         
@@ -302,13 +322,44 @@ public class Main implements Runnable {
      */
     public void getInputs() {
         switch (currentHovered) {
+            
+            case titleExtras -> {
+                System.out.println("extras");
+                if (KeyH.getDownPressed() && !downPressedThisTick) {
+                    downPressedThisTick = true;
+                    currentHovered = hovered.titleStart;
+                }
+                if (KeyH.getUpPressed() && !upPressedThisTick) {
+                    upPressedThisTick = true;
+                    currentHovered = hovered.titleExit;
+                }
+                if (KeyH.getEnterPressed() && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    System.out.println("about to remove title frame");
+                    frame.remove(title);
+                    System.out.println("removed title frame");
+                    frame.add(extras);
+                    System.out.println("added extras");
+                    currentHovered = hovered.extrasMenuExpandedLoreAndFacts;
+                    System.out.println("hovering on expanded lore and facts");
+                    frame.revalidate();
+                    System.out.println("revalidated");
+                }
+            }
+            
             case titleStart -> {
                 if (KeyH.getDownPressed() && !downPressedThisTick) {
                     downPressedThisTick = true;
                     currentHovered = hovered.titleHelp;
                 }
+
+                if (KeyH.getUpPressed() && !upPressedThisTick) {
+                    upPressedThisTick = true;
+                    currentHovered = hovered.titleExtras;
+                }
+
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
-  
+
                     enterPressedThisTick = true;
                     frame.remove(title);
                     frame.add(characterSelect);
@@ -327,9 +378,13 @@ public class Main implements Runnable {
                 }
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
+                    System.out.println("about to remove");
                     frame.remove(title);
+                    System.out.println("removed");
                     frame.add(help);
+                    System.out.println("added help");
                     currentHovered = hovered.helpExit;
+                    System.out.println("hovering help exit");
                     frame.revalidate();
                 }
             }
@@ -338,10 +393,94 @@ public class Main implements Runnable {
                     upPressedThisTick = true;
                     currentHovered = hovered.titleHelp;
                 }
+                if (KeyH.getDownPressed() && !downPressedThisTick) {
+                    downPressedThisTick = true;
+                    currentHovered = hovered.titleExtras;
+                }
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     System.exit(0);
                 }
             }
+
+            case extrasMenuExpandedLoreAndFacts -> {
+                System.out.println("extrasMenuExpandedLoreAndFacts");
+                if (KeyH.getUpPressed() && !rightPressedThisTick) {
+                    frame.remove(title);
+                    frame.add(extras);
+                    frame.revalidate();
+                    upPressedThisTick = true;
+                    currentHovered = hovered.extrasMenuExit;
+                }
+                if (KeyH.getDownPressed() && !enterPressedThisTick) {
+                    frame.remove(title);
+                    frame.add(extras);
+                    frame.revalidate();
+                    downPressedThisTick = true;
+                    currentHovered = hovered.extrasMenuPastChampions;
+                }
+                if (KeyH.getEnterPressed() && !enterPressedThisTick) {
+                    frame.remove(title);
+                    frame.add(extras);
+                    frame.revalidate();
+                    enterPressedThisTick = true;
+                    frame.remove(extras);
+                    frame.add(expandedLoreAndFacts);
+                    currentHovered = hovered.expandedLoreAndFacts;
+                    frame.revalidate();
+                }
+            }
+
+            case extrasMenuPastChampions -> {      
+                System.out.println("extrasMenuPastChampions");
+                if (KeyH.getUpPressed() && !rightPressedThisTick) {
+                    frame.remove(title);
+                    frame.add(extras);
+                    frame.revalidate();
+                    upPressedThisTick = true;
+                    currentHovered = hovered.expandedLoreAndFacts;
+                }
+                if (KeyH.getDownPressed() && !enterPressedThisTick) {
+                    frame.remove(title);
+                    frame.add(extras);
+                    frame.revalidate();
+                    downPressedThisTick = true;
+                    currentHovered = hovered.extrasMenuExit;
+                }
+                if (KeyH.getEnterPressed() && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(extras);
+                    frame.add(pastChampions);
+                    currentHovered = hovered.extrasMenuPastChampionsProceed;
+                    frame.revalidate();
+                }
+            }
+
+            case extrasMenuExit -> {      
+                System.out.println("extrasMenuExit");
+                if (KeyH.getUpPressed() && !rightPressedThisTick) {
+                    frame.remove(title);
+                    frame.add(extras);
+                    frame.revalidate();
+                    upPressedThisTick = true;
+                    currentHovered = hovered.expandedLoreAndFacts;
+                }
+                if (KeyH.getDownPressed() && !enterPressedThisTick) {
+                    frame.remove(title);
+                    frame.add(extras);
+                    frame.revalidate();
+                    downPressedThisTick = true;
+                    currentHovered = hovered.extrasMenuExit;
+                }
+                if (KeyH.getEnterPressed() && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(extras);
+                    frame.add(title);
+                    currentHovered = hovered.titleStart;
+                    frame.revalidate();
+                }
+
+            }
+
             case charSelect1 -> {
                 if (KeyH.getRightPressed() && !rightPressedThisTick) {
                     rightPressedThisTick = true;
@@ -350,7 +489,6 @@ public class Main implements Runnable {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     player.changeAbility(Player.abilityChoices.riso);
-                    player.setFullCooldown();
                     frame.remove(characterSelect);
                     frame.add(inGame);
                     currentHovered = hovered.inGame;
@@ -371,7 +509,6 @@ public class Main implements Runnable {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     player.changeAbility(Player.abilityChoices.adonis);
-                    player.setFullCooldown();
                     frame.remove(characterSelect);
                     frame.add(inGame);
                     currentHovered = hovered.inGame;
@@ -388,7 +525,6 @@ public class Main implements Runnable {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     player.changeAbility(Player.abilityChoices.tasha);
-                    player.setFullCooldown();
                     frame.remove(characterSelect);
                     frame.add(inGame);
                     currentHovered = hovered.inGame;
@@ -400,7 +536,6 @@ public class Main implements Runnable {
             case helpExit -> {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
-                    // frame.remove(help);
                     frame.remove(help);
                     frame.add(title);
                     currentHovered = hovered.titleStart;
@@ -438,6 +573,9 @@ public class Main implements Runnable {
                     currentHovered = hovered.inGame;
                 }            
             }
+
+            
+
             case inGame -> {
                 if (player.getAbilityON() && player.getAbility() == Player.abilityChoices.riso) {
                     if (lookRightLast) {
@@ -566,27 +704,14 @@ public class Main implements Runnable {
         twoBallWalter.setActive(false);
         teleportSicilia.setActive(false);
         switch (Main.currentLevel) {   
-            case level1 -> {
-                averageJoe.setActive(true); 
-                checkLevel = 1;
-            }
-            case level2 -> {
-                strongHercules.setActive(true);
-                checkLevel = 2;
-            }
+            case level1 -> averageJoe.setActive(true); 
+            case level2 -> strongHercules.setActive(true);
             case level3 -> {
                 gradyTwin1.setActive(true);
                 gradyTwin2.setActive(true);
-                checkLevel = 3;
             }
-            case level4 -> {
-                twoBallWalter.setActive(true);
-                checkLevel = 4;
-            }
-            case level5 -> {
-                teleportSicilia.setActive(true); 
-                checkLevel = 5;
-            }
+            case level4 -> twoBallWalter.setActive(true);
+            case level5 -> teleportSicilia.setActive(true);
             default -> {}
         }
     }
@@ -642,6 +767,10 @@ public class Main implements Runnable {
         inGame.updateValues(this);
         help.updateValues(this);
         characterSelect.updateValues(this);
+        extras.updateValues(this);
+        expandedLoreAndFacts.updateValues(this);
+        pastChampions.updateValues(this);
+        
         for (Enemy e: enemies) e.updateValues(ballShadows);
     }
 
@@ -695,7 +824,7 @@ public class Main implements Runnable {
         if (currentLevel==level.level1) {
             stopMusic();
             currentLevel=level.level2;
-           
+        
             playMusic(2);
         }
         else if (currentLevel==level.level2) {
@@ -706,7 +835,7 @@ public class Main implements Runnable {
         else if (currentLevel==level.level3) {
             stopMusic();
             currentLevel=level.level4;
-           
+        
             playMusic(2);
         }
         else if (currentLevel==level.level4) {
