@@ -151,37 +151,6 @@ public class GamePanel extends JPanel {
                     System.out.println("Failed to load image in title");
                 }
             }
-
-            case "extras" -> {
-                try {
-                    extraMenuExpandedLoreAndFacts = ImageIO.read(this.getClass().getResource("sprites/GUI/extraMenuExpandedLoreAndFacts.png"));
-                    extraMenuPastChampions = ImageIO.read(this.getClass().getResource("sprites/GUI/extraMenuPastChampions.png"));
-                    extraMenuExit = ImageIO.read(this.getClass().getResource("sprites/GUI/extraMenuExit.png"));
-
-                } catch (Exception e) {
-                    System.out.println("Failed to load image in extras");
-                }
-            }
-
-            case "expandedLoreAndFacts" -> {
-                try {
-
-                    extraMenuExpandedLoreAndFactsExpandedLoreAndFacts= ImageIO.read(this.getClass().getResource("sprites/GUI/expandedLoreAndFacts.png"));
-
-                } catch (Exception e) {
-                    System.out.println("Failed to load the lore and facts image");
-                }
-            }
-
-            case "pastChampions" -> {
-                try {
-                    extraMenuPastChampionsProceed = ImageIO.read(this.getClass().getResource("sprites/GUI/extrasPastChampionsProceed.png"));
-                    extraMenuPastChampionsExit = ImageIO.read(this.getClass().getResource("sprites/GUI/extrasPastChampionsExit.png"));
-
-                } catch (Exception e) {
-                    System.out.println("Failed to load in pastChampions");
-                }
-            }             
         }
     }
     
@@ -361,26 +330,6 @@ public class GamePanel extends JPanel {
                     }
                 }
             }
-            case "extras" -> {
-                System.out.println("about to draw extras menu");
-                g2.drawImage(helpBg, 0, 0, (int)WINW, (int)WINH, null);
-                g2.drawImage(extraMenuExpandedLoreAndFacts, 0, 0, (int)WINW, (int)WINH, null);
-                System.out.println("should have been drawn");
-                switch (Main.currentHovered) {
-                    case extrasMenuExpandedLoreAndFacts -> g2.drawImage(extraMenuExpandedLoreAndFacts, 0, 0, (int)WINW, (int)WINH,  null);
-                    case extrasMenuPastChampions -> g2.drawImage(extraMenuPastChampions, 0, 0, (int)WINW, (int)WINH, null);
-                    case extrasMenuExit -> g2.drawImage(extraMenuExit, 0, 0, (int)WINW, (int)WINH, null);
-                }
-            }
-
-            case "expanded lore and facts" -> g2.drawImage(extraMenuExpandedLoreAndFactsExpandedLoreAndFacts, 0, 0, (int)WINW, (int)WINH,  null);
-
-            case "past champions" -> {
-                switch (Main.currentHovered) {
-                    case extrasMenuPastChampionsProceed -> g2.drawImage(extraMenuPastChampionsProceed, 0, 0, (int)WINW, (int)WINH,  null);
-                    case extrasMenuPastChampionsExit -> g2.drawImage(extraMenuPastChampionsExit, 0, 0, (int)WINW, (int)WINH, null);
-                }
-            } 
         }
     }
 
