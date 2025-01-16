@@ -19,6 +19,7 @@ public class Enemy extends Entity {
         idleY; //y coordinate of the idle position
     private boolean isActive;
     private ArrayList<BallShadow> ballShadows;
+    private int lastHit;
 
    /**
     * Constructor
@@ -47,6 +48,7 @@ public class Enemy extends Entity {
             default -> {}
         }
         this.isActive = true;
+        this.lastHit = 0;
     }
 
     /**
@@ -69,6 +71,7 @@ public class Enemy extends Entity {
     public ArrayList<BallShadow> getBallShadows() { return this.ballShadows; }
     public double getDestinationX() { return this.destinationX; }
     public double getDestinationY() { return this.destinationY; }
+    public int getLastHit() { return this.lastHit; }
 
     /**
      * Sets if the enemy is currently playing or not
@@ -320,6 +323,7 @@ public class Enemy extends Entity {
             Rectangle enemy = new Rectangle((int)this.xx, (int)this.yy, this.size, this.size);
             if (b.getPlayerHitLast() && enemy.intersects(ball)) {
                 Main.playSE(4);
+                this.lastHit = Main.frames;
                 //Updated the velocity for the ball to be returned.
                 if (this.enemyType != enemyTypes.StrongHercules) {
                     if (!timeSlowed) b.velocity = Main.BALL_SPEED;

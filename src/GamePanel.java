@@ -306,11 +306,6 @@ public class GamePanel extends JPanel {
                 }
                 for (Enemy e: main.getEnemies()) {
                     if (e.getActive()) {
-                        drawEntity(g2, e, Color.BLACK);
-                    }
-                }
-                for (Enemy e: main.getEnemies()) {
-                    if (e.getActive()) {
                         drawEnemy(g2, e);
                     }
                 }
@@ -565,21 +560,31 @@ public class GamePanel extends JPanel {
         
 
         if (Main.checkLevel == 1) {
-            if (e.xx < e.getDestinationX() - (e.size / 2)) {
-                int sprite = (Main.frames % 15) / 5;
-                g2.drawImage(joe_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (e.xx > e.getDestinationX() - (e.size / 2)) {
-                int sprite = (Main.frames % 15) / 5;
-                g2.drawImage(joe_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (e.yy < e.getDestinationY() - (e.size / 2)) {
-                int sprite = (Main.frames % 15) / 5;
-                g2.drawImage(joe_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (e.yy > e.getDestinationY() - (e.size / 2)) {
-                int sprite = (Main.frames % 15) / 5;
-                g2.drawImage(joe_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            if (Main.frames - main.getEnemies().get(0).getLastHit() < 25) {
+                if (e.xx < e.getDestinationX() - (e.size / 2)) {
+                    int sprite = (Main.frames % 15) / 5;
+                    g2.drawImage(joe_hit_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                } else {
+                    int sprite = (Main.frames % 15) / 5;
+                    g2.drawImage(joe_hit_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                }
             } else {
-                int sprite = (Main.frames % 20) / 5;
-                g2.drawImage(joe_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                if (e.xx < e.getDestinationX() - (e.size / 2)) {
+                    int sprite = (Main.frames % 15) / 5;
+                    g2.drawImage(joe_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                } else if (e.xx > e.getDestinationX() - (e.size / 2)) {
+                    int sprite = (Main.frames % 15) / 5;
+                    g2.drawImage(joe_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                } else if (e.yy < e.getDestinationY() - (e.size / 2)) {
+                    int sprite = (Main.frames % 15) / 5;
+                    g2.drawImage(joe_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                } else if (e.yy > e.getDestinationY() - (e.size / 2)) {
+                    int sprite = (Main.frames % 15) / 5;
+                    g2.drawImage(joe_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                } else {
+                    int sprite = (Main.frames % 20) / 5;
+                    g2.drawImage(joe_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                }
             }
         } else if (Main.checkLevel == 2) {
             if (e.xx < e.getDestinationX() - (e.size / 2)) {

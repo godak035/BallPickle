@@ -78,7 +78,8 @@ public class Main implements Runnable {
         BALL_SPEED = 4.0 / 768.0 * GamePanel.WINH,
         ENEMY_SPEED = 1 / 768.0 * GamePanel.WINH,
         PLAYER_SPEED = 4.0 / 768.0 * GamePanel.WINH,
-        PLAYER_SIZE = 45.0 / 768.0 * GamePanel.WINH;
+        PLAYER_SIZE = 45.0 / 768.0 * GamePanel.WINH,
+        ENEMY_SIZE = PLAYER_SIZE * 1.8;
 
     public static int frames = 0;
     private int lastHit;
@@ -197,7 +198,7 @@ public class Main implements Runnable {
     Main() {
         playMusic(0);
         currentHovered = hovered.titleStart;
-        currentLevel = level.level1;
+        currentLevel = level.level5;
         timeSlowed = false;
         lastHit = 0;
 
@@ -228,12 +229,12 @@ public class Main implements Runnable {
         balls.add(ball);
         balls.add(ballWalter);
 
-        averageJoe = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.AverageJoe);
-        strongHercules = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.StrongHercules);
-        gradyTwin1 = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.GradyTwin1);
-        gradyTwin2 = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.GradyTwin2);
-        twoBallWalter = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.TwoBallWalter);
-        teleportSicilia = new Enemy(495, 100, ENEMY_SPEED, (int)PLAYER_SIZE, Enemy.enemyTypes.TeleportSicilia);
+        averageJoe = new Enemy(495, 100, ENEMY_SPEED, (int)ENEMY_SIZE, Enemy.enemyTypes.AverageJoe);
+        strongHercules = new Enemy(495, 100, ENEMY_SPEED, (int)ENEMY_SIZE, Enemy.enemyTypes.StrongHercules);
+        gradyTwin1 = new Enemy(495, 100, ENEMY_SPEED, (int)ENEMY_SIZE, Enemy.enemyTypes.GradyTwin1);
+        gradyTwin2 = new Enemy(495, 100, ENEMY_SPEED, (int)ENEMY_SIZE, Enemy.enemyTypes.GradyTwin2);
+        twoBallWalter = new Enemy(495, 100, ENEMY_SPEED, (int)ENEMY_SIZE, Enemy.enemyTypes.TwoBallWalter);
+        teleportSicilia = new Enemy(495, 100, ENEMY_SPEED, (int)ENEMY_SIZE, Enemy.enemyTypes.TeleportSicilia);
 
         averageJoe.setActive(true);
         strongHercules.setActive(false);
