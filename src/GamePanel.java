@@ -22,7 +22,7 @@ public class GamePanel extends JPanel {
 
     BufferedImage
         logo,
-        titleScreen, titleStart, titleHelp, titleExit,
+        titleScreen, titleStart, titleHelp, titleExit, titleExtras,
         helpBg,
         characterSelectBg, select,
         court, level2, level3, level4, level5,
@@ -35,6 +35,7 @@ public class GamePanel extends JPanel {
         hercules_right, hercules_left, hercules_up, hercules_down, hercules_idle, hercules_hit_right, hercules_hit_left,
         joe_right, joe_left, joe_up, joe_down, joe_idle, joe_hit_right, joe_hit_left,
         ball_anim,
+        extras,
         clock, dash, paddle;
         
     /**
@@ -123,6 +124,14 @@ public class GamePanel extends JPanel {
                 }
             }
 
+            case "extras" -> {
+                try {
+                    extras = ImageIO.read(this.getClass().getResource("sprites/GUI/extras.png"));
+                } catch (Exception e) {
+                    System.out.println("Failed to load image 'extras'");
+                }
+            }
+
             case "help" -> {
                 try {
                     helpBg = ImageIO.read(this.getClass().getResource("sprites/GUI/help.png"));
@@ -147,6 +156,7 @@ public class GamePanel extends JPanel {
                     titleStart = ImageIO.read(this.getClass().getResource("sprites/GUI/titleStart.png"));
                     titleHelp = ImageIO.read(this.getClass().getResource("sprites/GUI/titleHelp.png"));
                     titleExit = ImageIO.read(this.getClass().getResource("sprites/GUI/titleExit.png"));
+                    titleExtras = ImageIO.read(this.getClass().getResource("sprites/GUI/titleExtras.png"));
                 } catch (Exception e) {
                     System.out.println("Failed to load image in title");
                 }
@@ -182,6 +192,10 @@ public class GamePanel extends JPanel {
 
             case "Intramural Champion" -> {
                 g2.drawImage(intramuralChampion, 0, 0, (int)WINW, (int)WINH, null);
+            }
+
+            case "extras" -> {
+                g2.drawImage(extras, 0, 0, (int)WINW, (int)WINH, null);
             }
 
             case "game" -> {
@@ -326,6 +340,7 @@ public class GamePanel extends JPanel {
                         case titleStart -> g2.drawImage(titleStart, 0, 0, (int)WINW, (int)WINH,  null);
                         case titleExit -> g2.drawImage(titleExit, 0, 0, (int)WINW, (int)WINH, null);
                         case titleHelp -> g2.drawImage(titleHelp, 0, 0, (int)WINW, (int)WINH, null);
+                        case titleExtras -> g2.drawImage(titleExtras, 0, 0, (int)WINW, (int)WINH, null);
                         default -> {}
                     }
                 }

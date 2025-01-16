@@ -6,8 +6,8 @@
  */
 
 import java.awt.*;
-import javax.swing.*;
 import java.util.*;
+import javax.swing.*;
 
 public class Main implements Runnable {
 
@@ -29,10 +29,10 @@ public class Main implements Runnable {
     
     private JFrame frame;
     //Different panels that are drawn on for the title screen, game screen, help screen and character select screen
-    private GamePanel title, inGame, help, characterSelect, win, gameOver, intramuralChampion;
+    private GamePanel title, inGame, help, characterSelect, win, gameOver, intramuralChampion, extras;
 
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
-    public static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, inGame, helpExit,gameOverExit,victoryExit , nextLevel };
+    public static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, titleExtras, inGame, helpExit,gameOverExit,victoryExit , nextLevel, extrasExit };
     public static hovered currentHovered;
     public static enum level {level1, level2, level3, level4, level5};
     public static level currentLevel;
@@ -285,6 +285,9 @@ public class Main implements Runnable {
 
         intramuralChampion = new GamePanel("Intramural Champion");
         intramuralChampion.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
+
+        extras = new GamePanel("extras");
+        extras.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
         
         updateValues();
         
@@ -307,7 +310,6 @@ public class Main implements Runnable {
                     currentHovered = hovered.titleHelp;
                 }
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
-  
                     enterPressedThisTick = true;
                     frame.remove(title);
                     frame.add(characterSelect);
@@ -339,6 +341,25 @@ public class Main implements Runnable {
                 }
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     System.exit(0);
+                }
+                if (KeyH.getDownPressed() && !downPressedThisTick) {
+                    downPressedThisTick = true;
+                    currentHovered = hovered.titleExtras;
+                }
+            }
+            case titleExtras -> {
+                if (KeyH.getEnterPressed() && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(title);
+                    frame.add(extras);
+                    currentHovered = hovered.extrasExit;
+                    frame.pack();
+                    frame.revalidate();
+                    frame.repaint();
+                }
+                if (KeyH.getUpPressed() && !upPressedThisTick) {
+                    upPressedThisTick = true;
+                    currentHovered = hovered.titleExit;
                 }
             }
             case charSelect1 -> {
@@ -406,6 +427,15 @@ public class Main implements Runnable {
                     frame.revalidate();
                 }    
             }
+            case extrasExit -> {
+                if (KeyH.getEnterPressed() && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(extras);
+                    frame.add(title);
+                    currentHovered = hovered.titleStart;
+                    frame.revalidate();
+                }  
+            }
             case gameOverExit -> {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
@@ -414,7 +444,6 @@ public class Main implements Runnable {
                     currentHovered = hovered.titleStart;
                     frame.revalidate();
                 }    
-
             }
             case victoryExit -> {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
@@ -424,7 +453,6 @@ public class Main implements Runnable {
                     currentHovered = hovered.titleStart;
                     frame.revalidate();
                 }    
-
             }
             case nextLevel -> {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
