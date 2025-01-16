@@ -2,7 +2,7 @@
  * Main.java
  * The main gameloop of the BallPickle game.
  * by: David Sue, Vadim Mironov, Avishan Ketheswaran and Owen McCarthy
- * January 14, 2025
+ * January 15, 2025
  */
 
 import java.awt.*;
@@ -29,10 +29,10 @@ public class Main implements Runnable {
     
     private JFrame frame;
     //Different panels that are drawn on for the title screen, game screen, help screen and character select screen
-    private GamePanel title, inGame, help, characterSelect, win, gameOver, intramuralChampion, extras;
+    private GamePanel title, inGame, help, characterSelect, win, gameOver, intramuralChampion, extras, expandedLoreAndFactsExpandedLoreAndFacts;
 
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
-    public static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, titleExtras, inGame, helpExit,gameOverExit,victoryExit , nextLevel, extrasExit };
+    public static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, titleExtras, inGame, helpExit, gameOverExit, victoryExit, nextLevel, extrasExit, extras, extraMenuExit, extraMenuPastChampions, extraMenuExpandedLoreAndFacts, expandedLoreAndFactsExpandedLoreAndFacts };
     public static hovered currentHovered;
     public static enum level {level1, level2, level3, level4, level5};
     public static level currentLevel;
@@ -177,6 +177,8 @@ public class Main implements Runnable {
             help.repaint();
             characterSelect.repaint();
             inGame.repaint();
+            extras.repaint();
+            expandedLoreAndFactsExpandedLoreAndFacts.repaint();
         });
     }
 
@@ -289,6 +291,9 @@ public class Main implements Runnable {
 
         extras = new GamePanel("extras");
         extras.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
+
+        expandedLoreAndFactsExpandedLoreAndFacts = new GamePanel("expandedLoreAndFactsExpandedLoreAndFacts");
+        expandedLoreAndFactsExpandedLoreAndFacts.setPreferredSize(new Dimension((int)GamePanel.WINW, (int)GamePanel.WINH));
         
         updateValues();
         
@@ -349,20 +354,75 @@ public class Main implements Runnable {
                 }
             }
             case titleExtras -> {
+                  if (KeyH.getUpPressed() && !upPressedThisTick) {
+                    upPressedThisTick = true;
+                    currentHovered = hovered.titleExit;
+                }
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
                     frame.remove(title);
                     frame.add(extras);
-                    currentHovered = hovered.extrasExit;
-                    frame.pack();
+                    currentHovered = hovered.extraMenuExpandedLoreAndFacts;
                     frame.revalidate();
-                    frame.repaint();
+                }
+            }
+
+            case extraMenuExpandedLoreAndFacts -> {
+                if (KeyH.getDownPressed() && !downPressedThisTick) {
+                    downPressedThisTick = true;
+                    currentHovered = hovered.extraMenuPastChampions;
+                }
+                if (KeyH.getEnterPressed() && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(extras);
+                    frame.add(expandedLoreAndFactsExpandedLoreAndFacts);
+                    currentHovered = hovered.expandedLoreAndFactsExpandedLoreAndFacts;
+                    frame.revalidate();
+                }
+            }
+            
+            case expandedLoreAndFactsExpandedLoreAndFacts -> {
+                if (KeyH.getEnterPressed() && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(expandedLoreAndFactsExpandedLoreAndFacts);
+                    frame.add(title);
+                    currentHovered = hovered.titleStart;
+                    frame.revalidate();
+                }
+            }
+
+            case extraMenuPastChampions -> {
+                
+                if (KeyH.getDownPressed() && !downPressedThisTick) {
+                    downPressedThisTick = true;
+                    currentHovered = hovered.extrasExit;
                 }
                 if (KeyH.getUpPressed() && !upPressedThisTick) {
                     upPressedThisTick = true;
-                    currentHovered = hovered.titleExit;
+                    currentHovered = hovered.extraMenuExpandedLoreAndFacts;
+                }
+
+                //game
+                if (KeyH.getEnterPressed() && !enterPressedThisTick) {
+                    System.exit(0);
+                }
+                
+            }
+            
+            case extrasExit -> {
+                if (KeyH.getUpPressed() && !downPressedThisTick) {
+                    downPressedThisTick = true;
+                    currentHovered = hovered.extraMenuPastChampions;
+                }
+                if (KeyH.getEnterPressed() && !enterPressedThisTick) {
+                    enterPressedThisTick = true;
+                    frame.remove(extras);
+                    frame.add(title);
+                    currentHovered = hovered.titleStart;
+                    frame.revalidate();
                 }
             }
+            
             case charSelect1 -> {
                 if (KeyH.getRightPressed() && !rightPressedThisTick) {
                     rightPressedThisTick = true;
@@ -428,15 +488,7 @@ public class Main implements Runnable {
                     frame.revalidate();
                 }    
             }
-            case extrasExit -> {
-                if (KeyH.getEnterPressed() && !enterPressedThisTick) {
-                    enterPressedThisTick = true;
-                    frame.remove(extras);
-                    frame.add(title);
-                    currentHovered = hovered.titleStart;
-                    frame.revalidate();
-                }  
-            }
+                
             case gameOverExit -> {
                 if (KeyH.getEnterPressed() && !enterPressedThisTick) {
                     enterPressedThisTick = true;
