@@ -239,6 +239,10 @@ public class GamePanel extends JPanel {
                 g2.drawImage(intramuralChampion, 0, 0, (int)WINW, (int)WINH, null);
             }
 
+            case "extras" -> {
+                g2.drawImage(extras, 0, 0, (int)WINW, (int)WINH, null);
+            }
+
             case "game" -> {
                 switch (Main.currentLevel) {
                     case level1 -> {
