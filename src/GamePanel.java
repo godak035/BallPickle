@@ -34,6 +34,10 @@ public class GamePanel extends JPanel {
         tasha_right, tasha_left, tasha_up, tasha_down, tasha_idle, tasha_hit,
         hercules_right, hercules_left, hercules_up, hercules_down, hercules_idle, hercules_hit_right, hercules_hit_left,
         joe_right, joe_left, joe_up, joe_down, joe_idle, joe_hit_right, joe_hit_left,
+        grady1_right, grady1_left, grady1_up, grady1_down, grady1_idle, grady1_hit_right, grady1_hit_left,
+        grady2_right, grady2_left, grady2_up, grady2_down, grady2_idle, grady2_hit_right, grady2_hit_left,
+        walter_right, walter_left, walter_up, walter_down, walter_idle, walter_hit,
+        sicilia_right, sicilia_left, sicilia_up, sicilia_down, sicilia_idle, sicilia_hit_right, sicilia_hit_left,
         ball_anim,
         extras,
         clock, dash, paddle;
@@ -106,6 +110,29 @@ public class GamePanel extends JPanel {
                     hercules_hit_right = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_hit_right.png"));
                     hercules_idle = ImageIO.read(this.getClass().getResource("sprites/enemies/hercules_idle.png"));
 
+                    walter_right = ImageIO.read(this.getClass().getResource("sprites/enemies/walter_move_right.png"));
+                    walter_left = ImageIO.read(this.getClass().getResource("sprites/enemies/walter_move_left.png"));
+                    walter_up = ImageIO.read(this.getClass().getResource("sprites/enemies/walter_move_up.png"));
+                    walter_down = ImageIO.read(this.getClass().getResource("sprites/enemies/walter_move_down.png"));
+                    walter_hit = ImageIO.read(this.getClass().getResource("sprites/enemies/walter_hit.png"));
+                    walter_idle = ImageIO.read(this.getClass().getResource("sprites/enemies/walter_idle.png"));
+
+                    grady1_right = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_right.png"));
+                    grady1_left = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_left.png"));
+                    grady1_up = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_up.png"));
+                    grady1_down = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_down.png"));
+                    grady1_idle = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_idle.png"));
+                    grady1_hit_right = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_hit_right.png"));
+                    grady1_hit_left = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_left.png"));
+
+                    grady2_right = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_right.png"));
+                    grady2_left = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_left.png"));
+                    grady2_up = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_up.png"));
+                    grady2_down = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_down.png"));
+                    grady2_idle = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_idle.png"));
+                    grady2_hit_right = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_hit_right.png"));
+                    grady2_hit_left = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_left.png"));
+
                     joe_right = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_move_right.png"));
                     joe_left = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_move_left.png"));
                     joe_up = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_move_up.png"));
@@ -113,6 +140,14 @@ public class GamePanel extends JPanel {
                     joe_hit_left = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_hit_left.png"));
                     joe_hit_right = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_hit_right.png"));
                     joe_idle = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_idle.png"));
+
+                    sicilia_right = ImageIO.read(this.getClass().getResource("sprites/enemies/sicilia_move_right.png"));
+                    sicilia_left = ImageIO.read(this.getClass().getResource("sprites/enemies/sicilia_move_left.png"));
+                    sicilia_up = ImageIO.read(this.getClass().getResource("sprites/enemies/sicilia_move_up.png"));
+                    sicilia_down = ImageIO.read(this.getClass().getResource("sprites/enemies/sicilia_move_down.png"));
+                    sicilia_hit_left = ImageIO.read(this.getClass().getResource("sprites/enemies/sicilia_hit_left.png"));
+                    sicilia_hit_right = ImageIO.read(this.getClass().getResource("sprites/enemies/sicilia_hit_right.png"));
+                    sicilia_idle = ImageIO.read(this.getClass().getResource("sprites/enemies/sicilia_idle.png"));
 
                     ball_anim = ImageIO.read(this.getClass().getResource("sprites/players/ball_sprite_sheet.png"));
 
@@ -563,7 +598,58 @@ public class GamePanel extends JPanel {
                 int sprite = (Main.frames % 20) / 5;
                 g2.drawImage(hercules_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
             }
-        }    
+        } else if (Main.checkLevel == 3) {
+            if (e.xx < e.getDestinationX() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(grady1_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.xx > e.getDestinationX() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(grady1_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.yy < e.getDestinationY() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(grady1_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.yy > e.getDestinationY() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(grady1_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else {
+                int sprite = (Main.frames % 20) / 5;
+                g2.drawImage(grady1_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            }
+        }  else if (Main.checkLevel == 4) {
+            if (e.xx < e.getDestinationX() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(walter_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.xx > e.getDestinationX() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(walter_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.yy < e.getDestinationY() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(walter_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.yy > e.getDestinationY() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(walter_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else {
+                int sprite = (Main.frames % 20) / 5;
+                g2.drawImage(walter_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            }
+        }  else if (Main.checkLevel == 5) {
+            if (e.xx < e.getDestinationX() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(sicilia_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.xx > e.getDestinationX() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(sicilia_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.yy < e.getDestinationY() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(sicilia_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else if (e.yy > e.getDestinationY() - (e.size / 2)) {
+                int sprite = (Main.frames % 15) / 5;
+                g2.drawImage(sicilia_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            } else {
+                int sprite = (Main.frames % 20) / 5;
+                g2.drawImage(sicilia_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            }
+        }                      
     }
     
     private void drawBallShadow(Graphics2D g2, BallShadow b) {
