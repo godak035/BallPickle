@@ -190,7 +190,7 @@ public class Main implements Runnable {
     Main() {
         playMusic(0);
         currentHovered = hovered.titleStart;
-        currentLevel = level.level3;
+        currentLevel = level.level1;
         timeSlowed = false;
         lastHit = 0;
 
