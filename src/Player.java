@@ -42,12 +42,12 @@ public class Player extends Entity {
     }
 
     /**
-     * Updates the x and y position of the player to align with the xx and yy
+     * Updates the x and y position to align with the xx and yy
      */
     @Override
     public void updatePosition() {
-        this.x = (int)xx + positionXRelativeTo;
-        this.y = (int)yy + positionYRelativeTo;
+        this.setX((int)this.getXX());
+        this.setY((int)this.getYY());
     }
 
     /**

@@ -2,11 +2,11 @@
  * Entity.java
  * The abstract class Entity is the base for all moving entities in the BallPickle game.
  * by: David Sue, Vadim Mironov, Avishan Ketheswaran and Owen McCarthy
- * January 14, 2024
+ * January 15, 2024
  */
 public abstract class Entity {
-    int x, y, size;
-    double xx, yy, velocity;
+    private int x, y, size;
+    private double xx, yy, velocity;
 
     /**
      * Constructor
@@ -27,4 +27,20 @@ public abstract class Entity {
      * Updates the x and y value of the entity to align with the xx and yy
      */
     public abstract void updatePosition();
+
+    //Setter methods
+    public void setX(int x) { this.x = x; }
+    public void setY(int y) { this.y = y; }
+    public void setSize(int s) { this.size = s; }
+    public void setXX(double xx) { this.xx = xx; }
+    public void setYY(double yy) { this.yy = yy; }
+    public void setVelocity(double v) { this.velocity = v; }
+
+    //Getter methods
+    public int getX() { return this.x; }
+    public int getY() { return this.y; }
+    public int getSize() { return this.size; }
+    public double getXX() { return this.xx; }
+    public double getYY() { return this.yy; }
+    public double getVelocity() { return this.velocity; }
 }

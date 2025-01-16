@@ -50,12 +50,7 @@ public class Main implements Runnable {
     private ArrayList<BallShadow> ballShadows;
     private Ball ball, ballWalter;
     private ArrayList<Ball> balls;
-    Enemy averageJoe;
-    private Enemy strongHercules;
-    private Enemy gradyTwin1;
-    private Enemy gradyTwin2;
-    private Enemy twoBallWalter;
-    private Enemy teleportSicilia;
+    private Enemy averageJoe, strongHercules, gradyTwin1, gradyTwin2, twoBallWalter, teleportSicilia;
     private ArrayList<Enemy> enemies;
 
     //score
@@ -70,9 +65,6 @@ public class Main implements Runnable {
         playerXMax = (int)(450.0 / 1024.0 * GamePanel.WINW),
         playerYMax = (int)(250.0 / 768.0 * GamePanel.WINH);
 
-    //Soething with sound
-
-    
     //Entity speeds and sizes
     public final static double 
         BALL_SPEED = 4.0 / 768.0 * GamePanel.WINH,
@@ -81,7 +73,7 @@ public class Main implements Runnable {
         PLAYER_SIZE = 45.0 / 768.0 * GamePanel.WINH,
         ENEMY_SIZE = PLAYER_SIZE * 1.8;
 
-    public static int frames = 0;
+    private static int frames = 0;
     private int lastHit;
 
     private Thread gameThread;
@@ -198,13 +190,12 @@ public class Main implements Runnable {
     Main() {
         playMusic(0);
         currentHovered = hovered.titleStart;
-        currentLevel = level.level5;
+        currentLevel = level.level1;
         timeSlowed = false;
         lastHit = 0;
 
-        playerScore = 4;
+        playerScore = 0;
         enemyScore = -1;
-
 
         player = new Player(282, 125, PLAYER_SPEED, (int)PLAYER_SIZE * 2);
 
@@ -470,34 +461,34 @@ public class Main implements Runnable {
             case inGame -> {
                 if (player.getAbilityON() && player.getAbility() == Player.abilityChoices.riso) {
                     if (lookRightLast) {
-                        player.xx += player.velocity * 4;
-                        if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
+                        player.setXX(player.getXX() + (player.getVelocity() * 4));
+                        if (player.getXX() + player.getSize() > playerXMax) player.setXX(playerXMax - player.getSize());
                     } else {
-                        player.xx -= player.velocity * 4;
-                        if (player.xx < 0) player.xx = 0;
+                        player.setXX(player.getXX() - (player.getVelocity() * 4));
+                        if (player.getXX() < 0) player.setXX(0);
                     }
                 } else {
                     if (KeyH.getRightPressed()) {
                         rightPressedThisTick = true;
                         lookRightLast=true;
-                        player.xx += player.velocity;
-                        if (player.xx + player.size > playerXMax) player.xx = playerXMax - player.size;
+                        player.setXX(player.getXX() + player.getVelocity());
+                        if (player.getXX() + player.getSize() > playerXMax) player.setXX(playerXMax - player.getSize());
                     }
                     if (KeyH.getLeftPressed()) {
                         leftPressedThisTick = true;
                         lookRightLast=false;
-                        player.xx -= player.velocity;
-                        if (player.xx < 0) player.xx = 0;
+                        player.setXX(player.getXX() - player.getVelocity());
+                        if (player.getXX() < 0) player.setXX(0);
                     }
                     if (KeyH.getUpPressed()) { 
                         upPressedThisTick = true;
-                        player.yy -= player.velocity;
-                        if (player.yy < 0) player.yy = 0;
+                        player.setYY(player.getYY() - player.getVelocity());
+                        if (player.getYY() < 0) player.setYY(0);
                     }
                     if (KeyH.getDownPressed()) {    
                         downPressedThisTick = true;
-                        player.yy += player.velocity;
-                        if (player.yy + player.size > playerYMax) player.yy = playerYMax - player.size;
+                        player.setYY(player.getYY() + player.getVelocity());
+                        if (player.getYY() + player.getSize() > playerYMax) player.setYY(playerYMax - player.getSize());
                     }
                     if (KeyH.getEnterPressed()) {
                         if (!enterPressedThisTick) {
@@ -511,16 +502,16 @@ public class Main implements Runnable {
                                     * right: (712, 150)
                                     * based on a 1024 x 768 resolution
                                     */
-                                    Rectangle playerRect = new Rectangle((int)player.xx + player.getPositionXRelativeTo(), (int)player.yy + player.getPositionYRelativeTo(), player.size, player.size);
-                                    Rectangle ballRect = new Rectangle((int)balls.get(i).xx, (int)balls.get(i).yy, balls.get(i).size, balls.get(i).size);
+                                    Rectangle playerRect = new Rectangle((int)player.getXX() + player.getPositionXRelativeTo(), (int)player.getYY() + player.getPositionYRelativeTo(), player.getSize(), player.getSize());
+                                    Rectangle ballRect = new Rectangle((int)balls.get(i).getXX(), (int)balls.get(i).getYY(), balls.get(i).getSize(), balls.get(i).getSize());
                                     if (playerRect.intersects(ballRect)) {
                                         
                                         if (player.getAbilityON() && player.getAbility() == Player.abilityChoices.adonis) {
-                                            ballShadows.get(i).velocity = this.BALL_SPEED * 2;
+                                            ballShadows.get(i).setVelocity(Main.BALL_SPEED * 2);
                                             
                                         } else {
-                                            if (!timeSlowed) ballShadows.get(i).velocity = this.BALL_SPEED;
-                                            else ballShadows.get(i).velocity = this.BALL_SPEED / 2;
+                                            if (!timeSlowed) ballShadows.get(i).setVelocity(Main.BALL_SPEED);
+                                            else ballShadows.get(i).setVelocity(Main.BALL_SPEED / 2);
                                         }
                                         
                                         if (serve) ballShadows.get(i).setDestination((int)(712.0 / 1024.0 * GamePanel.WINW), (int)(150.0 / 768.0 * GamePanel.WINH));
@@ -560,24 +551,24 @@ public class Main implements Runnable {
      */
     public void resetGame() {
         
-        player.xx = GamePanel.WINW * 0.2;
-        player.yy = GamePanel.WINH * 0.1;
+        player.setXX(GamePanel.WINW * 0.2);
+        player.setYY(GamePanel.WINH * 0.1);
         player.setAbilityON(false);
         player.setAbilityTime(0);
         player.updatePosition();
 
         //resets the position of all enemies
         for (Enemy e: enemies) {
-            e.xx = GamePanel.WINW / 2.0;
-            e.yy = 100.0 / 768.0 * GamePanel.WINH;
+            e.setXX(GamePanel.WINW / 2.0);
+            e.setYY(100.0 / 768.0 * GamePanel.WINH);
             e.updatePosition();
         }
         
         //resets the position of all balls
         for (BallShadow b: ballShadows) {
-            b.xx = (int)(350.0 / 1024.0 * GamePanel.WINW);
-            b.yy = (int)(650.0 / 768.0 * GamePanel.WINH);
-            b.velocity = 0;
+            b.setXX((int)(250.0 / 1024.0 * GamePanel.WINW));
+            b.setYY((int)(650.0 / 768.0 * GamePanel.WINH));
+            b.setVelocity(0);
             b.setDestination((int)(300.0 / 1024.0 * GamePanel.WINW), (int)(500.0 * 768.0 * GamePanel.WINH));
             b.setDeparture((int)(100.0 / 1024.0 * GamePanel.WINW), (int)(100.0 * 768.0 * GamePanel.WINH));
             b.updatePosition();
@@ -642,8 +633,8 @@ public class Main implements Runnable {
                     if (player.getAbilityTime() == 100) {
                         player.setAbilityON(false);
                         timeSlowed = false;
-                        ballShadow.velocity *= 2;
-                        for (Enemy e: enemies) e.velocity *= 2;
+                        ballShadow.setVelocity(ballShadow.getVelocity() * 2);
+                        for (Enemy e: enemies) e.setVelocity(e.getVelocity() * 2);
                         player.setAbilityTime(0);
                     }
                 }
@@ -657,8 +648,8 @@ public class Main implements Runnable {
     public void checkTimeSlow() {
         if (!timeSlowed && player.getAbilityON() && player.getAbility() == Player.abilityChoices.tasha) {
             timeSlowed = true;
-            ballShadow.velocity /= 2;
-            for (Enemy e: enemies) e.velocity /= 2;
+            ballShadow.setVelocity(ballShadow.getVelocity() / 2);
+            for (Enemy e: enemies) e.setVelocity(e.getVelocity() / 2);
         }
     }
     
@@ -757,7 +748,7 @@ public class Main implements Runnable {
         // Score and game reset logic
         for (BallShadow b: ballShadows) {
             //checks if the ball is outside the screen
-            if (b.yy <= 0 || b.yy >= (int)GamePanel.WINH || b.xx <= 0 || b.xx >= (int)GamePanel.WINW) {
+            if (b.getYY() <= 0 || b.getYY() >= (int)GamePanel.WINH || b.getXX() <= 0 || b.getXX() >= (int)GamePanel.WINW) {
                 if (b.getPlayerHitLast()) {
                     playerScore++;
                     if (playerScore == 5) {
@@ -809,4 +800,5 @@ public class Main implements Runnable {
     public boolean getUpPressedThisTick() { return this.upPressedThisTick; }
     public boolean getDownPressedThisTick() { return this.downPressedThisTick; }
     public boolean getEnterPressedThisTick() { return this.enterPressedThisTick; }
+    public static int getFrames() { return frames; }
 }

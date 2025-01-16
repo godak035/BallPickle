@@ -5,7 +5,6 @@
  * Allows game to play and stop background music
  */
 
-import java.io.File;
 import java.net.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -14,13 +13,11 @@ import javax.sound.sampled.Clip;
 public class Sound {
 
     // Variables
-    Clip music, soundEffect;
-    URL soundURL[] = new URL[30];
-    File file1;
+    private Clip music, soundEffect;
+    private URL soundURL[] = new URL[30];
     
     // Constructor
     public Sound() {
-        
         //Sound collection
         soundURL[0] = getClass().getResource("Sound/MainMenu.wav");
         soundURL[1] = getClass().getResource("Sound/levelOdd.wav");
@@ -39,9 +36,7 @@ public class Sound {
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
             music = AudioSystem.getClip();
             music.open(ais);
-        }
-        //Catches Errors
-        catch(Exception e) {
+        } catch(Exception e) {
             System.out.print(e);
         }
     }
@@ -52,36 +47,28 @@ public class Sound {
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
             soundEffect = AudioSystem.getClip();
             soundEffect.open(ais);
-        }
-        //Catches Errors
-        catch(Exception e) {
+        } catch(Exception e) {
             System.out.print(e);
         }
-        
     }
     
     /**
      * Called to play music
      */
-    public void play() {
-        music.start();
-    }
-    public void playSoundEffect() {
-        soundEffect.start();
-    }
+    public void play() { music.start(); }
+
+    /**
+     * Called to play the sound effect
+     */
+    public void playSoundEffect() { soundEffect.start(); }
 
     /**
      * Called to loop the music forever
      */
-    public void loop() {
-        music.loop(Clip.LOOP_CONTINUOUSLY);
-        
-    }
+    public void loop() { music.loop(Clip.LOOP_CONTINUOUSLY); }
 
     /**
      * Called to stop music
      */
-    public void stop() {
-        music.stop();
-    }
+    public void stop() { music.stop(); }
 }
