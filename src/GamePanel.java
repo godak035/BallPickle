@@ -2,7 +2,7 @@
  * GamePanel.java
  * A panel that can display the BallPickle game
  * By: David Sue, Vadim Mironov, Avishan Ketheswaran and Owen McCarthy
- * January 15, 2025
+ * January 14, 2025
  */
 
 import java.awt.*;
@@ -39,7 +39,7 @@ public class GamePanel extends JPanel {
         walter_right, walter_left, walter_up, walter_down, walter_idle, walter_hit,
         sicilia_right, sicilia_left, sicilia_up, sicilia_down, sicilia_idle, sicilia_hit_right, sicilia_hit_left,
         ball_anim,
-        expandedLoreAndFactsExpandedLoreAndFacts, pastChampions, extrasExit, expandedLoreAndFacts,
+        extras,
         clock, dash, paddle;
         
     /**
@@ -159,19 +159,9 @@ public class GamePanel extends JPanel {
                 }
             }
 
-            case "expandedLoreAndFactsExpandedLoreAndFacts" -> {
-                try {
-                    expandedLoreAndFactsExpandedLoreAndFacts = ImageIO.read(this.getClass().getResource("sprites/GUI/extras.png"));
-                } catch (Exception e) {
-                    System.out.println("Failed to load image 'expandedLoreAndFacts'");
-                }
-            }
-
             case "extras" -> {
                 try {
-                    extrasExit = ImageIO.read(this.getClass().getResource("sprites/GUI/extraMenuExit.png"));
-                    expandedLoreAndFacts = ImageIO.read(this.getClass().getResource("sprites/GUI/extraMenuExpandedLoreAndFacts.png"));
-                    pastChampions = ImageIO.read(this.getClass().getResource("sprites/GUI/extraMenuPastChampions.png"));
+                    extras = ImageIO.read(this.getClass().getResource("sprites/GUI/extras.png"));
                 } catch (Exception e) {
                     System.out.println("Failed to load image 'extras'");
                 }
@@ -383,19 +373,6 @@ public class GamePanel extends JPanel {
                     }
                 }
             }
-            
-            case "expandedLoreAndFactsExpandedLoreAndFacts" -> g2.drawImage(expandedLoreAndFactsExpandedLoreAndFacts, 0, 0, (int)WINW, (int)WINH, null);
-
-            case "extras" -> {
-                g2.drawImage(expandedLoreAndFacts, 0, 0, (int)WINW, (int)WINH,  null);
-                switch (Main.currentHovered) {
-                    case extraMenuExpandedLoreAndFacts -> g2.drawImage(expandedLoreAndFacts, 0, 0, (int)WINW, (int)WINH,  null);
-                    case extraMenuPastChampions -> g2.drawImage(pastChampions, 0, 0, (int)WINW, (int)WINH, null);
-                    case extrasExit -> g2.drawImage(extrasExit, 0, 0, (int)WINW, (int)WINH, null);
-                    default -> {}  
-                }
-            }
-            
         }
     }
 
