@@ -269,7 +269,6 @@ public class GamePanel extends JPanel {
                     g2.setColor(new Color(255,69,169));
                     g2.drawString("Ability ready!", (int)(GamePanel.WINH * 0.023), (int)(GamePanel.WINH * 0.72));
                 }
-
                 for (Enemy e: main.getEnemies()) {
                     if (e.getActive()) {
                         drawEntity(g2, e, Color.BLACK);
@@ -282,15 +281,14 @@ public class GamePanel extends JPanel {
                 }
                 for (BallShadow b: main.getBallShadows()) {
                     if (b.getActive()) {
-                        drawEntity(g2, b, Color.BLACK);
+                        drawBallShadow(g2, b);
                     }
                 }
                 for (Ball b: main.getBalls()) {
                     if (b.getShadow().getActive()) {
-                        drawEntity(g2, b, Color.BLUE);
+                        drawBall(g2, b);
                     }
                 }
-                drawBall(g2);
                 drawPlayer(g2);
                 if (main.getTimeSlowed()) drawTimeSlowVignette(g2);
 
@@ -423,15 +421,15 @@ public class GamePanel extends JPanel {
     * Draws the ball, with its animations.
     * @param g2  The Graphics2D object to be manipulated
     */
-    private void drawBall(Graphics2D g2) {
-        int ballX = (int)(main.getBall().xx);
-        int ballY = (int)(main.getBall().yy);
-        int ballX2 = (int)(main.getBall().xx + main.getBall().size);
-        int ballY2 = (int)(main.getBall().yy + main.getBall().size);
+    private void drawBall(Graphics2D g2, Ball b) {
+        int ballX = (int)(b.xx - GamePanel.WINH * 0.01);
+        int ballY = (int)(b.yy - GamePanel.WINH * 0.01);
+        int ballX2 = (int)(b.xx + b.size + GamePanel.WINH * 0.01);
+        int ballY2 = (int)(b.yy + b.size + GamePanel.WINH * 0.01);
 
         if (main.getBallShadow().getActive()) {
             int sprite = (Main.frames % 25) / 5;
-            g2.drawImage(ball_anim, ballX, ballY, ballX2, ballY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+            g2.drawImage(ball_anim, ballX, ballY, ballX2, ballY2, sprite * 64, 0, (sprite * 64) + 64, 64, null);
         }
     }
 
@@ -566,8 +564,12 @@ public class GamePanel extends JPanel {
                 g2.drawImage(hercules_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
             }
         }    
-     }
-        
+    }
+    
+    private void drawBallShadow(Graphics2D g2, BallShadow b) {
+        g2.setColor(Color.BLACK);
+        g2.fillOval(b.x - (int)(GamePanel.WINH * 0.0048), b.y + b.size, b.size + (int)(GamePanel.WINH * 0.01), b.size / 2);
+    }    
         
     /**
      * draws the destination and departure point of the ball (for debugging)

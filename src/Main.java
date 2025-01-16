@@ -78,7 +78,7 @@ public class Main implements Runnable {
         BALL_SPEED = 4.0 / 768.0 * GamePanel.WINH,
         ENEMY_SPEED = 1 / 768.0 * GamePanel.WINH,
         PLAYER_SPEED = 4.0 / 768.0 * GamePanel.WINH,
-        PLAYER_SIZE = 35.0 / 768.0 * GamePanel.WINH;
+        PLAYER_SIZE = 45.0 / 768.0 * GamePanel.WINH;
 
     public static int frames = 0;
     private int lastHit;
