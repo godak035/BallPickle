@@ -463,67 +463,35 @@ public class GamePanel extends JPanel {
         int playerX2 = (int)(main.getPlayer().getXX() + main.getPlayer().getPositionXRelativeTo() + main.getPlayer().getSize());
         int playerY2 = (int)(main.getPlayer().getYY() + main.getPlayer().getPositionYRelativeTo() + main.getPlayer().getSize());
 
+        BufferedImage imageToDraw;
+        int sprite;
+        if (Main.getFrames() - main.getLastHit() < 25) sprite = (Main.getFrames() - main.getLastHit()) / 5;
+        else if (!main.getRightPressedThisTick() && !main.getLeftPressedThisTick() && !main.getUpPressedThisTick() && !main.getDownPressedThisTick()) sprite = (Main.getFrames() % 20) / 5;
+        else sprite = (Main.getFrames() % 15) / 5;
+
         if (main.getPlayer().getAbility() == Player.abilityChoices.riso) {
-            if (Main.getFrames() - main.getLastHit() < 25) {
-                int sprite = (Main.getFrames() - main.getLastHit()) / 5;
-                g2.drawImage(riso_hit, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getRightPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(riso_right, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getLeftPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(riso_left, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getUpPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(riso_up, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getDownPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(riso_down, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else {
-                int sprite = (Main.getFrames() % 20) / 5;
-                g2.drawImage(riso_idle, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            }
+            if (Main.getFrames() - main.getLastHit() < 25) imageToDraw = riso_hit;
+            else if (main.getRightPressedThisTick()) imageToDraw = riso_right;
+            else if (main.getLeftPressedThisTick()) imageToDraw = riso_left;
+            else if (main.getUpPressedThisTick()) imageToDraw = riso_up;
+            else if (main.getDownPressedThisTick()) imageToDraw = riso_down;
+            else imageToDraw = riso_idle;
         } else if (main.getPlayer().getAbility() == Player.abilityChoices.adonis) {
-            if (Main.getFrames() - main.getLastHit() < 25) {
-                int sprite = (Main.getFrames() - main.getLastHit()) / 5;
-                g2.drawImage(adonis_hit, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getRightPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(adonis_right, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getLeftPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(adonis_left, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getUpPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(adonis_up, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getDownPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(adonis_down, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else {
-                int sprite = (Main.getFrames() % 20) / 5;
-                g2.drawImage(adonis_idle, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            }
+            if (Main.getFrames() - main.getLastHit() < 25) imageToDraw = adonis_hit;
+            else if (main.getRightPressedThisTick()) imageToDraw = adonis_right;
+            else if (main.getLeftPressedThisTick()) imageToDraw = adonis_left;
+            else if (main.getUpPressedThisTick()) imageToDraw = adonis_up;
+            else if (main.getDownPressedThisTick()) imageToDraw = adonis_down;
+            else imageToDraw = adonis_idle;
         } else if (main.getPlayer().getAbility() == Player.abilityChoices.tasha) {
-            if (Main.getFrames() - main.getLastHit() < 25) {
-                int sprite = (Main.getFrames() - main.getLastHit()) / 5;
-                g2.drawImage(tasha_hit, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getRightPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(tasha_right, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getLeftPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(tasha_left, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getUpPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(tasha_up, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else if (main.getDownPressedThisTick()) {
-                int sprite = (Main.getFrames() % 15) / 5;
-                g2.drawImage(tasha_down, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            } else {
-                int sprite = (Main.getFrames() % 20) / 5;
-                g2.drawImage(tasha_idle, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-            }
-        }
+            if (Main.getFrames() - main.getLastHit() < 25) imageToDraw = tasha_hit;
+            else if (main.getRightPressedThisTick()) imageToDraw = tasha_right;
+            else if (main.getLeftPressedThisTick()) imageToDraw = tasha_left;
+            else if (main.getUpPressedThisTick()) imageToDraw = tasha_up;
+            else if (main.getDownPressedThisTick()) imageToDraw = tasha_down;
+            else imageToDraw = adonis_idle;
+        } else imageToDraw = riso_idle;
+        g2.drawImage(imageToDraw, playerX, playerY, playerX2, playerY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
     }
 
     /**
@@ -539,169 +507,68 @@ public class GamePanel extends JPanel {
         int enemyX2 = (int)e.getXX() + e.getSize();
         int enemyY2 = (int)e.getYY() + e.getSize();
 
-        if (e.getType() == Enemy.enemyTypes.AverageJoe) {
-            if (Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(joe_hit_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(joe_hit_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
-            } else {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(joe_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(joe_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(joe_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(joe_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 20) / 5;
-                    g2.drawImage(joe_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
+        BufferedImage imageToDraw;
+        int sprite;
+        if ((Main.getFrames() - main.getEnemies().get(0).getLastHit() > 25) && (e.getXX() == e.getDestinationX()) && (e.getYY() == e.getDestinationY())) sprite = (Main.getFrames() % 20) / 5;
+        else sprite = (Main.getFrames() % 15) / 5;
+
+        switch (e.getType()) {
+            case AverageJoe -> {
+                if ((Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) && (e.getXX() < e.getDestinationX() - (e.getSize() / 2))) imageToDraw = joe_hit_right;
+                else if ((Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) && (e.getXX() >= e.getDestinationX() - (e.getSize() / 2))) imageToDraw = joe_hit_left;
+                else if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) imageToDraw = joe_right;
+                else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) imageToDraw = joe_left;
+                else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) imageToDraw = joe_up;
+                else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) imageToDraw = joe_down;
+                else imageToDraw = joe_idle;
             }
-        } else if (e.getType() == Enemy.enemyTypes.StrongHercules) {
-            if (Main.getFrames() - main.getEnemies().get(1).getLastHit() < 25) {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(hercules_hit_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(hercules_hit_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
-            } else {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(hercules_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(hercules_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(hercules_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(hercules_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 20) / 5;
-                    g2.drawImage(hercules_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
+            case StrongHercules -> {
+                if ((Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) && (e.getXX() < e.getDestinationX() - (e.getSize() / 2))) imageToDraw = hercules_hit_right;
+                else if ((Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) && (e.getXX() >= e.getDestinationX() - (e.getSize() / 2))) imageToDraw = hercules_hit_left;
+                else if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) imageToDraw = hercules_right;
+                else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) imageToDraw = hercules_left;
+                else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) imageToDraw = hercules_up;
+                else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) imageToDraw = hercules_down;
+                else imageToDraw = hercules_idle;
             }
-        } else if (e.getType() == Enemy.enemyTypes.GradyTwin1) {
-            if (Main.getFrames() - main.getEnemies().get(2).getLastHit() < 25) {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady1_hit_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady1_hit_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
-            } else {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady1_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady1_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady1_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady1_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 20) / 5;
-                    g2.drawImage(grady1_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
+            case GradyTwin1 -> {
+                if ((Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) && (e.getXX() < e.getDestinationX() - (e.getSize() / 2))) imageToDraw = grady1_hit_right;
+                else if ((Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) && (e.getXX() >= e.getDestinationX() - (e.getSize() / 2))) imageToDraw = grady1_hit_left;
+                else if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) imageToDraw = grady1_right;
+                else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) imageToDraw = grady1_left;
+                else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) imageToDraw = grady1_up;
+                else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) imageToDraw = grady1_down;
+                else imageToDraw = grady1_idle;
             }
-        } else if (e.getType() == Enemy.enemyTypes.GradyTwin2) {
-            if (Main.getFrames() - main.getEnemies().get(2).getLastHit() < 25) {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady2_hit_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady2_hit_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
-            } else {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady2_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady2_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady2_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(grady2_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 20) / 5;
-                    g2.drawImage(grady2_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
+            case GradyTwin2 -> {
+                if ((Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) && (e.getXX() < e.getDestinationX() - (e.getSize() / 2))) imageToDraw = grady2_hit_right;
+                else if ((Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) && (e.getXX() >= e.getDestinationX() - (e.getSize() / 2))) imageToDraw = grady2_hit_left;
+                else if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) imageToDraw = grady2_right;
+                else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) imageToDraw = grady2_left;
+                else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) imageToDraw = grady2_up;
+                else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) imageToDraw = grady2_down;
+                else imageToDraw = grady2_idle;
             }
-        }  else if (e.getType() == Enemy.enemyTypes.TwoBallWalter) {
-            if (Main.getFrames() - main.getEnemies().get(4).getLastHit() < 25) {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(walter_hit, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(walter_hit, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
-            } else {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(walter_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(walter_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(walter_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(walter_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 20) / 5;
-                    g2.drawImage(walter_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
+            case TwoBallWalter -> {
+                if (Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) imageToDraw = walter_hit;
+                else if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) imageToDraw = walter_right;
+                else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) imageToDraw = walter_left;
+                else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) imageToDraw = walter_up;
+                else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) imageToDraw = walter_down;
+                else imageToDraw = walter_idle;
             }
-        }  else if (e.getType() == Enemy.enemyTypes.TeleportSicilia) {
-            if (Main.getFrames() - main.getEnemies().get(5).getLastHit() < 25) {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(sicilia_hit_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(sicilia_hit_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
-            } else {
-                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(sicilia_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(sicilia_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(sicilia_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) {
-                    int sprite = (Main.getFrames() % 15) / 5;
-                    g2.drawImage(sicilia_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                } else {
-                    int sprite = (Main.getFrames() % 20) / 5;
-                    g2.drawImage(sicilia_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
-                }
+            case TeleportSicilia -> {
+                if ((Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) && (e.getXX() < e.getDestinationX() - (e.getSize() / 2))) imageToDraw = sicilia_hit_right;
+                else if ((Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) && (e.getXX() >= e.getDestinationX() - (e.getSize() / 2))) imageToDraw = sicilia_hit_left;
+                else if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) imageToDraw = sicilia_right;
+                else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) imageToDraw = sicilia_left;
+                else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) imageToDraw = sicilia_up;
+                else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) imageToDraw = sicilia_down;
+                else imageToDraw = sicilia_idle;
             }
+            default -> imageToDraw = riso_idle;
         }
+        g2.drawImage(imageToDraw, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
     }
     
     /**
