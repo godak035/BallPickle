@@ -124,13 +124,13 @@ public class GamePanel extends JPanel {
                     grady1_hit_right = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_hit_right.png"));
                     grady1_hit_left = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_left.png"));
 
-                    grady2_right = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_right.png"));
-                    grady2_left = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_left.png"));
-                    grady2_up = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_up.png"));
-                    grady2_down = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_down.png"));
-                    grady2_idle = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_idle.png"));
-                    grady2_hit_right = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_hit_right.png"));
-                    grady2_hit_left = ImageIO.read(this.getClass().getResource("sprites/enemies/grady1_move_left.png"));
+                    grady2_right = ImageIO.read(this.getClass().getResource("sprites/enemies/grady2_move_right.png"));
+                    grady2_left = ImageIO.read(this.getClass().getResource("sprites/enemies/grady2_move_left.png"));
+                    grady2_up = ImageIO.read(this.getClass().getResource("sprites/enemies/grady2_move_up.png"));
+                    grady2_down = ImageIO.read(this.getClass().getResource("sprites/enemies/grady2_move_down.png"));
+                    grady2_idle = ImageIO.read(this.getClass().getResource("sprites/enemies/grady2_idle.png"));
+                    grady2_hit_right = ImageIO.read(this.getClass().getResource("sprites/enemies/grady2_hit_right.png"));
+                    grady2_hit_left = ImageIO.read(this.getClass().getResource("sprites/enemies/grady2_move_left.png"));
 
                     joe_right = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_move_right.png"));
                     joe_left = ImageIO.read(this.getClass().getResource("sprites/enemies/joe_move_left.png"));
@@ -233,14 +233,14 @@ public class GamePanel extends JPanel {
             }
 
             case "game" -> {
-                switch (Main.currentLevel) {
-                    case level1 -> {
+                switch (Main.getCurrentLevel()) {
+                    case 1 -> {
                         g2.setColor(new Color(100, 100, 100));
                         g2.fillRect(0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH);
                         g2.drawImage(court, 0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH, null);
                     }
 
-                    case level2 -> {
+                    case 2 -> {
                         for (int i = 0; i < GamePanel.WINW; i += 64) {
                             for (int j = 0; j < GamePanel.WINH; j += 64) {
                                 g2.drawImage(level2, i, j, 64, 64, null);
@@ -250,7 +250,7 @@ public class GamePanel extends JPanel {
 
                     }
 
-                    case level3 -> {
+                    case 3 -> {
                         for (int i = 0; i < GamePanel.WINW; i += 64) {
                             for (int j = 0; j < GamePanel.WINH; j += 64) {
                                 g2.drawImage(level3, i, j, 64, 64, null);
@@ -259,7 +259,7 @@ public class GamePanel extends JPanel {
                         g2.drawImage(court, 0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH, null);
                     }
 
-                    case level4 -> {
+                    case 4 -> {
                         for (int i = 0; i < GamePanel.WINW; i += 64) {
                             for (int j = 0; j < GamePanel.WINH; j += 64) {
                                 g2.drawImage(level4, i, j, 64, 64, null);
@@ -268,7 +268,7 @@ public class GamePanel extends JPanel {
                         g2.drawImage(court, 0, 0, (int)GamePanel.WINW, (int)GamePanel.WINH, null);
                     }
 
-                    case level5 -> {
+                    case 5 -> {
                         for (int i = 0; i < GamePanel.WINW; i += 64) {
                             for (int j = 0; j < GamePanel.WINH; j += 64) {
                                 g2.drawImage(level5, i, j, 64, 64, null);
@@ -539,7 +539,7 @@ public class GamePanel extends JPanel {
         int enemyX2 = (int)e.getXX() + e.getSize();
         int enemyY2 = (int)e.getYY() + e.getSize();
 
-        if (Main.checkLevel == 1) {
+        if (e.getType() == Enemy.enemyTypes.AverageJoe) {
             if (Main.getFrames() - main.getEnemies().get(0).getLastHit() < 25) {
                 if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
                     int sprite = (Main.getFrames() % 15) / 5;
@@ -566,7 +566,7 @@ public class GamePanel extends JPanel {
                     g2.drawImage(joe_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
                 }
             }
-        } else if (Main.checkLevel == 2) {
+        } else if (e.getType() == Enemy.enemyTypes.StrongHercules) {
             if (Main.getFrames() - main.getEnemies().get(1).getLastHit() < 25) {
                 if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
                     int sprite = (Main.getFrames() % 15) / 5;
@@ -593,7 +593,7 @@ public class GamePanel extends JPanel {
                     g2.drawImage(hercules_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
                 }
             }
-        } else if (Main.checkLevel == 3) {
+        } else if (e.getType() == Enemy.enemyTypes.GradyTwin1) {
             if (Main.getFrames() - main.getEnemies().get(2).getLastHit() < 25) {
                 if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
                     int sprite = (Main.getFrames() % 15) / 5;
@@ -620,7 +620,34 @@ public class GamePanel extends JPanel {
                     g2.drawImage(grady1_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
                 }
             }
-        }  else if (Main.checkLevel == 4) {
+        } else if (e.getType() == Enemy.enemyTypes.GradyTwin2) {
+            if (Main.getFrames() - main.getEnemies().get(2).getLastHit() < 25) {
+                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
+                    int sprite = (Main.getFrames() % 15) / 5;
+                    g2.drawImage(grady2_hit_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                } else {
+                    int sprite = (Main.getFrames() % 15) / 5;
+                    g2.drawImage(grady2_hit_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                }
+            } else {
+                if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
+                    int sprite = (Main.getFrames() % 15) / 5;
+                    g2.drawImage(grady2_right, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                } else if (e.getXX() > e.getDestinationX() - (e.getSize() / 2)) {
+                    int sprite = (Main.getFrames() % 15) / 5;
+                    g2.drawImage(grady2_left, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                } else if (e.getYY() < e.getDestinationY() - (e.getSize() / 2)) {
+                    int sprite = (Main.getFrames() % 15) / 5;
+                    g2.drawImage(grady2_up, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                } else if (e.getYY() > e.getDestinationY() - (e.getSize() / 2)) {
+                    int sprite = (Main.getFrames() % 15) / 5;
+                    g2.drawImage(grady2_down, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                } else {
+                    int sprite = (Main.getFrames() % 20) / 5;
+                    g2.drawImage(grady2_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
+                }
+            }
+        }  else if (e.getType() == Enemy.enemyTypes.TwoBallWalter) {
             if (Main.getFrames() - main.getEnemies().get(4).getLastHit() < 25) {
                 if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
                     int sprite = (Main.getFrames() % 15) / 5;
@@ -647,7 +674,7 @@ public class GamePanel extends JPanel {
                     g2.drawImage(walter_idle, enemyX, enemyY, enemyX2, enemyY2, sprite * 128, 0, (sprite * 128) + 128, 128, null);
                 }
             }
-        }  else if (Main.checkLevel == 5) {
+        }  else if (e.getType() == Enemy.enemyTypes.TeleportSicilia) {
             if (Main.getFrames() - main.getEnemies().get(5).getLastHit() < 25) {
                 if (e.getXX() < e.getDestinationX() - (e.getSize() / 2)) {
                     int sprite = (Main.getFrames() % 15) / 5;

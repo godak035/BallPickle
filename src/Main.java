@@ -34,8 +34,6 @@ public class Main implements Runnable {
     //The current button that the user is hovering over (e.g. pressing enter will activate an input of that button)
     public static enum hovered { charSelect1, charSelect2, charSelect3, titleStart, titleExit, titleHelp, titleExtras, inGame, helpExit,gameOverExit,victoryExit , nextLevel, extrasExit };
     public static hovered currentHovered;
-    public static enum level {level1, level2, level3, level4, level5};
-    public static level currentLevel;
 
     //Whether or not the user has released the keys since they have pressed them 
     //(used in the menus, to ensure that you don't move down 2 options if you press the down key for 2 frames)
@@ -55,7 +53,7 @@ public class Main implements Runnable {
 
     //score
     static int playerScore, enemyScore;
-    static int checkLevel;
+    private static int currentLevel;
 
     //miscellaneous other booleans
     private boolean lookRightLast, timeSlowed, serve=true;
@@ -190,7 +188,7 @@ public class Main implements Runnable {
     Main() {
         playMusic(0);
         currentHovered = hovered.titleStart;
-        currentLevel = level.level1;
+        currentLevel = 1;
         timeSlowed = false;
         lastHit = 0;
 
@@ -369,6 +367,7 @@ public class Main implements Runnable {
                     frame.revalidate();
                     stopMusic();
                     playMusic(1);
+                    resetGame();
                 }
             }
             case charSelect2 -> {
@@ -390,6 +389,7 @@ public class Main implements Runnable {
                     frame.revalidate();
                     stopMusic();
                     playMusic(1);
+                    resetGame();
                 }
             }
             case charSelect3 -> {
@@ -407,6 +407,7 @@ public class Main implements Runnable {
                     frame.revalidate();
                     stopMusic();
                     playMusic(1);
+                    resetGame();
                 }
             }
             case helpExit -> {
@@ -584,28 +585,15 @@ public class Main implements Runnable {
         gradyTwin2.setActive(false);
         twoBallWalter.setActive(false);
         teleportSicilia.setActive(false);
-        switch (Main.currentLevel) {   
-            case level1 -> {
-                averageJoe.setActive(true); 
-                checkLevel = 1;
-            }
-            case level2 -> {
-                strongHercules.setActive(true);
-                checkLevel = 2;
-            }
-            case level3 -> {
+        switch (Main.getCurrentLevel()) {   
+            case 1 -> averageJoe.setActive(true); 
+            case 2 -> strongHercules.setActive(true);
+            case 3 -> {
                 gradyTwin1.setActive(true);
                 gradyTwin2.setActive(true);
-                checkLevel = 3;
             }
-            case level4 -> {
-                twoBallWalter.setActive(true);
-                checkLevel = 4;
-            }
-            case level5 -> {
-                teleportSicilia.setActive(true); 
-                checkLevel = 5;
-            }
+            case 4 -> twoBallWalter.setActive(true);
+            case 5 -> teleportSicilia.setActive(true); 
             default -> {}
         }
     }
@@ -711,27 +699,27 @@ public class Main implements Runnable {
      * Moves to the next level
      */
     public void next() {
-        if (currentLevel==level.level1) {
+        if (currentLevel==1) {
             stopMusic();
-            currentLevel=level.level2;
+            currentLevel++;
             playMusic(2);
         }
-        else if (currentLevel==level.level2) {
-            currentLevel=level.level3;
+        else if (currentLevel==2) {
+            currentLevel++;
             stopMusic();
             playMusic(1);
         }
-        else if (currentLevel==level.level3) {
+        else if (currentLevel==3) {
             stopMusic();
-            currentLevel=level.level4;
+            currentLevel++;
             playMusic(2);
         }
-        else if (currentLevel==level.level4) {
+        else if (currentLevel==4) {
             stopMusic();
-            currentLevel=level.level5;
+            currentLevel++;
             playMusic(3);
         }
-        else if (currentLevel==level.level5) {
+        else if (currentLevel==5) {
             frame.remove(inGame);
             frame.add(intramuralChampion);
             frame.revalidate();
@@ -752,7 +740,7 @@ public class Main implements Runnable {
                 if (b.getPlayerHitLast()) {
                     playerScore++;
                     if (playerScore == 5) {
-                        if (currentLevel != level.level5) {
+                        if (currentLevel != 5) {
                             resetGame();
                             enemyScore = 0;
                             playerScore = 0;
@@ -801,4 +789,5 @@ public class Main implements Runnable {
     public boolean getDownPressedThisTick() { return this.downPressedThisTick; }
     public boolean getEnterPressedThisTick() { return this.enterPressedThisTick; }
     public static int getFrames() { return frames; }
+    public static int getCurrentLevel() { return currentLevel; }
 }

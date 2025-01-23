@@ -72,6 +72,7 @@ public class Enemy extends Entity {
     public double getDestinationX() { return this.destinationX; }
     public double getDestinationY() { return this.destinationY; }
     public int getLastHit() { return this.lastHit; }
+    public enemyTypes getType() { return this.enemyType; }
 
     /**
      * Sets if the enemy is currently playing or not
